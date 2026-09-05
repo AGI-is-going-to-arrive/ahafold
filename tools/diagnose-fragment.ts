@@ -251,11 +251,16 @@ try {
             await capture('load-return');
             finalState = await settle();
             if (mode === 'fresh-settled-then-reload') {
-              log({ kind: 'fresh-contract-before-reload', ...identity, contractComplete: complete(finalState) });
-              phase = 'reload-after-verified-fresh-navigation';
-              await page.reload({ waitUntil: 'load' });
-              await capture('load-return');
-              finalState = await settle();
+              const preconditionMet = complete(finalState);
+              log({ kind: 'fresh-contract-before-reload', ...identity, contractComplete: preconditionMet });
+              if (preconditionMet) {
+                phase = 'reload-after-verified-fresh-navigation';
+                await page.reload({ waitUntil: 'load' });
+                await capture('load-return');
+                finalState = await settle();
+              } else {
+                log({ kind: 'reload-precondition-not-met', ...identity, phase, skipped: 'reload-after-verified-fresh-navigation' });
+              }
             }
           }
           if (!finalState.hasFocus) {
