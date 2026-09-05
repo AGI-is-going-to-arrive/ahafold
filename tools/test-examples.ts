@@ -86,9 +86,49 @@ async function checkKeyboard(page: Page): Promise<void> {
     const target = focusable.nth(index);
     const mustReach = await target.evaluate((element) => {
       const native = element as HTMLElement;
-      return native.tabIndex >= 0 && !element.matches(':disabled') && native.getClientRects().length > 0;
+      for (let ancestor = element.parentElement; ancestor; ancestor = ancestor.parentElement) {
+        if (ancestor instanceof HTMLDetailsElement && !ancestor.open) {
+          const summary = Array.from(ancestor.children).find((child) => child.tagName === 'SUMMARY');
+          if (!summary?.contains(element)) return false;
+        }
+      }
+      if (element instanceof HTMLInputElement && element.type === 'radio' && element.name) {
+        const group = Array.from(document.querySelectorAll<HTMLInputElement>('input[type="radio"]'))
+          .filter((radio) => radio.name === element.name && radio.form === element.form && !radio.disabled);
+        const tabStop = group.find((radio) => radio.checked) ?? group[0];
+        if (element !== tabStop) return false;
+      }
+      return native.tabIndex >= 0 && !element.matches(':disabled') && native.checkVisibility();
     });
     if (mustReach) assert.ok(reached.has(index), `Keyboard cannot reach focusable item ${index}`);
+  }
+  const radios = page.locator('input[type="radio"]');
+  const radioGroups = await radios.evaluateAll((elements) => {
+    const groups: number[][] = [];
+    const inputs = elements.filter((element): element is HTMLInputElement => element instanceof HTMLInputElement);
+    for (const [index, input] of inputs.entries()) {
+      if (!input.name || input.disabled) continue;
+      const existing = groups.find((group) => {
+        const first = inputs[group[0] ?? -1];
+        return first?.name === input.name && first.form === input.form;
+      });
+      if (existing) existing.push(index);
+      else groups.push([index]);
+    }
+    return groups.filter((group) => group.length > 1);
+  });
+  for (const group of radioGroups) {
+    const checked = await Promise.all(group.map((index) => radios.nth(index).isChecked()));
+    const selected = checked.indexOf(true);
+    assert.ok(selected >= 0, 'This example radio group declares an initial choice');
+    const initial = radios.nth(group[selected] ?? -1);
+    const next = radios.nth(group[(selected + 1) % group.length] ?? -1);
+    await initial.focus();
+    await initial.press('ArrowRight');
+    assert.ok(await next.isChecked(), 'ArrowRight reaches and selects the next radio in the group');
+    await expectFocusRing(next);
+    await next.press('ArrowLeft');
+    assert.ok(await initial.isChecked(), 'ArrowLeft restores the initial radio choice');
   }
   const disclosures = page.locator('details');
   for (let index = 0; index < await disclosures.count(); index++) {
@@ -130,6 +170,36 @@ async function checkKeyboard(page: Page): Promise<void> {
       assert.equal(await disclosures.nth(ancestorIndex).getAttribute('open'), null, 'Restore initially closed ancestor');
     }
   }
+}
+
+async function checkGrokComparison(page: Page): Promise<void> {
+  const included = page.locator('input[name="sunk-handling"][value="include"]');
+  const excluded = page.locator('input[name="sunk-handling"][value="exclude"]');
+  const expectComparison = async (includePastCost: boolean): Promise<void> => {
+    const amount = async (selector: string): Promise<number> => Number((await page.locator(selector).innerText())
+      .replaceAll('−', '-').replace(/[^\d.+-]/g, ''));
+    const continuing = includePastCost ? -760 : 40;
+    const goingHome = includePastCost ? -600 : 200;
+    assert.equal(await amount('#net-continue'), continuing, 'Hypothetical continuation value');
+    assert.equal(await amount('#net-home'), goingHome, 'Hypothetical rest value');
+    assert.equal(await amount('#net-home') - await amount('#net-continue'), 160, 'Common sunk cost does not change the difference');
+    assert.equal(await amount('#ranking-note'), 160, 'Visible comparison reports the calculated difference');
+    assert.equal(await amount('#sunk-continue'), includePastCost ? -800 : 0);
+    assert.equal(await amount('#sunk-home'), includePastCost ? -800 : 0);
+    assert.equal(await page.locator('#sunk-row').evaluate((element) => element.classList.contains('is-out')), !includePastCost);
+  };
+  assert.ok(await included.isChecked());
+  await expectComparison(true);
+  await included.focus();
+  await included.press('ArrowRight');
+  assert.ok(await excluded.isChecked());
+  await expectComparison(false);
+  const reset = page.locator('#compare-form button[type="reset"]');
+  await reset.focus();
+  await reset.press('Enter');
+  await page.waitForFunction(() => document.querySelector('#net-continue')?.textContent?.includes('760'));
+  assert.ok(await included.isChecked(), 'Form reset restores the original radio selection');
+  await expectComparison(true);
 }
 
 async function setRange(locator: Locator, value: number): Promise<void> {
@@ -315,6 +385,7 @@ try {
       await checkResourceLocations(page, candidate);
       await checkKeyboard(page);
       if (candidate.name === 'compounding') await checkCompounding(page);
+      if (candidate.name === 'grok-sunk-cost') await checkGrokComparison(page);
       const audit = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
       assert.deepEqual(audit.violations.map((violation) => ({ id: violation.id, impact: violation.impact, nodes: violation.nodes.map((node) => node.target) })), [], `${candidate.name}: axe accessibility violations`);
       assert.deepEqual(pageErrors, [], `${candidate.name}: browser script errors`);
@@ -323,7 +394,7 @@ try {
       await page.locator('body').click({ position: { x: 1, y: 1 } });
       await page.evaluate(() => scrollTo(0, 0));
       await page.screenshot({ path: path.join(output, `${candidate.name}-${viewport.width}.png`), fullPage: true });
-      console.log(`PASS ${candidate.name}: ${viewport.width}px, offline assets${candidate.imageMode === 'forbidden' ? ', zero raster images' : ''}, keyboard, axe${candidate.name === 'compounding' ? ', calculation boundaries/reset/timeline' : ''}`);
+      console.log(`PASS ${candidate.name}: ${viewport.width}px, offline assets${candidate.imageMode === 'forbidden' ? ', zero raster images' : ''}, keyboard, axe${candidate.name === 'compounding' ? ', calculation boundaries/reset/timeline' : candidate.name === 'grok-sunk-cost' ? ', radio comparison/reset' : ''}`);
       await context.close();
     }
   }

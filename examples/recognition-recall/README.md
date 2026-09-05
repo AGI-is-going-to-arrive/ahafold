@@ -13,6 +13,10 @@ native-image budget and supplied source summaries. The test did not use a previo
 scene, a placeholder, or the character master as its output. It used text identity,
 without passing an image-generation reference. The author started from the English README.
 
+The [Simplified Chinese edition](index.zh-CN.html) was created through an installed
+AhaFold text-revision session with zero image calls. Its image, CSS, and disclosure
+structure match the English original; English raster labels are explained in Chinese.
+
 ## Meaning and limits
 
 Recognition judges a shown candidate; recall supplies the answer from memory. Recall can use cues. The thought bubble is a metaphor, not a literal storage model. The fold-open exercise is not a validated memory test, and repeated exposure changes the task.

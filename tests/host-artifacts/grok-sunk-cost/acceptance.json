@@ -1,0 +1,60 @@
+{
+  "status": "completed",
+  "output_path": "ahafold-output/sunk-cost-v2/index.html",
+  "image_asset": "ahafold-output/sunk-cost-v2/assets/sunk-cost.jpg",
+  "source_image": "corrected-sunk-cost.jpg",
+  "previous_output_preserved": "ahafold-output/sunk-cost/",
+  "native_tools": {
+    "baseline": "image_gen",
+    "correction": "image_edit",
+    "this_turn": null
+  },
+  "image_call_count": {
+    "baseline_image_gen": 1,
+    "separate_image_edit": 1,
+    "this_turn": 0
+  },
+  "baseline_exit": 1,
+  "baseline_exit_reason": "turn cap",
+  "image": {
+    "format": "JPEG",
+    "width": 1280,
+    "height": 720,
+    "bytes": 112050,
+    "sha256": "b199e5cc30a248694c8fa309caac10048ef22c84969653bef123f58804db4428"
+  },
+  "hashes": {
+    "source": "b199e5cc30a248694c8fa309caac10048ef22c84969653bef123f58804db4428",
+    "v2_asset": "b199e5cc30a248694c8fa309caac10048ef22c84969653bef123f58804db4428",
+    "v2_embedded": "b199e5cc30a248694c8fa309caac10048ef22c84969653bef123f58804db4428",
+    "baseline_asset_unchanged": "74058f289664d747b238dbd882f96d594ab32cfbf63d40ebc9117a12cc97c9b2",
+    "source_asset_embedded_match": true
+  },
+  "html_diff": "inline illustration bytes only; alt unchanged (no old-corner description)",
+  "references_read": [
+    ".grok/skills/ahafold/SKILL.md",
+    ".grok/skills/ahafold/references/explanation.md",
+    ".grok/skills/ahafold/references/fold.md",
+    ".grok/skills/ahafold/references/native-grok.md",
+    ".grok/skills/ahafold/assets/explainer.html"
+  ],
+  "identity_sheet_inspected_not_attached": ".grok/skills/ahafold/assets/fold/reference-sheet.png",
+  "template": ".grok/skills/ahafold/assets/explainer.html",
+  "parent_visual_inspection": {
+    "fold_front_right_teal_corner": "correct",
+    "chinese_labels_and_scene": "correct",
+    "grok_watermark": "retained"
+  },
+  "limitations": [
+    "This turn made 0 image_gen/image_edit calls.",
+    "Pixel identity, labels, and watermark were inspected by the parent, not this turn.",
+    "This turn verified SHA-256, JPEG SOF dimensions, and byte identity only; the image was not visually decoded here.",
+    "Baseline HTML keyboard/arithmetic/offline checks were already verified by the parent on ahafold-output/sunk-cost/; this turn did not re-open a browser.",
+    "Original baseline run exited 1 at the turn cap before writing acceptance.json.",
+    "Provider watermark retained in original bytes; not cropped."
+  ],
+  "native_html_sha256_before_maintainer_correction": "92c29fe2272c883123a58cfa4c03169654b52ae5436e5d917961e5d16372d30e",
+  "maintainer_corrections": [
+    "Clarified that some future obligations are shared yet still must be fulfilled; no image or script changes."
+  ]
+}

@@ -21,6 +21,9 @@ public release or a claim of full support on all target platforms.
 | Recognition versus recall | [Read](examples/recognition-recall/index.html) | [Notes](examples/recognition-recall/README.md) |
 | Compounding · 复利 | [Read](examples/compounding/index.html) | [Notes](examples/compounding/README.md) |
 
+The [Chinese recognition/recall edition](examples/recognition-recall/index.zh-CN.html)
+demonstrates a language revision that preserves the original image.
+
 Download or clone the repository, then open an example's `index.html` in your browser;
 GitHub's file view displays source. Each page includes its image, CSS, and any small
 script inline; original images are also retained in the adjacent `assets/` folder.
@@ -162,7 +165,7 @@ image probes. `PARTIAL` does not mean full acceptance.
 | Combination | State | Evidence / limitation |
 | --- | --- | --- |
 | macOS / Codex | PASS | Installed native generation, three examples and offline browser checks passed; reference/edit untested. |
-| macOS / Grok Build | PARTIAL | Baseline hit turn cap; native edit corrected fold; HTML finalization in progress. Visible watermark retained. |
+| macOS / Grok Build | PASS | Generation → one corrective native edit → completed HTML; visible watermark retained. Strict no-watermark use is unmet. |
 | macOS / Antigravity CLI | BLOCKED | Installed resources read; native image returned 429; draft retained. |
 | Windows / Codex | NOT TESTED | — |
 | Windows / Grok Build | NOT TESTED | — |

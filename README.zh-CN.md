@@ -19,6 +19,8 @@
 | 识别与回忆 · Recognition versus recall | [阅读](examples/recognition-recall/index.html) | [说明](examples/recognition-recall/README.md) |
 | 复利 · Compounding | [阅读](examples/compounding/index.html) | [说明](examples/compounding/README.md) |
 
+[识别／回忆中文版](examples/recognition-recall/index.zh-CN.html) 展示了保留原图的语言改写。
+
 下载或克隆仓库后，用浏览器打开示例的 `index.html`；GitHub 文件页显示的是源码。
 页面内嵌图片、CSS 和必要的小段脚本，原图另存于旁边的 `assets/`。
 读者无需 AI 账户、Node.js 或服务端，阅读不产生额外模型调用。
@@ -144,7 +146,7 @@ npx skills@1.5.23 remove ahafold -y
 | 组合 | 状态 | 证据 / 限制 |
 | --- | --- | --- |
 | macOS / Codex | PASS | 安装后原生生图、三个示例及离线浏览器检查通过；参考图/编辑未测。 |
-| macOS / Grok Build | PARTIAL | 首轮触及回合上限；原生编辑已修正翻角，HTML收尾中。保留可见水印。 |
+| macOS / Grok Build | PASS | 生图→一次原生编辑修正→完成HTML；保留可见水印，不满足严格无水印任务。 |
 | macOS / Antigravity CLI | BLOCKED | 已读取安装包；原生生图返回429，保留草稿。 |
 | Windows / Codex | NOT TESTED | — |
 | Windows / Grok Build | NOT TESTED | — |
