@@ -46,6 +46,86 @@ interface ReadingSnapshot {
   numericOutputs: { name: string; values: string[] }[];
 }
 
+interface FragmentTrace {
+  file: string;
+  phase: string;
+  total: number;
+  records: Record<string, unknown>[];
+}
+
+const fragmentTraceContexts = new WeakSet<BrowserContext>();
+const fragmentTraces = new WeakMap<Page, FragmentTrace>();
+const fragmentTracePrefix = 'AHAFOLD_EXACT_FLOW_EVENT ';
+const fragmentTraceScript = String.raw`(() => {
+  function record(event, source) {
+    const active = document.activeElement;
+    const navigation = performance.getEntriesByType('navigation')[0];
+    const target = source && source.target;
+    console.debug('AHAFOLD_EXACT_FLOW_EVENT ' + JSON.stringify({
+      event, performanceNow: performance.now(), timeOrigin: performance.timeOrigin,
+      readyState: document.readyState, hash: location.hash,
+      activeTag: active ? active.tagName : null, activeId: active ? active.id : null,
+      hasFocus: document.hasFocus(), visibilityState: document.visibilityState,
+      navigationType: navigation ? navigation.type : null,
+      eventTargetTag: target ? target.tagName || target.nodeName || null : null,
+      eventTargetId: target ? target.id || null : null
+    }));
+  }
+  document.addEventListener('DOMContentLoaded', event => record('DOMContentLoaded', event), true);
+  window.addEventListener('load', event => record('load', event), true);
+  window.addEventListener('pageshow', event => record('pageshow', event), true);
+  document.addEventListener('focusin', event => record('focusin', event), true);
+  document.addEventListener('focusout', event => record('focusout', event), true);
+  window.addEventListener('hashchange', event => record('hashchange', event), true);
+  record('init', null);
+})();`;
+
+function recordFragmentEvent(trace: FragmentTrace, record: Record<string, unknown>): void {
+  trace.total++;
+  trace.records.push(record);
+  if (trace.records.length > 160) trace.records.shift();
+}
+
+async function prepareFragmentTrace(page: Page, file: string): Promise<void> {
+  const context = page.context();
+  if (!fragmentTraceContexts.has(context)) {
+    await context.addInitScript({ content: fragmentTraceScript });
+    fragmentTraceContexts.add(context);
+  }
+  const existing = fragmentTraces.get(page);
+  if (existing) {
+    existing.file = file;
+    existing.phase = 'preceding-checks';
+    return;
+  }
+  const trace: FragmentTrace = { file, phase: 'preceding-checks', total: 0, records: [] };
+  fragmentTraces.set(page, trace);
+  page.on('console', (message) => {
+    const text = message.text();
+    if (!text.startsWith(fragmentTracePrefix)) return;
+    let event: unknown;
+    try { event = JSON.parse(text.slice(fragmentTracePrefix.length)); } catch { return; }
+    if (!isRecord(event)) return;
+    const fields = ['event', 'performanceNow', 'timeOrigin', 'readyState', 'hash', 'activeTag', 'activeId', 'hasFocus', 'visibilityState', 'navigationType', 'eventTargetTag', 'eventTargetId'];
+    recordFragmentEvent(trace, { source: 'native', file: trace.file, receivedDuring: trace.phase, receivedAt: Date.now(), event: Object.fromEntries(fields.map((key) => [key, event[key]])) });
+  });
+}
+
+function fragmentPhase(page: Page, phase: string): void {
+  const trace = fragmentTraces.get(page);
+  if (!trace) return;
+  trace.phase = phase;
+  recordFragmentEvent(trace, { source: 'phase', file: trace.file, phase, receivedAt: Date.now() });
+}
+
+function emitFragmentTrace(page: Page): void {
+  const trace = fragmentTraces.get(page);
+  console.log(JSON.stringify({ kind: 'fragment-trace-header', file: trace?.file ?? '(unregistered page)', phase: trace?.phase ?? null, totalRecords: trace?.total ?? 0, retainedRecords: trace?.records.length ?? 0 }));
+  for (const [index, record] of (trace?.records ?? []).entries()) {
+    console.log(JSON.stringify({ kind: 'fragment-trace-entry', index, record }));
+  }
+}
+
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = path.join(root, 'output', 'longform-checks');
 const args = process.argv.slice(2);
@@ -270,11 +350,26 @@ async function assertFragmentTarget(page: Page, target: NavigationTarget): Promi
         && topmost !== null && (heading.contains(topmost) || target === topmost);
     }, target.id, { timeout: 5000 });
   } catch (error) {
-    const diagnostic = await page.evaluate(() => ({
-      hash: location.hash,
-      activeTag: document.activeElement?.tagName ?? null,
-      activeId: document.activeElement?.id ?? null,
-    }));
+    emitFragmentTrace(page);
+    const diagnostic = await page.evaluate((id) => {
+      const target = document.getElementById(id);
+      const style = target ? getComputedStyle(target) : null;
+      const bounds = target?.getBoundingClientRect();
+      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+      return {
+        hash: location.hash, activeTag: document.activeElement?.tagName ?? null,
+        activeId: document.activeElement?.id ?? null, hasFocus: document.hasFocus(),
+        visibilityState: document.visibilityState, navigationType: navigation?.type ?? null,
+        performanceNow: performance.now(), timeOrigin: performance.timeOrigin,
+        target: {
+          exists: target !== null, tabindexAttribute: target?.getAttribute('tabindex') ?? null,
+          tabindex: target?.tabIndex ?? null, display: style?.display ?? null,
+          visibility: style?.visibility ?? null, opacity: style?.opacity ?? null,
+          checkVisibility: target?.checkVisibility() ?? null,
+          rect: bounds ? { x: bounds.x, y: bounds.y, width: bounds.width, height: bounds.height, top: bounds.top, bottom: bounds.bottom } : null,
+        },
+      };
+    }, target.id);
     throw new Error(`${target.id}: native fragment focus/visibility did not settle within 5s; ${JSON.stringify(diagnostic)}`, { cause: error });
   }
   const state = await page.evaluate((id) => {
@@ -313,7 +408,9 @@ async function checkNavigation(page: Page, url: string): Promise<number> {
   }
   const last = targets.at(-1);
   assert.ok(last);
+  fragmentPhase(page, 'same-full-url-goto');
   await page.goto(`${url}#${encodeURIComponent(last.id)}`, { waitUntil: 'load' });
+  fragmentPhase(page, 'immediate-reload');
   await page.reload({ waitUntil: 'load' });
   await assertFragmentTarget(page, last);
   return targets.length;
@@ -560,6 +657,7 @@ async function checkNoJavaScript(browser: Awaited<ReturnType<typeof chromium.lau
   try {
     const page = await context.newPage();
     const failures = await trackFailures(page);
+    await prepareFragmentTrace(page, candidate.file);
     const url = pathToFileURL(path.join(root, candidate.file)).href;
     await page.goto(url, { waitUntil: 'load' });
     await assertCoreStructure(page);
@@ -627,6 +725,7 @@ async function checkRealPageZoom(): Promise<void> {
     const page = context.pages()[0] ?? await context.newPage();
     const failures = await trackFailures(page);
     for (const candidate of cases) {
+      await prepareFragmentTrace(page, candidate.file);
       const url = pathToFileURL(path.join(root, candidate.file)).href;
       await page.goto(url, { waitUntil: 'load' });
       assert.equal(await setBrowserZoom(worker, url, 1), 1);
@@ -664,6 +763,7 @@ try {
       try {
         const page = await context.newPage();
         const failures = await trackFailures(page);
+        await prepareFragmentTrace(page, candidate.file);
         const url = pathToFileURL(path.join(root, candidate.file)).href;
         await page.goto(url, { waitUntil: 'load' });
         await assertCoreStructure(page);
