@@ -132,6 +132,20 @@ exact Chromium history/scroll-restoration cause remains unestablished. The curre
 Actions run determines the revised acceptance result; no skill or example bytes
 changed during this investigation.
 
+**Final executable-code CI result: Windows FAIL; macOS/Linux PASS.**
+[Run 33949587839](https://github.com/AGI-is-going-to-arrive/ahafold/actions/runs/33949587839)
+tested code commit `b5c09ec710d27a18297ec701626368a3adeca1bf`. The Codex English retry
+guide passed all four ordinary widths and its genuine fresh deep link at 390px
+with JavaScript disabled, but its subsequent reload left focus on `BODY` instead
+of `#source-notes` for five seconds. Therefore the failure is broader than the
+earlier interactive-history path. The fresh-entry correction did not establish
+reliable reload focus on Windows. The strict failing assertion remains in place;
+this gate was not skipped, downgraded or reported as passed. The final evidence
+update changes documentation only and does not change that executable-code result.
+The implementation and examples remain a private development iteration with an
+unmet Windows release gate, alongside the separately recorded Grok content and
+image limitations.
+
 The raw Grok retry page exposed roughly 1,019px of A4 horizontal overflow. Its
 default numeric feedback was also hidden without JavaScript; the existing static
 table and capability notice remained readable. Those faults are corrected only in

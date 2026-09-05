@@ -220,6 +220,9 @@ passages affected four checks. One Grok run produced Chinese from English materi
 and an English prompt that had no explicit “Write in English” clause. Reviewed
 examples retain their correction records; the raw results and earlier failures
 remain part of the evidence. Browser results and outstanding checks are in that report.
+The Windows long-form CI gate remains **FAIL**: native heading focus can be lost
+after reload, including after a verified fresh deep link with JavaScript disabled.
+macOS/Linux checks passed. This development iteration has not cleared every release gate.
 
 Short labels, Fold identity, reference-image input, and image editing are separate
 checks. A logged-in account does not guarantee quota. Cost is unknown and usage is

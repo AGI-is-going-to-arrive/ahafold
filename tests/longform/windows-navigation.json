@@ -275,5 +275,27 @@
     "fetched_on": "2026-09-05",
     "method": "smart-search fetch, source only; no Grok search call. Context7 did not provide a matching current HTML Standard source.",
     "limit": "Normative fragment focus and browser zoom API behavior are context, not proof of the cause of the observed Windows failure."
-  }
+  },
+  "latest_executable_code_run": {
+    "id": 33949587839,
+    "sha": "b5c09ec710d27a18297ec701626368a3adeca1bf",
+    "url": "https://github.com/AGI-is-going-to-arrive/ahafold/actions/runs/33949587839",
+    "macos": "success",
+    "linux": "success",
+    "windows": "failure",
+    "file": "examples/longform/retries/index.html",
+    "width": 390,
+    "javascript_enabled": false,
+    "fresh_fragment_focus": "passed",
+    "subsequent_reload_focus": "failed",
+    "diagnostic": {
+      "hash": "#source-notes",
+      "activeTag": "BODY",
+      "activeId": ""
+    },
+    "wait_seconds": 5,
+    "assertion_retained": true,
+    "interpretation": "The latest observed failure is not limited to the old interactive-history scenario. Reliable Windows reload focus remains unestablished; the release gate is unmet."
+  },
+  "final_update_scope": "Documentation-only evidence update; executable skill, examples and test code remain identical to b5c09ec. No new matrix success is claimed."
 }

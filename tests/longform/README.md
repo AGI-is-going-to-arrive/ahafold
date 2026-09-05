@@ -59,6 +59,10 @@ metrics; it does not test fresh cross-document entry or reload at 200%. Earlier
 Windows focus failures on the interactive-history reload path remain documented
 in the [navigation evidence](windows-navigation.json).
 
+The latest executable-code run also failed Windows reload focus after a verified
+fresh deep link with JavaScript disabled. The assertion is retained, and the
+Windows release gate remains **FAIL**; see the [final result](results.md).
+
 Money checks compare displayed precision exactly with a full-precision oracle;
 the earlier tolerance that could hide one-cent errors is removed. Geometry uses
 separate tolerances. Rendering checks do not establish factual completeness or
