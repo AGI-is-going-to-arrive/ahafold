@@ -1,5 +1,9 @@
 # Long-form development and acceptance
 
+The first six runs below intentionally prohibited images and are no-image controls.
+The [illustrated correction](illustrated-results.md) separately records two current-Codex
+native scenes, the updated joint picture/text workflow and the integrated long guide.
+
 User-authorized scope: extend AhaFold from short concept explanations to long,
 complex supplied material, while keeping one independent skill and current-host
 native image behavior. Antigravity CLI remains deferred. Earlier failed snapshots
@@ -45,8 +49,8 @@ filled six-job queue explanation and clearly identifies itself as a template.
 It is not evidence that a host generated a fresh image or completed a user's guide.
 
 `pnpm run test:longform --template-only` checks that template. The full command
-requires the template, three delivered long guides and their three reviewed Grok
-variants; missing examples fail. The suite checks 320/390/768/1440px,
+requires eight pages: the template, three original long guides, their three reviewed
+Grok variants and the illustrated library; missing examples fail. The suite checks 320/390/768/1440px,
 contents focus, fresh deep-link focus followed by reload, keyboard scroll/disclosures,
 screen-size SVG text, offline resources, axe, no-JS reading, A4 print and actual
 200% Chromium page zoom. Zoom uses a temporary isolated test extension, never a

@@ -1,0 +1,97 @@
+{
+  "date": "2026-09-05",
+  "kind": "current-Codex native illustration generation and maintainer integration",
+  "scope": "Illustrated long-form example using the existing Codex library guide. This is not a new fresh installed-host authoring acceptance, and does not retest Grok/Antigravity image generation.",
+  "tool": "image_gen.imagegen",
+  "model": "not disclosed by the built-in tool",
+  "cost": "unknown; current host account and quota",
+  "budget": {
+    "previous_calls": 9,
+    "calls_this_batch": 2,
+    "cumulative_calls": 11,
+    "total_authorized_calls": 15
+  },
+  "base_html": {
+    "file": "examples/longform/library/index.html",
+    "sha256": "346d108b12af14167db7c4ed722559b7aaaef1eff5505afe727ff448b99e236a",
+    "modified": false
+  },
+  "images": [
+    {
+      "file": "assets/receipt-reservation.png",
+      "sha256": "dc31df6a3597b1fc43d9b270f5c6c1dfd223ff99f1026f951f26bb6c28a4b641",
+      "bytes": 2054519,
+      "width": 1536,
+      "height": 1024,
+      "role": "opening cognitive anchor: receipt versus reservation of a real tool",
+      "prompt": "Use case: illustration-story.\nAsset type: explanatory illustration embedded near the opening of a long AhaFold HTML guide.\nInput image role: identity and drawing-style reference only. Transform the reference character into ONE new narrative scene; do not reproduce the reference sheet, its layout, pose collection or headings.\n\nScene and teaching relationship: a receipt is only a message; a reservation binds a particular physical tool. Show ONE Fold character actively attaching a short paper reservation tag with a visible loop to ONE real cordless drill resting on a low tool-library shelf. The drill remains on the shelf, not handed to a borrower. Place a separate loose receipt on the nearby counter, visibly NOT attached to the drill. Fold's paper-strip arms should be engaged with the tag/loop, its attentive dash eyes directed at the work. Only a shelf/counter, drill, attached tag and loose receipt are needed.\nText, verbatim: the attached tag reads “留置”; the separate receipt reads “收件”. These are the only requested words. Make both Chinese labels large, simple and legible at mobile viewing size, close to their correct object.\nIdentity: Fold's entire body is one squat apricot-yellow paper page (#F4C96B), slightly irregular dark hand-drawn outline (#242A2D), ONE teal folded upper corner (#2A8C82), two short dark dash eyes, no mouth. Short flat paper-strip arms and small paper-tab feet; no fingers, gloves, clothing, robot joints or wire limbs. Keep the same flat paper character as the reference.\nStyle: restrained editorial hand-drawn illustration, flat colors, clean white background, very light paper feel, generous white space, sparse objects, clear physical action. Landscape approximately 3:2. Keep all objects and both labels comfortably inside the canvas. Use one coherent scene, not a flowchart or panel grid.\nBoundary: this is an intuitive scene, not evidence of timing, eligibility, inventory totals or completed borrowing. Do not draw a clock, numerical chart, money transfer, checkmark claiming all conditions satisfied, or extra caption/brand/watermark/signature. The accompanying HTML states the exact rules and limits. Preserve any provenance markings the generation service itself supplies.",
+      "references": [
+        {
+          "file": "skills/ahafold/assets/fold/reference-sheet.png",
+          "role": "identity and style",
+          "sha256": "ce069334946531bb7a6b361bb1902d5f3469a9adc5fcfc900d4e89e07d7dd36a"
+        }
+      ],
+      "observed_labels": [
+        "留置",
+        "收件"
+      ]
+    },
+    {
+      "file": "assets/return-inspection.png",
+      "sha256": "2d8008f0f2f14f95d8d1eb6231fa015d89fe5a4f3df9515ddc428cce6e578f2b",
+      "bytes": 2045454,
+      "width": 1536,
+      "height": 1024,
+      "role": "chapter anchor: recorded return versus inspection, availability and settlement",
+      "prompt": "Use case: illustration-story.\nAsset type: a second chapter illustration inside the same long AhaFold tool-library guide.\nInput images: Image 1 is the Fold identity reference only. Image 2 is the companion illustration for visual style and the blue-grey cordless drill design, not a layout to reproduce. Make ONE new coherent scene, not a character sheet or before/after panel.\n\nTeaching relationship: a recorded return stops the borrowing clock, while the physical tool still awaits inspection and is not automatically available to the next borrower.\nShow ONE Fold character leaning attentively over a low inspection bench, holding a simple magnifying glass toward the same kind of blue-grey cordless drill, now lying in an inspection tray. Fold must actively examine the drill rather than holding up a topic sign. On the bench beside the tray, show a clearly visible return record card. Both the tool and card stay at the bench. Do not show a borrower taking the drill, a money refund, a damage verdict or a completed inspection.\nExact text: the return record card reads “已记归还”; the tray's front label reads “待检查”. Only these two labels; large, clean Chinese characters, legible at mobile size. Remove the earlier “留置” tag and receipt from this different stage.\nKeep Fold consistent: a single squat apricot-yellow page with a slightly irregular charcoal outline, ONE teal folded upper corner, two short dark dash eyes, no mouth. Short flat paper-strip arms and small paper-tab feet; no realistic hands, fingers, gloves, clothes, wire limbs, extra folds or robot parts.\nStyle and framing: match the companion's restrained hand-drawn editorial illustration, white background, sparse props, flat color, only very light paper shading. Landscape around 3:2, with comfortable margins. Keep the magnifying glass aimed at the drill, and keep labels separated and clearly attached to their own card/tray. No decorative headline, brand logo, chart, clocks, numerical values or extra text.\nThe HTML caption will explain that the service desk must actually register the return, inspection does not by itself establish damage liability, and availability and deposit settlement are separate states. The image is an intuitive anchor, not a replacement for those precise rules. Do not add a decorative signature/watermark; preserve provenance markings supplied by the generation service itself.",
+      "references": [
+        {
+          "file": "skills/ahafold/assets/fold/reference-sheet.png",
+          "role": "identity",
+          "sha256": "ce069334946531bb7a6b361bb1902d5f3469a9adc5fcfc900d4e89e07d7dd36a"
+        },
+        {
+          "file": "examples/longform/library/assets/receipt-reservation.png",
+          "role": "companion style and drill continuity",
+          "sha256": "dc31df6a3597b1fc43d9b270f5c6c1dfd223ff99f1026f951f26bb6c28a4b641"
+        }
+      ],
+      "observed_labels": [
+        "待检查",
+        "已记归还"
+      ]
+    }
+  ],
+  "preservation": "Original returned PNG bytes copied without cropping, repainting, recompression or metadata removal; same bytes embedded in illustrated.html.",
+  "markings": "No visible watermark or decorative signature observed on the two inspected images. This does not establish absence of invisible provenance.",
+  "verification_status": "Independent image/caption/semantic preservation review PASS; supplementary reading/layout checks PASS within their scope; strict longform artifact run FAIL at post-reload focus. See tests/longform/illustrated-results.md.",
+  "illustrated_html": {
+    "file": "illustrated.html",
+    "sha256": "f277f8ec396ff79799d0f3dfabf2adb3172689fc25742bd7d0770d17c8f63f5b"
+  },
+  "semantic_preservation": {
+    "original_body_text_nodes_preserved": 578,
+    "tables_byte_identical": 4,
+    "original_html_unchanged": true,
+    "new_content": "Two figures and captions plus one short AI-image provenance note."
+  },
+  "supplementary_browser_checks": {
+    "date": "2026-09-05T07:33:41.207Z",
+    "scope": "Supplementary image/reading QA only; excludes post-reload focus. Does not override strict test:longform failure or establish installed-host acceptance.",
+    "htmlSha256": "f277f8ec396ff79799d0f3dfabf2adb3172689fc25742bd7d0770d17c8f63f5b",
+    "regularWidths": [
+      320,
+      390,
+      768,
+      1440
+    ],
+    "regularImageByteAspectAndCaptionChecks": "PASS before the separate no-JS scanner attempt",
+    "regularAxeViolations": 0,
+    "regularNativeToc": "PASS",
+    "a4Print": "PDF generated, both figures visible, no horizontal document overflow",
+    "noJavaScript390": "PASS image decode,11sections, native TOC, containment; axe not run in this mode",
+    "actualBrowserZoom200": "PASS Chrome reported2x,DPR doubled,viewport halved,images preserved,native TOC",
+    "scannerLimitation": "The first supplementary run tried axe inside a JavaScript-disabled context and errored with promise garbage collection. It did not produce an accessibility violation result for that mode; no-JS functional checks were then run separately."
+  }
+}

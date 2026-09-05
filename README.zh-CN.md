@@ -4,9 +4,9 @@
 
 [English](README.md)
 
-一个轻量的单 skill，把一个概念或一份长文组织成清楚的 HTML 图解。
-纸页角色**小折（Fold）**可以通过动作演示概念；插画和交互按需使用，
-情境有助于解释材料时，再调用当前宿主的原生生图工具。
+一个轻量的单 skill，共同规划原创插画与准确的 HTML 说明，覆盖单个概念和长篇资料。
+纸页角色**小折（Fold）**用具体动作演示关系，计划中的配图由当前宿主原生工具生成。
+明确无图、只改文字和纯精确技术材料仍受支持；交互按需要加入。
 
 **v0.1 私有开发中。** 安装需要仓库访问权限。目前没有公开发布，也未宣称所有目标平台全面通过。
 [Codex/Grok专项多维审计](tests/focus-validation.md) 已覆盖中文、英文和混排使用，
@@ -14,20 +14,21 @@
 
 ## 先看成品
 
-[![AhaFold 中文工具借用长篇图解预览](examples/longform/library/preview.png)](examples/longform/library/index.html)
+[![AhaFold 带小折原创配图的中文长篇](examples/longform/library/illustrated-preview.png)](examples/longform/library/illustrated.html)
 
 | 图解 | 篇幅与语言 | 完整 HTML | 输入与来源记录 |
 | --- | --- | --- | --- |
-| 借到工具，究竟从哪一步算起？ | 中文 · 11 节 | [阅读](examples/longform/library/index.html) | [说明](examples/longform/library/README.md) |
+| 借到工具，究竟从哪一步算起？ | 中文 · 11 节 · 2 幅原创小折场景 | [阅读](examples/longform/library/illustrated.html) | [说明](examples/longform/library/README.md) |
 | Did my seats get booked? | 英文 · 11 节 | [阅读](examples/longform/retries/index.html) | [说明](examples/longform/retries/README.md) |
 | TypeScript → JSON 的边界 | 中文解释 + English 术语／代码 · 10 节 | [阅读](examples/longform/type-boundaries/index.html) | [说明](examples/longform/type-boundaries/README.md) |
 | 沉没成本 · Sunk cost | 简短图解 | [阅读](examples/sunk-cost/index.html) | [说明](examples/sunk-cost/README.md) |
 | 识别与回忆 · Recognition versus recall | 简短图解 | [阅读](examples/recognition-recall/index.html) | [说明](examples/recognition-recall/README.md) |
 | 复利 · Compounding | 简短图解 | [阅读](examples/compounding/index.html) | [说明](examples/compounding/README.md) |
 
-三份[长篇成品](examples/longform/README.md)均来自全新本地安装后的 Codex 会话，
-保留宿主原始输出，图片调用为 0。各自说明还链接到单独标注、经维护者复核修改的 Grok 版本，
-并保留原始测试记录。完整页面可直接阅读，预览只展示开头。
+工具借用图文版把两幅当前 Codex 原生生成的图片与已有长文结合：主图区分收件与留置，
+章节图解释已记归还与待检查。这是维护者编排的图文示例，不算新的安装后宿主独立生成验收。
+三份 Codex 无图原版、Grok 修订版及原始记录仍保留在[长篇说明](examples/longform/README.md)中。
+预览只展示开头，第二幅图位于归还章节正文。
 
 [识别／回忆中文版](examples/recognition-recall/index.zh-CN.html) 展示了保留原图的语言改写。
 
@@ -44,10 +45,11 @@
 
 简单需求使用[简短模板](skills/ahafold/assets/explainer.html)。材料较长或明确要求长篇时，
 使用[长篇说明](skills/ahafold/references/longform.md)和[原创多章节模板](skills/ahafold/assets/longform.html)。
-技能在同一套本地 HTML 工作流中，按材料选择适合的表达方式；长篇不要求额外生成图片。
+技能在同一套本地 HTML 工作流中选择表达方式。写长文前就规划主图及有必要的章节图，
+不要将已计划的配图推到最后，也不按章节机械凑图。
 
 图片负责角色、情境、动作与少量必要短标签。长正文、代码、公式和复杂图表放在可编辑的 HTML/SVG。
-图片、小折和交互均按需要使用，也可以明确要求只输出插图。
+明确无图和纯精确表达的需求仍受支持；小折与交互按解释需要使用，也可以明确要求只输出插图。
 
 作者使用所选宿主的账户与可用额度，生成时提供的材料会发送给该供应商。
 AhaFold 不包含数据库、索引器、独立服务、统一模型 SDK 或代码库分析产品线。
@@ -112,19 +114,21 @@ Codex 中提及 `$ahafold`；Grok Build 和 Antigravity CLI 中使用 `/ahafold`
 ```text
 Use AhaFold to turn material.md into a complete long guide for a general reader.
 Write in English. Keep important conditions, exceptions, numbers, and original code.
-No images.
+Plan a main Fold illustration and any chapter scene that adds a different insight.
 ```
 
 请明确写出成品语言。中文或中英混排的长篇可以这样请求：
 
 ```text
 使用 AhaFold 把 material.md 做成完整长篇图解，面向普通读者。
-用简体中文写作，保留重要条件、例外和数值；不要图片。
+用简体中文写作，保留重要条件、例外和数值。先共同规划正文与小折配图，
+用主图建立直觉，再按需要安排解释不同关系的章节图。
 ```
 
 ```text
 使用 AhaFold 把 material.md 做成长篇图解。
-解释用简体中文，保留 English 术语与原代码，讲清关键边界；不要图片。
+解释用简体中文，保留 English 术语与原代码，讲清关键边界。
+配图帮助建立直觉，精确执行路径、代码与数值留在 HTML/SVG。
 ```
 
 不需要图片时：
@@ -193,6 +197,12 @@ Grok 提到了全部 60 项，但只有 56 项保持一致，三处矛盾影响�
 展示的修订版保留修改记录，原始结果与此前失败仍属于测试证据。浏览器结果和未完成项见该报告。
 Windows 长篇 CI 门槛仍为 **FAIL**：刷新可能丢失原生标题焦点，无脚本模式下已验证的首次深链接之后也会出现。
 macOS／Linux 检查通过。本轮开发迭代尚未满足全部发布门槛。
+
+那六份无图案例不能证明完整图文长文链路。[新增配图记录](examples/longform/library/illustration-provenance.json)
+记录本批2次当前 Codex 原生调用（累计11/15）、实际图像／图注检查及维护者编排的长篇。
+Grok／Antigravity 的图文长篇生成，以及修订后工作流的全新安装宿主测试，仍未验证。
+[新图文页检查](tests/longform/illustrated-results.md)通过了单独的配图／阅读验证，
+但严格页面测试也在 macOS 复现刷新焦点失败，不能沿用旧 CI 通过结果宣称此版全面验收。
 
 短标签、角色身份、参考图输入和图片编辑分别验收。已登录不代表有额度，费用未知且用量并非无限。
 每张图都需要检查：某条原生路线可能无法满足严格“无可见水印”要求。

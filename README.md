@@ -4,10 +4,11 @@
 
 [简体中文](README.zh-CN.md)
 
-A lightweight, single agent skill for clear HTML explanations, from one concept to
-a long document. **Fold**, a curious paper-page character, can demonstrate the idea.
-Illustrations and interaction are optional; use your current harness's native image
-tool when a scene helps explain the material.
+A lightweight, single agent skill that plans original illustrations and accurate
+HTML together, from one concept to a long document. **Fold**, a curious paper-page
+character, demonstrates the relevant action. Use the current harness's native
+image tool for the planned scenes; explicit no-image requests, text-only edits and
+precision-only material remain supported. Add interaction when it helps.
 
 **Private v0.1 development.** Repository access is required to install. This is not a
 public release or a claim of full support on all target platforms.
@@ -17,21 +18,23 @@ tasks; the earlier examples do not establish universal reliability.
 
 ## See the result
 
-[![AhaFold long Chinese tool-library guide preview](examples/longform/library/preview.png)](examples/longform/library/index.html)
+[![AhaFold illustrated long Chinese tool-library guide](examples/longform/library/illustrated-preview.png)](examples/longform/library/illustrated.html)
 
 | Explanation | Scope | Complete HTML | Input and provenance |
 | --- | --- | --- | --- |
-| Borrowing from a tool library | Chinese · 11 sections | [Read](examples/longform/library/index.html) | [Notes](examples/longform/library/README.md) |
+| Borrowing from a tool library | Chinese · 11 sections · 2 original Fold scenes | [Read](examples/longform/library/illustrated.html) | [Notes](examples/longform/library/README.md) |
 | Did my seats get booked? | English · 11 sections | [Read](examples/longform/retries/index.html) | [Notes](examples/longform/retries/README.md) |
 | TypeScript → JSON boundaries | Chinese + English terms/code · 10 sections | [Read](examples/longform/type-boundaries/index.html) | [Notes](examples/longform/type-boundaries/README.md) |
 | Sunk cost · 沉没成本 | Compact | [Read](examples/sunk-cost/index.html) | [Notes](examples/sunk-cost/README.md) |
 | Recognition versus recall | Compact | [Read](examples/recognition-recall/index.html) | [Notes](examples/recognition-recall/README.md) |
 | Compounding · 复利 | Compact | [Read](examples/compounding/index.html) | [Notes](examples/compounding/README.md) |
 
-The three [long guides](examples/longform/README.md) are unchanged Codex outputs
-from fresh local AhaFold installations, with zero image calls. Their notes also
-link to separately labelled, maintainer-reviewed Grok variants and preserve the
-original results. These are complete reading examples; previews show only the opening.
+The illustrated library guide combines two real current-Codex native images with
+the existing long explanation: one scene anchors receipt versus reservation,
+another explains recorded return versus inspection. It is a maintainer-integrated
+example, not a new fresh installed-host run. The three original no-image Codex
+outputs and separately reviewed Grok variants remain in the [long-guide notes](examples/longform/README.md).
+Previews show only the opening; the second illustration is inside the return chapter.
 
 The [Chinese recognition/recall edition](examples/recognition-recall/index.zh-CN.html)
 demonstrates a language revision that preserves the original image.
@@ -54,11 +57,13 @@ Substantial material or an explicit long-guide request uses the
 [long-form guidance](skills/ahafold/references/longform.md) and
 [original multi-section template](skills/ahafold/assets/longform.html). The skill
 chooses the representations for the material within the same local-HTML workflow.
-Longer work does not require new images.
+Plan the main picture and any useful chapter scenes before writing the full page;
+do not postpone a requested illustration until the end or add one per chapter mechanically.
 
 Images carry the character, situation, action, and a few useful short labels. Long
-prose, code, formulas, and complex charts stay in editable HTML/SVG. Images, Fold,
-and interaction are optional. You can explicitly request an illustration only.
+prose, code, formulas, and complex charts stay in editable HTML/SVG. Explicit
+no-image and precision-only requests remain supported; Fold and interaction are
+used when they help. You can also request an illustration only.
 
 The author uses their selected harness account and available quota. Generation sends
 the supplied material to that provider. AhaFold includes no database, indexer,
@@ -130,19 +135,21 @@ Use short labels in the illustration, and add interaction only if it helps.
 ```text
 Use AhaFold to turn material.md into a complete long guide for a general reader.
 Write in English. Keep important conditions, exceptions, numbers, and original code.
-No images.
+Plan a main Fold illustration and any chapter scene that adds a different insight.
 ```
 
 State the output language explicitly. For a Chinese or mixed-language long guide:
 
 ```text
 使用 AhaFold 把 material.md 做成完整长篇图解，面向普通读者。
-用简体中文写作，保留重要条件、例外和数值；不要图片。
+用简体中文写作，保留重要条件、例外和数值。先共同规划正文与小折配图，
+用主图建立直觉，再按需要安排解释不同关系的章节图。
 ```
 
 ```text
 使用 AhaFold 把 material.md 做成长篇图解。
-解释用简体中文，保留 English 术语与原代码，讲清关键边界；不要图片。
+解释用简体中文，保留 English 术语与原代码，讲清关键边界。
+配图帮助建立直觉，精确执行路径、代码与数值留在 HTML/SVG。
 ```
 
 To skip images:
@@ -223,6 +230,15 @@ remain part of the evidence. Browser results and outstanding checks are in that 
 The Windows long-form CI gate remains **FAIL**: native heading focus can be lost
 after reload, including after a verified fresh deep link with JavaScript disabled.
 macOS/Linux checks passed. This development iteration has not cleared every release gate.
+
+Those six no-image cases do not establish the illustrated long-form path. The
+[new library picture record](examples/longform/library/illustration-provenance.json)
+adds2 current-Codex native calls (cumulative11/15), with actual pixel/caption checks
+and a maintainer-integrated long guide. Grok/Antigravity illustrated long-form
+authoring and a fresh installed-host run of this corrected workflow remain unverified.
+The [illustrated-page checks](tests/longform/illustrated-results.md) passed their
+separate image/reading scope, but the strict page run also hit reload-focus failure
+on macOS. Earlier CI passes do not establish full acceptance of this new edition.
 
 Short labels, Fold identity, reference-image input, and image editing are separate
 checks. A logged-in account does not guarantee quota. Cost is unknown and usage is

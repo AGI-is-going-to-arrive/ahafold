@@ -1,5 +1,9 @@
 # Long-form results · 2026-09-05
 
+This report records the initial **no-image** long-form batch. It does not establish
+the illustrated workflow. The later [illustrated correction and its separate results](illustrated-results.md)
+restore joint picture/text planning and add two actual native Fold scenes.
+
 AhaFold now has a long-form authoring path, an original eight-section template,
 and three substantial delivered guides. Six fresh installed-host sessions completed
 normally. That is lifecycle evidence, not six successful content acceptances:

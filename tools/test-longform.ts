@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { AxeBuilder } from '@axe-core/playwright';
 import { chromium, type BrowserContext, type Locator, type Page, type Worker } from 'playwright';
+import { decodePng, type ImageInfo } from './package-contract.js';
 
 interface LongformCase {
   name: string;
@@ -25,6 +27,7 @@ interface PageEvidence {
   minimumSvgFontPx: number | null;
   numericStates: number | null;
   calculator: CalculatorEvidence | null;
+  illustrations: ImageInfo[] | null;
 }
 
 interface CalculatorEvidence {
@@ -53,8 +56,10 @@ const templateOnly = args.length === 1 && args[0] === '--template-only';
 const artifact = args.length === 2 && args[0] === '--artifact' ? args[1] : undefined;
 assert.ok(args.length === 0 || templateOnly || artifact, 'Use --template-only or --artifact with a repository-relative HTML file');
 const template: LongformCase = { name: 'template', file: 'skills/ahafold/assets/longform.html' };
+const illustratedLibraryFile = 'examples/longform/library/illustrated.html';
 const examples: readonly LongformCase[] = [
   { name: 'library', file: 'examples/longform/library/index.html' },
+  { name: 'library-illustrated', file: illustratedLibraryFile },
   { name: 'library-grok-reviewed', file: 'examples/longform/library/grok-reviewed.html' },
   { name: 'retries', file: 'examples/longform/retries/index.html' },
   { name: 'retries-grok-reviewed', file: 'examples/longform/retries/grok-zh-reviewed.html' },
@@ -183,6 +188,80 @@ async function assertLocalResources(page: Page, candidate: LongformCase): Promis
     });
     assert.ok((await image.getAttribute('alt'))?.trim(), 'An explanatory image needs nonempty alt text');
   }
+}
+
+async function checkIllustratedLibrary(page: Page, candidate: LongformCase): Promise<ImageInfo[] | null> {
+  if (path.resolve(root, candidate.file) !== path.resolve(root, illustratedLibraryFile)) return null;
+  assert.equal(await page.locator('img').count(), 2, 'Illustrated library delivers exactly two actual images');
+  const provenance: unknown = JSON.parse(await readFile(path.join(root, 'examples/longform/library/illustration-provenance.json'), 'utf8'));
+  assert.ok(isRecord(provenance) && Array.isArray(provenance.images) && provenance.images.length === 2, 'Illustrations have two native-output provenance records');
+  const originals: ImageInfo[] = [];
+  for (const scene of ['receipt-reservation', 'return-inspection'] as const) {
+    const file = `examples/longform/library/assets/${scene}.png`;
+    const original = await readFile(path.join(root, file));
+    const info = await decodePng(root, file);
+    const recorded: unknown = provenance.images.find((entry: unknown) => isRecord(entry) && entry.file === `assets/${scene}.png`);
+    assert.ok(isRecord(recorded), `${scene}: native-output provenance exists`);
+    assert.equal(info.sha256, recorded.sha256, `${scene}: original matches the recorded native-output hash`);
+    assert.equal(original.length, recorded.bytes, `${scene}: original byte length matches native provenance`);
+    assert.equal(info.width, recorded.width, `${scene}: width matches native provenance`);
+    assert.equal(info.height, recorded.height, `${scene}: height matches native provenance`);
+    const figure = page.locator(`figure[data-ahafold-enrichment="${scene}"]`);
+    assert.equal(await figure.count(), 1, 'Each native image belongs to one explanatory figure');
+    const image = figure.locator('img');
+    assert.equal(await image.count(), 1);
+    const source = await image.getAttribute('src');
+    const encoded = /^data:image\/png;base64,([A-Za-z0-9+/=\s]+)$/.exec(source ?? '')?.[1];
+    assert.ok(encoded, `${scene}: image is an embedded PNG, not a remote or placeholder reference`);
+    const embedded = Buffer.from(encoded, 'base64');
+    assert.ok(embedded.equals(original), `${scene}: embedded PNG preserves the original bytes exactly`);
+    assert.equal(createHash('sha256').update(embedded).digest('hex'), info.sha256, `${scene}: embedded PNG hash matches the decoded original`);
+    await image.scrollIntoViewIfNeeded();
+    const rendering = await image.evaluate(async (element) => {
+      if (!(element instanceof HTMLImageElement)) throw new Error('Expected native illustration image');
+      await element.decode();
+      const bounds = element.getBoundingClientRect();
+      const clippedBy: string[] = [];
+      for (let ancestor = element.parentElement; ancestor; ancestor = ancestor.parentElement) {
+        const style = getComputedStyle(ancestor);
+        const frame = ancestor.getBoundingClientRect();
+        if (/(?:hidden|clip)/.test(style.overflowX) && (bounds.left < frame.left - 1 || bounds.right > frame.right + 1)
+          || /(?:hidden|clip)/.test(style.overflowY) && (bounds.top < frame.top - 1 || bounds.bottom > frame.bottom + 1)) {
+          clippedBy.push(ancestor.tagName.toLowerCase());
+        }
+        if (ancestor.tagName === 'FIGURE') break;
+      }
+      return {
+        width: element.naturalWidth, height: element.naturalHeight,
+        renderedWidth: bounds.width, renderedHeight: bounds.height,
+        alt: element.alt.trim(), exposed: !element.closest('[aria-hidden="true"]') && !/^(?:none|presentation)$/.test(element.getAttribute('role') ?? ''),
+        inOpening: document.querySelector('main h1')?.closest('header')?.contains(element) ?? false,
+        inReturn: document.getElementById('return')?.closest('section')?.contains(element) ?? false,
+        clippedBy,
+      };
+    });
+    assert.equal(rendering.width, info.width, `${scene}: browser decodes the original pixel width`);
+    assert.equal(rendering.height, info.height, `${scene}: browser decodes the original pixel height`);
+    assert.ok(rendering.renderedWidth > 0 && rendering.renderedHeight > 0, `${scene}: illustration is rendered`);
+    assert.ok(Math.abs(rendering.renderedWidth / rendering.renderedHeight / (info.width / info.height) - 1) <= 0.01, `${scene}: displayed aspect ratio must preserve the entire original within 1%`);
+    assert.deepEqual(rendering.clippedBy, [], `${scene}: a containing figure must not crop the image`);
+    assert.ok(rendering.exposed && rendering.alt.length >= 20, `${scene}: accessible descriptive alt text is required; its semantic accuracy is reviewed separately`);
+    assert.ok(scene === 'receipt-reservation' ? rendering.inOpening : rendering.inReturn, `${scene}: the image remains beside the explanation it illustrates`);
+    const caption = figure.locator('figcaption');
+    assert.equal(await caption.count(), 1);
+    await caption.scrollIntoViewIfNeeded();
+    assert.ok(await caption.isVisible(), `${scene}: caption is readable`);
+    const captionId = await caption.getAttribute('id');
+    assert.ok(captionId && (await figure.getAttribute('aria-labelledby'))?.split(/\s+/).includes(captionId), `${scene}: figure label resolves to its visible caption`);
+    const explanation = caption.locator('p').first();
+    const boundary = caption.locator('.scene-limits');
+    assert.equal(await boundary.count(), 1, `${scene}: the visible explanation includes its limits`);
+    for (const paragraph of [explanation, boundary]) {
+      assert.ok(await paragraph.isVisible() && normalizedText(await paragraph.innerText()).length >= 20, `${scene}: explanatory and limits text remain readable; word presence is not a semantic verdict`);
+    }
+    originals.push(info);
+  }
+  return originals;
 }
 
 async function expectFocus(locator: Locator): Promise<void> {
@@ -454,7 +533,8 @@ async function readLibraryOracle(): Promise<LibraryOracle> {
 }
 
 async function checkLibraryNumbers(page: Page, candidate: LongformCase): Promise<number | null> {
-  if (path.resolve(root, candidate.file) !== path.join(root, 'examples', 'longform', 'library', 'index.html')) return null;
+  const file = path.resolve(root, candidate.file);
+  if (file !== path.join(root, 'examples', 'longform', 'library', 'index.html') && file !== path.resolve(root, illustratedLibraryFile)) return null;
   const oracle = await readLibraryOracle();
   const table = page.getByRole('table').filter({ has: page.getByRole('columnheader', { name: '无新损伤：退还', exact: true }) });
   assert.equal(await table.count(), 1, 'The delivered library page has one visible full refund table');
@@ -586,6 +666,7 @@ async function checkNoJavaScript(browser: Awaited<ReturnType<typeof chromium.lau
     await checkNavigation(page, url);
     await checkLibraryNumbers(page, candidate);
     await assertLocalResources(page, candidate);
+    await checkIllustratedLibrary(page, candidate);
     assertNoFailures(failures, `${candidate.name}, no JavaScript`);
   } finally {
     await context.close();
@@ -596,6 +677,7 @@ async function checkPrint(page: Page, candidate: LongformCase): Promise<void> {
   await page.goto(pathToFileURL(path.join(root, candidate.file)).href, { waitUntil: 'load' });
   await page.setViewportSize({ width: 794, height: 1123 });
   await page.emulateMedia({ media: 'print' });
+  await checkIllustratedLibrary(page, candidate);
   await assertNoOverflow(page, `${candidate.name}, A4 print`);
   const clipped = await page.locator('main *').evaluateAll((elements) => elements.flatMap((element) => {
     const style = getComputedStyle(element);
@@ -666,6 +748,7 @@ async function checkRealPageZoom(): Promise<void> {
       await checkScrollRegions(page);
       await checkSvgFonts(page);
       await checkLibraryNumbers(page, candidate);
+      await checkIllustratedLibrary(page, candidate);
       await checkLibraryCalculator(page, candidate);
       await page.screenshot({ path: path.join(output, `${candidate.name}-zoom-200.png`), fullPage: true });
       assertNoFailures(failures, `${candidate.name}, real 200% page zoom`);
@@ -697,6 +780,7 @@ try {
         }
         await assertNoOverflow(page, `${candidate.name}, ${viewport.width}px`);
         await assertLocalResources(page, candidate);
+        const illustrations = await checkIllustratedLibrary(page, candidate);
         await checkKeyboard(page);
         const tocLinks = await checkNavigation(page, url);
         const scrollRegions = await checkScrollRegions(page);
@@ -707,8 +791,8 @@ try {
         assert.deepEqual(audit.violations.map((violation) => ({ id: violation.id, impact: violation.impact, nodes: violation.nodes.map((node) => node.target) })), [], `${candidate.name}: accessibility violations`);
         if (viewport.width === 1440) await checkPrint(page, candidate);
         assertNoFailures(failures, `${candidate.name}, ${viewport.width}px`);
-        evidence.push({ name: candidate.name, width: viewport.width, tocLinks, scrollRegions, minimumSvgFontPx, numericStates, calculator });
-        console.log(`PASS ${candidate.name}: ${viewport.width}px, TOC/deep-link focus, keyboard disclosure/local scroll, SVG screen fonts, offline, axe${numericStates ? `, ${numericStates} exact refund states and rendered deposit bars` : ''}${calculator ? `, calculator ${calculator.refundStates} refund/${calculator.disputedStates} dispute/${calculator.invalidStates} invalid states and keyboard reset` : ''}${viewport.width === 1440 ? ', A4 print' : ''}`);
+        evidence.push({ name: candidate.name, width: viewport.width, tocLinks, scrollRegions, minimumSvgFontPx, numericStates, calculator, illustrations });
+        console.log(`PASS ${candidate.name}: ${viewport.width}px, TOC/deep-link focus, keyboard disclosure/local scroll, SVG screen fonts, offline, axe${illustrations ? ', two original PNGs preserved with visible captions and uncropped aspect ratios' : ''}${numericStates ? `, ${numericStates} exact refund states and rendered deposit bars` : ''}${calculator ? `, calculator ${calculator.refundStates} refund/${calculator.disputedStates} dispute/${calculator.invalidStates} invalid states and keyboard reset` : ''}${viewport.width === 1440 ? ', A4 print' : ''}`);
       } finally {
         await context.close();
       }
@@ -723,6 +807,6 @@ try {
 await checkRealPageZoom();
 const scope = templateOnly ? 'template only; delivered examples and installed hosts were not tested'
   : artifact ? 'one explicitly selected artifact only; this is not approval of the artifact or installed-host acceptance'
-    : 'template, three required longform topics and their three reviewed Grok variants; installed hosts require separate evidence';
+    : 'template, three original longform topics, their three reviewed Grok variants and the illustrated library; installed hosts require separate evidence';
 await writeFile(path.join(output, 'results.json'), `${JSON.stringify({ timestamp: new Date().toISOString(), scope, cases: evidence }, null, 2)}\n`);
 console.log(`Scope: ${scope}. Automated checks do not establish factual correctness, illustration semantics, aesthetics, or human comprehension.`);

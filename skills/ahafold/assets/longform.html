@@ -48,6 +48,10 @@
     li + li { margin-top: 0.75rem; }
     figure { margin: 2rem 0; }
     figcaption { margin-top: 1rem; color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    .story-illustration { max-width: var(--reading-width); margin-block: 2rem; }
+    .story-illustration img { display: block; width: 100%; height: auto; }
+    .story-illustration figcaption strong { display: block; margin-bottom: 0.35rem; color: var(--ink); }
+    .illustration-limit { display: block; margin-top: 0.5rem; }
     svg { display: block; }
     svg text { fill: var(--ink); font-family: inherit; font-size: 18px; }
     code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 1em; }
@@ -216,8 +220,10 @@
 <body>
   <!-- Original long-form starter, with filled, explicitly hypothetical content.
        EDIT: Replace the question, argument, calculations and sources together.
-       Keep only representations that explain the new topic. An image, character,
-       table or interaction is never mandatory. This page generates no artwork.
+       Plan the core illustration and useful chapter scenes with the argument.
+       The two commented figure examples below are authoring slots, not generated
+       assets. Insert inspected native image bytes before calling an illustrated
+       guide complete; omit slots for an explicit no-image/precision-only request.
        Native anchors and disclosures work offline without JavaScript. -->
   <a class="skip-link" href="#main">跳到正文</a>
   <header class="page-header">
@@ -228,11 +234,23 @@
   <main id="main" class="page-layout" tabindex="-1" aria-labelledby="page-title">
     <header class="introduction">
       <h1 id="page-title">任务都不慢，<br>队伍怎么越排越长？</h1>
+      <!-- CORE SCENE SLOT: Fold waits with a ready-to-print page beside a busy
+           printer and accumulating work. Anchor: waiting differs from processing.
+           Generate from this page's actual assumptions; keep exact job counts and
+           minutes in the HTML timeline. Replace the example src/alt/caption with
+           the inspected native output; the commented markup is not a delivered image.
+      <figure class="story-illustration">
+        <img src="data:image/png;base64,INSPECTED_ORIGINAL_BYTES" width="1536" height="1024" alt="Describe the real scene after inspection.">
+        <figcaption><strong>Explain the action's connection to the main claim.</strong>
+          <span class="illustration-limit">State where the picture's analogy stops; exact timing follows in HTML.</span>
+        </figcaption>
+      </figure>
+      -->
       <p class="lead">一份文件只打印 3 分钟，为什么第六个人要等 5 分钟才能开始？沿着一台共享打印机的六份任务，分开到达、等待与处理，看看哪些改法真的省时间。</p>
       <div class="central-answer">
         <p><strong>等待会累积，因为新任务到来的间隔，比机器完成一份任务的时间更短。</strong>单份任务没有变慢，后来的任务仍会排得更久。</p>
       </div>
-      <p class="template-note">这是 AhaFold 的原创长篇 HTML 模板，以假设场景展示完整推理。它不是实测报告，也没有生成插画。所有数字和限制都在正文中展开。</p>
+      <p class="template-note">这是 AhaFold 的原创长篇 HTML 模板，以假设场景展示推理与图文规划。源码标明主图和章节配图位置，尚须生成并填入真实插画；此模板不是完整的原生配图成品。所有数字和限制在正文中展开。</p>
     </header>
 
     <nav id="contents" class="contents" aria-label="本页目录" tabindex="-1">
@@ -363,6 +381,17 @@
       </section>
 
       <section class="chapter" aria-labelledby="why-it-grows">
+        <!-- CHAPTER SCENE SLOT: Fold moves a waiting queue from a screen to a
+             physical line beside the same busy printer. Anchor: hiding or moving
+             the wait does not create processing capacity. Use only if this adds
+             understanding; do not draw illustrated lengths as measured durations.
+        <figure class="story-illustration">
+          <img src="data:image/png;base64,INSPECTED_ORIGINAL_BYTES" width="1536" height="1024" loading="lazy" alt="Describe the inspected action and relevant objects.">
+          <figcaption><strong>Connect this different scene to the chapter's claim.</strong>
+            <span class="illustration-limit">Keep actual capacity and waiting-time calculations in the nearby HTML.</span>
+          </figcaption>
+        </figure>
+        -->
         <div class="prose">
           <h2 id="why-it-grows" tabindex="-1">队伍增长，要同时看节奏与工作量</h2>
           <p>本例每隔 2 分钟来一份，机器却需要 3 分钟才完成一份。前一份留下的缺口还没消化，下一份已经到了，因此相邻任务的等待从 0、1、2 一直增加到 5 分钟。</p>

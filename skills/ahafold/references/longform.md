@@ -2,8 +2,9 @@
 
 Read this for a substantial supplied document, several dependent questions, many
 states/conditions, or a user who explicitly asks for a long or complex guide.
-Length calls for information architecture, not extra decoration. Keep the result
-within AhaFold's single-skill, local-HTML workflow.
+Plan original illustrations and precise HTML together. Length needs reading
+structure and distinct cognitive anchors; it does not justify decorative filler.
+Keep the result within AhaFold's single-skill, local-HTML workflow.
 
 ## Establish the argument before styling
 
@@ -17,6 +18,8 @@ Make a compact working outline containing:
 - The main answer and the dependencies needed to understand it.
 - Important facts, definitions, assumptions, exceptions and sources.
 - A mapping from each required point to a section, diagram/table or worked example.
+- The core illustration and any necessary chapter scenes: supported claim, actual
+  action, placement, exact short labels, intended caption/analogy limit and call budget.
 
 This can be a small author note, not a reader-facing form or a database. If the task
 may span sessions, save the outline and outstanding checks beside the work so a
@@ -26,6 +29,43 @@ debugging in the delivered reading surface.
 Preserve important qualifications when compressing prose. Do not satisfy a word
 count by repeating summaries, or make a short answer longer merely to use this
 template. User-requested exclusions and focused explanations still take precedence.
+
+## Plan pictures as part of the explanation
+
+For an illustrated long guide, begin with a core scene that gives the main
+relationship an intuitive anchor. Place it early with the opening argument, not
+only as a decorative cover. Add a chapter scene when it resolves a different
+misunderstanding, exposes a boundary or makes a consequential action visible.
+Do not impose a fixed image count or one image per chapter.
+
+For each planned picture, decide these together before generating it:
+
+| Picture decision | What to establish |
+| --- | --- |
+| Claim and cognitive role | What this scene helps the reader understand beyond the adjacent prose |
+| Action and objects | What Fold actually does and which relationship the objects represent |
+| Placement | The opening or specific chapter where the reader needs this anchor |
+| Labels and caption | Exact short labels, their searchable HTML meanings, and the caption's intended claim |
+| Boundary | What the scene must not imply about timing, quantities, eligibility or guarantees |
+| Route and budget | The current host's native tool, planned calls and preserved original asset |
+
+For example, binding a tag to one real tool can distinguish a reservation from a
+loose receipt. Examining a returned tool can distinguish recorded return from
+inspection and availability. The exact records, deadlines and fee calculations
+remain in HTML/SVG. These are different cognitive roles, not two copies of the
+same mascot pose.
+
+Use the current host's native image reference from `SKILL.md`, inspect the real
+output, and place the preserved image in semantic `figure`/`img`/`figcaption`
+markup. Captions must describe observed pixels; revise the planned caption if the
+result differs. Repeat label meanings and limits in selectable HTML. Keep images
+responsive without cropping meaningful content or shrinking labels out of legibility.
+
+Explicit no-image requests, text-only revisions and precision-only material remain
+valid exceptions. Missing quota/tool access is a different outcome: retain a
+readable draft and identify its unfinished planned illustrations. Do not silently
+count that draft as a completed illustrated long guide. A test that explicitly
+forbids images only establishes the no-image path.
 
 ## Choose a reading structure
 
@@ -65,8 +105,8 @@ Optional active-section highlighting must not seize focus or scroll the document
 
 Label an arrow with its actual relation when ambiguity is possible: for example
 "queues", "expires", "parses" or "may fail". Keep diagram captions aligned with
-what the diagram really shows. Fold and native illustrations can anchor selected
-sections; they should not replace precise state, numeric or logical diagrams.
+what the diagram really shows. The planned native scenes provide intuitive anchors;
+HTML/SVG carries the precise state, numeric and logical relationships beside them.
 
 ## Layout for reading at several depths
 
@@ -94,11 +134,12 @@ values when its script has not run.
 
 ## Complete in bounded stages
 
-First save a complete, readable static draft with the core sections and source
-coverage. Then add exact diagrams/calculations, useful interaction, and any
-budgeted native imagery. Save complete HTML at each meaningful stage rather than
-waiting until the end to write the first usable file. The draft's status must be
-honest until checks finish.
+First save the joint picture/text outline and a readable static draft with the
+core sections and source coverage. Generate and integrate the planned native
+scenes as part of the core explanation, alongside exact diagrams/calculations;
+add useful interaction where it helps. Save complete HTML at meaningful stages
+rather than waiting until the end. The draft remains incomplete while its planned
+illustrations or required checks are missing.
 
 Use one focused verification pass and a batched correction pass. Reuse unchanged
 source evidence; avoid repeated full-page/base64 reads and repeated source fetches.
@@ -108,7 +149,9 @@ from a file's presence alone.
 
 Before delivery, compare the source/claim outline with the actual page. Check the
 opening answer, headings, overview, local diagrams, table rows, interactive output,
-captions and conclusion for the same conditions and semantics. Verify numerical
+captions and conclusion for the same conditions and semantics. Inspect every real
+illustration's identity, action, label spelling, caption agreement and provider
+markings; verify original and embedded image hashes. Verify numerical
 boundaries and visible strings from full-precision values. Check desktop/tablet/
 mobile, keyboard navigation, fragment links, actual SVG label sizes, text zoom,
 no-JS reading and print. Name unperformed checks or missing material explicitly.
