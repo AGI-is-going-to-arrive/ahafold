@@ -11,7 +11,7 @@ Read this when planning an explanation or revising its editable content. Use the
 | A relationship changes under a condition | An editable SVG/HTML diagram, worked numbers, or a small control | State fixed assumptions, show units, and make the displayed formula, values, and graph agree. |
 | Exact terminology or dense technical content | Clear HTML text, a compact table, code, or SVG | Omit illustration and character when they add no information. |
 
-Use one core illustration for a short explanation if it helps. More scenes need distinct explanatory work. Fold should push, pull, unload, open, carry, compare, or connect something that represents the relationship. It need not perform a literal paper-folding action.
+Scale image count to the generated explanatory prose and its distinct relationships; a short piece may need one, while longer work needs proportionate coverage. Use the [length-based planning rule](longform.md#determine-the-count-from-the-generated-content) and recalibrate after the actual draft. Fold should push, pull, unload, open, carry, compare or connect something that represents the relationship; it need not perform a literal paper-folding action.
 
 ## Accuracy and evidence
 

@@ -57,8 +57,12 @@ Substantial material or an explicit long-guide request uses the
 [long-form guidance](skills/ahafold/references/longform.md) and
 [original multi-section template](skills/ahafold/assets/longform.html). The skill
 chooses the representations for the material within the same local-HTML workflow.
-Plan the main picture and any useful chapter scenes before writing the full page;
-do not postpone a requested illustration until the end or add one per chapter mechanically.
+Image count follows the generated explanatory prose. Start from roughly one image
+per1000 Chinese/CJK characters or600 English words (combine both for mixed prose),
+then adjust for independent mechanisms, difficult passages and existing visual
+coverage. Recount after the full draft or a substantial rewrite. Code, tables,
+appendices, captions and image data do not inflate the count; there is no universal
+image cap. Explicit user counts, edit scope and authorized budgets take precedence.
 
 Images carry the character, situation, action, and a few useful short labels. Long
 prose, code, formulas, and complex charts stay in editable HTML/SVG. Explicit
@@ -135,7 +139,8 @@ Use short labels in the illustration, and add interaction only if it helps.
 ```text
 Use AhaFold to turn material.md into a complete long guide for a general reader.
 Write in English. Keep important conditions, exceptions, numbers, and original code.
-Plan a main Fold illustration and any chapter scene that adds a different insight.
+Scale the number and placement of Fold illustrations to the generated body length
+and conceptual density, then review the plan after the full draft.
 ```
 
 State the output language explicitly. For a Chinese or mixed-language long guide:
@@ -143,13 +148,14 @@ State the output language explicitly. For a Chinese or mixed-language long guide
 ```text
 使用 AhaFold 把 material.md 做成完整长篇图解，面向普通读者。
 用简体中文写作，保留重要条件、例外和数值。先共同规划正文与小折配图，
-用主图建立直觉，再按需要安排解释不同关系的章节图。
+配图数量随生成正文的长度、独立机制和阅读节奏动态调整，完整初稿后重新核算。
 ```
 
 ```text
 使用 AhaFold 把 material.md 做成长篇图解。
 解释用简体中文，保留 English 术语与原代码，讲清关键边界。
-配图帮助建立直觉，精确执行路径、代码与数值留在 HTML/SVG。
+配图数量随实际解释正文的长短调整；精确执行路径、代码与数值留在 HTML/SVG，
+代码块和表格长度不用于凑配图数量。
 ```
 
 To skip images:

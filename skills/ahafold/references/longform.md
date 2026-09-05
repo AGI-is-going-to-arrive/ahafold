@@ -18,8 +18,10 @@ Make a compact working outline containing:
 - The main answer and the dependencies needed to understand it.
 - Important facts, definitions, assumptions, exceptions and sources.
 - A mapping from each required point to a section, diagram/table or worked example.
-- The core illustration and any necessary chapter scenes: supported claim, actual
-  action, placement, exact short labels, intended caption/analogy limit and call budget.
+- Estimated explanatory-body length and a corresponding image-count target;
+  update these from the actual generated draft, not the source document's size.
+- Each planned scene's supported claim, action, placement, exact short labels,
+  intended caption/analogy limit, reusable asset and required native call.
 
 This can be a small author note, not a reader-facing form or a database. If the task
 may span sessions, save the outline and outstanding checks beside the work so a
@@ -32,11 +34,67 @@ template. User-requested exclusions and focused explanations still take preceden
 
 ## Plan pictures as part of the explanation
 
-For an illustrated long guide, begin with a core scene that gives the main
-relationship an intuitive anchor. Place it early with the opening argument, not
-only as a decorative cover. Add a chapter scene when it resolves a different
-misunderstanding, exposes a boundary or makes a consequential action visible.
-Do not impose a fixed image count or one image per chapter.
+### Determine the count from the generated content
+
+Use the actual explanatory prose the reader will receive. Do not count raw input
+length, HTML/CSS, base64, navigation, code blocks or inline code (whether supplied
+or generated), table cells, appendices, sources, image captions or alt text.
+Excluding captions prevents added images from inflating
+their own quota. Count mixed-language prose once: let `C` be its Chinese/CJK
+character count and `W` its English/non-CJK word count.
+
+For a normal illustrated narrative with nonempty prose, use this adjustable
+editorial starting point:
+
+`N₀ = max(1, ceil(C / 1000 + W / 600))`
+
+This is a planning heuristic, not an empirically validated optimum or a rigid
+quota. It grows with the generated content and has no universal upper limit.
+
+| Generated explanatory prose | Initial distinct-image target |
+| --- | ---: |
+| 1000 Chinese characters | 1 |
+| 3000 Chinese characters | 3 |
+| 6000 Chinese characters | 6 |
+| 1800 English words | 3 |
+| 2000 Chinese characters plus 600 English words | 3 |
+
+Then map the target to meaningful reading spans and calibrate it:
+
+- Add coverage for independent mechanisms, contrasts, state changes and difficult
+  transitions. Check for long uninterrupted prose spans that still need a visual
+  anchor; do not concentrate the entire allocation in the opening.
+- Merge repetitive or decorative scenes. Precise HTML/SVG may already explain a
+  technical span well; raw code or large tables must not force unrelated pictures.
+  Record the content reason when the final plan differs substantially from `N₀`.
+- Count distinct useful illustrations, not repeated placements of the same image,
+  decorative icons or the Fold reference sheet. An existing suitable image can
+  satisfy a planned scene without a new generation call.
+
+Estimate from the outline, recount when the full draft exists, and review the
+plan after a substantial expansion or shortening. Add newly needed coverage,
+merge obsolete plans and reposition useful images. Preserve existing original
+files; a count change does not authorize deleting assets or regenerating them.
+Do not label a two-image demonstration as the recommended density for every guide.
+
+An explicit user image count, no-image request, read-only task or text-only/language
+revision takes precedence. Pure code/table work with no explanatory prose does
+not enter the formula; an illustration-only request follows its requested output.
+Do not increase calls during a text-only revision merely because word counts change.
+
+Track the recommended total, the chosen scene plan, reusable images, remaining
+generations and authorized call budget separately. A budget limit does not change
+the measured length or silently erase planned coverage. If it cannot cover the
+plan, state what remains unillustrated and prioritize the useful work already
+authorized. Follow any user-approved limited version; never exceed the budget to
+meet this heuristic, and count retries as calls rather than new finished pictures.
+
+### Assign each picture a role and position
+
+Give the central relationship an intuitive anchor early, then distribute the
+remaining scenes where their distinct claims arise. The count follows the content;
+it is not a fixed “main image plus a few chapter pictures” format, nor an automatic
+one-picture-per-heading rule.
 
 For each planned picture, decide these together before generating it:
 
@@ -135,7 +193,8 @@ values when its script has not run.
 ## Complete in bounded stages
 
 First save the joint picture/text outline and a readable static draft with the
-core sections and source coverage. Generate and integrate the planned native
+core sections and source coverage. Recount the actual explanatory prose and adjust
+the scene count and placement before treating the image plan as final. Generate and integrate the planned native
 scenes as part of the core explanation, alongside exact diagrams/calculations;
 add useful interaction where it helps. Save complete HTML at meaningful stages
 rather than waiting until the end. The draft remains incomplete while its planned

@@ -15,6 +15,15 @@ the short image labels and preserves the exact rules' boundaries.
 图文版在原有11节长文中加入两幅当前 Codex 原生生成的小折场景：开头解释收件与留置，
 归还章节区分已记归还与待检查。原正文与四张表完整保留，图注重复短标签并说明精确规则的边界。
 
+The two images are a historical integration/byte-preservation example, not the
+recommended image count for an 11-section guide. New authoring uses the
+[length-adaptive planning rule](../../../skills/ahafold/references/longform.md#determine-the-count-from-the-generated-content).
+This saved example has not been regenerated as an acceptance case for that rule.
+
+此处两图是此前图文编排与原图保真示例，不代表11节长文的推荐配图数量。
+新生成任务采用[随正文长度动态规划的规则](../../../skills/ahafold/references/longform.md#determine-the-count-from-the-generated-content)，
+本页尚未按新数量规则重新生成验收。
+
 This is maintainer integration, not a new fresh installed-host authoring run.
 It used **2 image calls**, bringing the cumulative budget use to **11/15**.
 Both1536×1024 PNGs are preserved byte-for-byte in `assets/` and embedded in the

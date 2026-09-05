@@ -45,8 +45,10 @@
 
 简单需求使用[简短模板](skills/ahafold/assets/explainer.html)。材料较长或明确要求长篇时，
 使用[长篇说明](skills/ahafold/references/longform.md)和[原创多章节模板](skills/ahafold/assets/longform.html)。
-技能在同一套本地 HTML 工作流中选择表达方式。写长文前就规划主图及有必要的章节图，
-不要将已计划的配图推到最后，也不按章节机械凑图。
+配图数量随生成的解释正文动态调整：先按每约1000个中文／CJK字符或600个英文词一幅图估算，
+混排合并计算，再根据独立机制、理解难点和现有视觉覆盖校准，完整初稿及实质改写后重新核算。
+代码、表格、附录、图注和图片数据不凑字数；没有通用张数上限。
+用户明确指定的数量、修改范围和已授权预算优先。
 
 图片负责角色、情境、动作与少量必要短标签。长正文、代码、公式和复杂图表放在可编辑的 HTML/SVG。
 明确无图和纯精确表达的需求仍受支持；小折与交互按解释需要使用，也可以明确要求只输出插图。
@@ -114,7 +116,8 @@ Codex 中提及 `$ahafold`；Grok Build 和 Antigravity CLI 中使用 `/ahafold`
 ```text
 Use AhaFold to turn material.md into a complete long guide for a general reader.
 Write in English. Keep important conditions, exceptions, numbers, and original code.
-Plan a main Fold illustration and any chapter scene that adds a different insight.
+Scale the number and placement of Fold illustrations to the generated body length
+and conceptual density, then review the plan after the full draft.
 ```
 
 请明确写出成品语言。中文或中英混排的长篇可以这样请求：
@@ -122,13 +125,14 @@ Plan a main Fold illustration and any chapter scene that adds a different insigh
 ```text
 使用 AhaFold 把 material.md 做成完整长篇图解，面向普通读者。
 用简体中文写作，保留重要条件、例外和数值。先共同规划正文与小折配图，
-用主图建立直觉，再按需要安排解释不同关系的章节图。
+配图数量随生成正文的长度、独立机制和阅读节奏动态调整，完整初稿后重新核算。
 ```
 
 ```text
 使用 AhaFold 把 material.md 做成长篇图解。
 解释用简体中文，保留 English 术语与原代码，讲清关键边界。
-配图帮助建立直觉，精确执行路径、代码与数值留在 HTML/SVG。
+配图数量随实际解释正文的长短调整；精确执行路径、代码与数值留在 HTML/SVG，
+代码块和表格长度不用于凑配图数量。
 ```
 
 不需要图片时：
