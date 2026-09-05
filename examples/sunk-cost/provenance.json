@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-05",
+  "host": "Codex CLI 0.153.4",
+  "os": "macOS 26.6.2",
+  "installed_skill": true,
+  "route": "image_gen.imagegen",
+  "image_calls": 1,
+  "reference_inputs": 0,
+  "asset": "assets/fold-sunk-cost.png",
+  "format": "PNG",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 1747271,
+  "sha256": "a21e6597b95d9a8e1e9e778d97375108f8709b61f5a1d4b766cbd85754bd865a",
+  "visible_watermark": "not observed",
+  "original_bytes_preserved": true,
+  "backend_snapshot": "not disclosed",
+  "cost": "unknown",
+  "sources": [
+    "https://openstax.org/books/principles-managerial-accounting/pages/10-5-evaluate-and-determine-whether-to-sell-or-process-further",
+    "https://www.economicshelp.org/blog/27047/economics/sunk-cost-fallacy/"
+  ]
+}

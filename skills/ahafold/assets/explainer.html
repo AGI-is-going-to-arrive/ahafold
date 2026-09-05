@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- EDIT: Match the document language, title, and description to the explanation. -->
+  <title>图像与文字如何分工 — AhaFold 可编辑模板</title>
+  <meta name="description" content="AhaFold 的离线 HTML 起点：用图像建立直觉，用可编辑的文字和图形讲清关系。">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --teal: #2a8c82;
+      --teal-ink: #17665e;
+      --line: #d9dfdd;
+      --page-width: 60rem;
+      --reading-width: 42rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: 100%;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    a { color: var(--teal-ink); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    :target { scroll-margin-top: 1.5rem; }
+    p, li, dd, figcaption { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.25rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { line-height: 1.35; text-wrap: balance; }
+    h1 { margin: 0; font-size: 3rem; font-weight: 700; letter-spacing: -0.025em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.625rem; font-weight: 650; }
+    h3 { margin: 2rem 0 0.75rem; font-size: 1.25rem; }
+    strong { font-weight: 650; }
+    img, svg { display: block; max-width: 100%; height: auto; }
+    img { margin-inline: auto; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: 1.25rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    code { font-size: 0.92em; }
+    pre { max-width: 100%; overflow-x: auto; padding: 1rem; background: #f5f7f6; }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    th, td { padding: 0.75rem; border-bottom: 1px solid var(--line); text-align: left; }
+    input, button, select, textarea { font: inherit; accent-color: var(--teal); caret-color: var(--teal-ink); }
+    button, input, select, summary { min-height: 2.75rem; }
+
+    .skip-link {
+      position: absolute;
+      inset: 0.75rem auto auto 1rem;
+      z-index: 1;
+      padding: 0.5rem 1rem;
+      background: var(--paper);
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, main, .page-footer {
+      width: min(calc(100% - 3rem), var(--page-width));
+      margin-inline: auto;
+    }
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1.5rem;
+      padding-block: 1.75rem 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+    .introduction { max-width: var(--reading-width); padding-block: 4.5rem 3.5rem; }
+    .lead { margin-top: 1.75rem; font-size: 1.25rem; line-height: 1.8; }
+    .template-note { margin-top: 1.5rem; color: var(--muted); font-size: 0.9375rem; line-height: 1.7; }
+    .reading-body { max-width: var(--reading-width); }
+    .reading-body > section { padding-block: 2.5rem; border-top: 1px solid var(--line); }
+    .takeaway {
+      margin: 1.75rem 0 0;
+      padding: 1.5rem 1.75rem;
+      background: var(--apricot-wash);
+      border: 1px solid var(--apricot);
+      border-radius: 12px;
+      font-size: 1.25rem;
+      line-height: 1.7;
+    }
+    .takeaway strong { text-decoration: underline; text-decoration-color: var(--apricot); text-underline-offset: 0.25em; }
+    .expression-map { width: min(100%, 30rem); margin-inline: auto; }
+    .expression-map text { fill: var(--ink); font-family: inherit; font-size: 20px; font-weight: 550; }
+    .expression-map .branch { fill: none; stroke: var(--teal); stroke-width: 2; }
+    .expression-map .root { fill: var(--apricot-wash); stroke: var(--apricot); }
+    .expression-map .leaf { fill: var(--paper); stroke: var(--line); }
+    .roles { margin: 1.75rem 0 0; }
+    .role {
+      display: grid;
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      gap: 1.5rem;
+      padding-block: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .role dt { font-weight: 650; }
+    .role dd { margin: 0; }
+    .role dd p + p { margin-top: 0.5rem; }
+    .supporting { color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    details { margin-top: 1.75rem; border-block: 1px solid var(--line); }
+    summary {
+      padding-block: 1rem;
+      color: var(--teal-ink);
+      font-weight: 650;
+      cursor: pointer;
+    }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+    summary::marker { color: var(--teal-ink); }
+    details[open] summary { margin-bottom: 0.25rem; }
+    .detail-content { padding-bottom: 1.5rem; }
+    .source-list { margin: 1rem 0 0; padding-left: 1.5rem; }
+    .source-list li + li { margin-top: 0.75rem; }
+    .page-footer { padding-block: 1.75rem 3rem; border-top: 1px solid var(--line); }
+    .page-footer p { max-width: var(--reading-width); color: var(--muted); font-size: 0.9375rem; }
+
+    @media (max-width: 42rem) {
+      .page-header, main, .page-footer { width: calc(100% - 3rem); }
+      .page-header { padding-top: 1.25rem; }
+      .introduction { padding-block: 3rem 2.5rem; }
+      h1 { font-size: 2rem; letter-spacing: -0.02em; }
+      h2 { font-size: 1.375rem; }
+      .lead { font-size: 1.125rem; }
+      .reading-body > section { padding-block: 2rem; }
+      .takeaway { padding: 1.25rem; font-size: 1.125rem; }
+      .role { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+    }
+
+    @media print {
+      :root { font-size: 11pt; }
+      .skip-link { display: none; }
+      .page-header, main, .page-footer { width: 100%; }
+      .introduction { padding-block: 2rem; }
+      .reading-body > section { break-inside: avoid; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Surface brief: Read mode; retain the established white, apricot, and teal identity.
+       This starter is self-contained. It makes no network requests and has no script runtime.
+       EDIT: Keep only sections that help this specific explanation. Nothing requires an image,
+       character, SVG, or interaction. No sample artwork is presented as newly generated. -->
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <article aria-labelledby="page-title">
+      <!-- EDIT: State the reader's question and the central answer in ordinary language. -->
+      <header class="introduction">
+        <h1 id="page-title">图像建立直觉，<br>文字讲清关系。</h1>
+        <p class="lead">一页解释里，动作与情境可以交给插画；准确的定义、数字和推理留在可编辑的文字与图形里。两者围绕同一个问题展开。</p>
+        <p class="template-note">这是 AhaFold 的可编辑 HTML 模板。本页以“图文分工”说明阅读结构，没有生成插画，也不是成品示例或宿主验收记录。</p>
+      </header>
+
+      <div class="reading-body">
+        <section aria-labelledby="central-idea">
+          <h2 id="central-idea">先找到要解释的关系</h2>
+          <p>从读者卡住的地方开始：他们分不清两个概念，还是不明白一个结果怎样发生？把最重要的关系写成一句话，再决定怎样呈现它。</p>
+          <p>例如，本页要说明的是：<strong>画面与文字可以分工，却不能讲出相互矛盾的含义。</strong>这个共同含义决定了图里该出现什么动作，也决定了正文必须补足什么。</p>
+          <div class="takeaway">
+            <p>先确定<strong>要让读者看懂什么</strong>，再选择能把这件事讲清楚的表达。</p>
+          </div>
+        </section>
+
+        <section aria-labelledby="representation">
+          <h2 id="representation">让图与文字各自承担任务</h2>
+          <!-- OPTIONAL DIAGRAM: SVG here expresses a precise relationship, not a substitute
+               for generated illustration. Update its labels, title, description, and caption together. -->
+          <figure>
+            <svg class="expression-map" viewBox="0 0 420 188" role="img" aria-labelledby="map-title map-description">
+              <title id="map-title">一个核心含义，两种表达</title>
+              <desc id="map-description">核心含义分别连接到动作与情境、准确的说明。前者可以用插画，后者用 HTML 或 SVG；它们解释同一个关系。</desc>
+              <path class="branch" d="M210 68V99M105 112V99H315V112"></path>
+              <rect class="root" x="116" y="10" width="188" height="58" rx="12"></rect>
+              <text x="210" y="46" text-anchor="middle">一个核心含义</text>
+              <rect class="leaf" x="10" y="112" width="190" height="60" rx="12"></rect>
+              <text x="105" y="150" text-anchor="middle">动作与情境</text>
+              <rect class="leaf" x="220" y="112" width="190" height="60" rx="12"></rect>
+              <text x="315" y="150" text-anchor="middle">准确的说明</text>
+            </svg>
+            <figcaption>画面帮助读者看见关系，正文把关系说准确。这里的分支表示分工，不表示每一页都必须同时使用两种表达。</figcaption>
+          </figure>
+
+          <dl class="roles">
+            <div class="role">
+              <dt>需要画面时</dt>
+              <dd>
+                <p>用一个清楚的动作、情境或对照建立直觉。小折可以参与这个动作；若角色无助于解释，就省略它。</p>
+                <p class="supporting">图内可放少量必要短标签。重要标签的含义也应出现在可读、可搜索的图注或正文中。</p>
+              </dd>
+            </div>
+            <div class="role">
+              <dt>需要准确时</dt>
+              <dd>
+                <p>把长正文、代码、公式、精确数值和复杂图表留在 HTML / SVG 中。读者可以核对细节，作者也能直接修改它们。</p>
+                <p class="supporting">只修改正文或语言时，保留含义没有变化的原图。修改位图内部的字，可能需要重新编辑或生成那张图。</p>
+              </dd>
+            </div>
+          </dl>
+
+          <!-- OPTIONAL IMAGE: Add a figure only after an actual native image call returns a
+               valid, inspected file. Preserve its original bytes and provider markings in assets/.
+               Embed those same bytes as a data URL for a single-file shareable page if appropriate.
+               Give the image useful alt text and a caption with important labels and analogy limits.
+               Do not use the character reference sheet or a placeholder as a new scene. -->
+        </section>
+
+        <section aria-labelledby="limits">
+          <h2 id="limits">把直觉的边界也讲出来</h2>
+          <p>类比只突出一部分关系。交付前要说明：画面中哪一部分对应真实概念，哪一部分只是帮助理解的简化。必要的限制应直接可见，不能只藏在展开区里。</p>
+          <p>本页的分工图是一条编辑建议，不是关于学习效果的实验结论。它也不表示图片一定比文字好。</p>
+
+          <!-- OPTIONAL INTERACTION: Native disclosure works by keyboard and without JavaScript.
+               Keep a supplementary answer here; remove the entire details block if it adds no value. -->
+          <details>
+            <summary>没有插画，也可以是一页好解释吗？</summary>
+            <div class="detail-content">
+              <p>可以。术语对照、准确的公式推导，或本来就很清楚的简短说明，可能只需要文字与简单图形。</p>
+              <p>同样，交互应当帮助读者观察一个变化或检查自己的理解。没有这种用途时，静态页面已经足够。</p>
+            </div>
+          </details>
+        </section>
+
+        <!-- EDIT: Replace the source note with actual supplied material and verified sources.
+             Use real titles and URLs only. State unknowns instead of inventing citations.
+             Delete this author-facing starter guidance from a finished explanation. -->
+        <section aria-labelledby="sources">
+          <h2 id="sources">来源与说明</h2>
+          <p>本页内容是 AhaFold 的编辑约定，没有引用外部研究。正式作品在这里注明使用的资料、已核验的来源，以及无法核验的部分。若仅依据用户提供的材料，也应说明材料范围。</p>
+          <p class="supporting">替换模板内容时，同步检查标题、语言、图注、SVG 标签和展开区。读者即使不联网，也应能读懂正文；来源链接可以在有网络时再打开。</p>
+        </section>
+      </div>
+    </article>
+  </main>
+
+  <!-- EDIT: Keep only reader-relevant delivery notes in the finished page. -->
+  <footer class="page-footer">
+    <p>这份模板可直接在浏览器里离线打开。文字与 SVG 均可编辑；阅读和展开内容不调用模型。</p>
+  </footer>
+</body>
+</html>

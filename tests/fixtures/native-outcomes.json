@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "provenance": "Synthetic, sanitized replay inputs reflecting known native-tool outcome classes. These are not raw session logs or additional image calls.",
+  "cases": [
+    {
+      "id": "missing-native-tool",
+      "input": { "nativeToolAvailable": false, "exitCode": null, "files": [] },
+      "expected": { "imageSuccess": false, "automaticRetry": false, "switchHarness": false, "action": "Keep an HTML/text draft and report that the current host has no native image tool." }
+    },
+    {
+      "id": "quota-429",
+      "input": { "nativeToolAvailable": true, "httpStatus": 429, "exitCode": 1, "files": [] },
+      "expected": { "imageSuccess": false, "automaticRetry": false, "switchHarness": false, "action": "Stop this image route and report the exhausted quota. Do not poll, extract tokens, or change endpoints." }
+    },
+    {
+      "id": "authentication-failure",
+      "input": { "nativeToolAvailable": true, "httpStatus": 401, "exitCode": 1, "files": [] },
+      "expected": { "imageSuccess": false, "automaticRetry": false, "switchHarness": false, "action": "Stop this route and report authentication failure without requesting or reading a token." }
+    },
+    {
+      "id": "timeout-result-unknown",
+      "input": { "nativeToolAvailable": true, "exitCode": null, "timedOut": true, "files": null },
+      "expected": { "imageSuccess": null, "automaticRetry": false, "switchHarness": false, "action": "Inspect the known output location once, preserve any valid artifact, and report unresolved generation status. Do not automatically submit again." }
+    },
+    {
+      "id": "exit-zero-without-image",
+      "input": { "nativeToolAvailable": true, "exitCode": 0, "files": [] },
+      "expected": { "imageSuccess": false, "automaticRetry": false, "switchHarness": false, "action": "Report that no valid image was returned. Process success alone is not image success." }
+    },
+    {
+      "id": "exit-one-with-valid-image",
+      "input": { "nativeToolAvailable": true, "exitCode": 1, "files": [{ "path": "output/fold.png", "decodes": true, "width": 1024, "height": 1024 }] },
+      "expected": { "imageSuccess": true, "automaticRetry": false, "switchHarness": false, "action": "Preserve and visually inspect the valid original image; disclose that the command did not complete successfully. Do not mark full host acceptance as passed." }
+    },
+    {
+      "id": "visible-watermark-strict-task",
+      "input": { "nativeToolAvailable": true, "exitCode": 0, "strictNoVisibleWatermark": true, "files": [{ "path": "output/fold.png", "decodes": true, "visibleWatermark": "Grok" }] },
+      "expected": { "imageSuccess": true, "automaticRetry": false, "switchHarness": false, "taskSatisfied": false, "action": "Keep the provider markings and report that the strict no-visible-watermark requirement is unmet. Do not crop, erase, or claim unmarked output." }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "ahafold-maintainer-checks",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Development checks for the standalone AhaFold skill. Not a product runtime.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.20.0"
+  },
+  "packageManager": "pnpm@11.24.0",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "check:package": "tsx tools/check-package.ts",
+    "test:checks": "tsx --test tools/check-package.test.ts",
+    "test:examples": "tsx tools/test-examples.ts",
+    "check": "pnpm run typecheck && pnpm run test:checks && pnpm run check:package && pnpm run test:examples"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@types/node": "26.4.1",
+    "@types/pngjs": "6.0.5",
+    "marked": "18.0.11",
+    "playwright": "1.62.1",
+    "pngjs": "7.0.0",
+    "tsx": "4.23.13",
+    "typescript": "7.0.2",
+    "yaml": "2.9.0"
+  }
+}

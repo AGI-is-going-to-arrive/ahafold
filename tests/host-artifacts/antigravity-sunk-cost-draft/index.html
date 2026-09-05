@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>沉没成本：放下已经无法挽回的包袱 — AhaFold 概念解说</title>
+  <meta name="description" content="用直观场景与严密逻辑讲清沉没成本：只有不可收回的既往成本才叫沉没成本；未来决策只取决于备选方案之间的增量成本与增量收益。">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --teal: #2a8c82;
+      --teal-ink: #17665e;
+      --line: #d9dfdd;
+      --page-width: 60rem;
+      --reading-width: 42rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: 100%;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    a { color: var(--teal-ink); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    :target { scroll-margin-top: 1.5rem; }
+    p, li, dd, figcaption { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.25rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { line-height: 1.35; text-wrap: balance; }
+    h1 { margin: 0; font-size: 2.75rem; font-weight: 700; letter-spacing: -0.025em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.625rem; font-weight: 650; }
+    h3 { margin: 2rem 0 0.75rem; font-size: 1.25rem; }
+    strong { font-weight: 650; }
+    img, svg { display: block; max-width: 100%; height: auto; }
+    img { margin-inline: auto; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: 1.25rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    code { font-size: 0.92em; }
+    pre { max-width: 100%; overflow-x: auto; padding: 1rem; background: #f5f7f6; }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; margin-top: 1.25rem; }
+    th, td { padding: 0.75rem; border-bottom: 1px solid var(--line); text-align: left; }
+    th { background: #fafbfb; font-weight: 650; }
+    input, button, select, textarea { font: inherit; accent-color: var(--teal); caret-color: var(--teal-ink); }
+    button, input, select, summary { min-height: 2.75rem; }
+
+    .skip-link {
+      position: absolute;
+      inset: 0.75rem auto auto 1rem;
+      z-index: 1;
+      padding: 0.5rem 1rem;
+      background: var(--paper);
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, main, .page-footer {
+      width: min(calc(100% - 3rem), var(--page-width));
+      margin-inline: auto;
+    }
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1.5rem;
+      padding-block: 1.75rem 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+    .introduction { max-width: var(--reading-width); padding-block: 4.5rem 3.5rem; }
+    .lead { margin-top: 1.75rem; font-size: 1.25rem; line-height: 1.8; }
+    .template-note {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: #f8f9fa;
+      border-left: 4px solid var(--teal);
+      color: var(--muted);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+    }
+    .reading-body { max-width: var(--reading-width); }
+    .reading-body > section { padding-block: 2.5rem; border-top: 1px solid var(--line); }
+    .takeaway {
+      margin: 1.75rem 0 0;
+      padding: 1.5rem 1.75rem;
+      background: var(--apricot-wash);
+      border: 1px solid var(--apricot);
+      border-radius: 12px;
+      font-size: 1.25rem;
+      line-height: 1.7;
+    }
+    .takeaway strong { text-decoration: underline; text-decoration-color: var(--apricot); text-underline-offset: 0.25em; }
+
+    .decision-diagram { width: min(100%, 36rem); margin-inline: auto; }
+    .decision-diagram text { fill: var(--ink); font-family: inherit; font-size: 15px; }
+    .decision-diagram .heading { font-weight: 650; font-size: 16px; }
+    .decision-diagram .wire { fill: none; stroke: var(--teal); stroke-width: 2; }
+    .decision-diagram .wire-dashed { fill: none; stroke: var(--muted); stroke-width: 2; stroke-dasharray: 4 4; }
+    .decision-diagram .box-sunk { fill: #f0f2f2; stroke: var(--line); stroke-width: 1.5; }
+    .decision-diagram .box-decision { fill: var(--apricot-wash); stroke: var(--apricot); stroke-width: 2; }
+    .decision-diagram .box-option { fill: var(--paper); stroke: var(--teal); stroke-width: 1.5; }
+
+    .illustration-card {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: #fafbfb;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+    }
+    .illustration-card h3 { margin-top: 0; font-size: 1.125rem; color: var(--ink); }
+    .illustration-card p { font-size: 0.9375rem; color: var(--muted); line-height: 1.65; }
+    .label-badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      margin-inline: 0.2rem;
+      background: var(--apricot-wash);
+      border: 1px solid var(--apricot);
+      border-radius: 4px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .roles { margin: 1.75rem 0 0; }
+    .role {
+      display: grid;
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      gap: 1.5rem;
+      padding-block: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .role dt { font-weight: 650; }
+    .role dd { margin: 0; }
+    .role dd p + p { margin-top: 0.5rem; }
+    .supporting { color: var(--muted); font-size: 1rem; line-height: 1.7; }
+
+    .example-box {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: #fafbfb;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .example-box h3 { margin-top: 0; font-size: 1.15rem; }
+
+    details { margin-top: 1.75rem; border-block: 1px solid var(--line); }
+    summary {
+      padding-block: 1rem;
+      color: var(--teal-ink);
+      font-weight: 650;
+      cursor: pointer;
+    }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+    summary::marker { color: var(--teal-ink); }
+    details[open] summary { margin-bottom: 0.25rem; }
+    .detail-content { padding-bottom: 1.5rem; }
+    .source-list { margin: 1rem 0 0; padding-left: 1.5rem; }
+    .source-list li + li { margin-top: 0.75rem; }
+    .page-footer { padding-block: 1.75rem 3rem; border-top: 1px solid var(--line); }
+    .page-footer p { max-width: var(--reading-width); color: var(--muted); font-size: 0.9375rem; }
+
+    @media (max-width: 42rem) {
+      .page-header, main, .page-footer { width: calc(100% - 3rem); }
+      .page-header { padding-top: 1.25rem; }
+      .introduction { padding-block: 3rem 2.5rem; }
+      h1 { font-size: 2rem; letter-spacing: -0.02em; }
+      h2 { font-size: 1.375rem; }
+      .lead { font-size: 1.125rem; }
+      .reading-body > section { padding-block: 2rem; }
+      .takeaway { padding: 1.25rem; font-size: 1.125rem; }
+      .role { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+    }
+
+    @media print {
+      :root { font-size: 11pt; }
+      .skip-link { display: none; }
+      .page-header, main, .page-footer { width: 100%; }
+      .introduction { padding-block: 2rem; }
+      .reading-body > section { break-inside: avoid; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <article aria-labelledby="page-title">
+      <header class="introduction">
+        <h1 id="page-title">沉没成本：<br>放下已经无法挽回的包袱</h1>
+        <p class="lead">人们常说“既然已经投入了那么多，现在放弃太可惜了”。但在清晰的理性视角下，已经发生且无法收回的过去付出，在眼前的所有未来选项里都没有任何差异。真正决定明智选择的，只有面向未来的增量代价与增量收获。</p>
+        <div class="template-note">
+          <strong>生成状态说明（诚实记录）：</strong>本页为根据 AhaFold 规范生成的完整概念解说草稿。在调用宿主原生图像生成工具 <code>generate_image</code> 时遭遇服务配额限制（HTTP 429 RESOURCE_EXHAUSTED），遵循测试规范的单次上限原则，立即停止图像生成，不进行自动重试或外部兜底。长文逻辑、边界界定与结构化矢量图谱完整保留。
+        </div>
+      </header>
+
+      <div class="reading-body">
+        <section aria-labelledby="central-rule">
+          <h2 id="central-rule">一个核心判断：什么是真正的沉没成本？</h2>
+          <p>在经济学与管理会计中，<strong>沉没成本（Sunk Cost）</strong>有其严格的界定：<strong>指在决策之前就已经发生，并且无论未来做出何种选择都再也无法改变或收回的成本。</strong></p>
+          <p>沉没成本之所以不应参与当前决策，其背后的数学与逻辑非常纯粹：既然无论你选择继续往前走，还是选择掉头换路，这笔历史支出都无法退回，那么它在<strong>各个备选方案之间的差额恒等于零</strong>。不产生方案差额的成本，就是不相关成本（Irrelevant Cost）。</p>
+
+          <div class="takeaway">
+            <p>核心原则：<strong>只有无法挽回的过去成本才是沉没成本；未来决策只取决于各选项之间的未来增量成本与增量收益。</strong></p>
+          </div>
+        </section>
+
+        <section aria-labelledby="scene-and-diagram">
+          <h2 id="scene-and-diagram">情境直觉与决策结构</h2>
+          <p>直觉往往可以通过一个简洁的动作建立：在人生的十字路口，背负着沉重的背包寸步难行，这时最具决定性的动作，是主动把包袱卸下放在路边，然后轻装比较前方不同的岔路。</p>
+
+          <div class="illustration-card">
+            <h3>原定插画构思（小折动作与标签说明）</h3>
+            <p><strong>角色与动作：</strong>小折（Fold —— 一页微曲的杏黄色小纸片人，右上角带着青色折角）停在一个分岔路口，将背上写有沉重历史的行囊卸下、安置在脚边的路面，转身凝视面前延伸向不同方向的两条道路。</p>
+            <p><strong>画面核心标签：</strong></p>
+            <ul>
+              <li><span class="label-badge">过去</span>：对应地表卸下的沉重包袱与走过的来路，象征不可改变、不可收回的历史投入。</li>
+              <li><span class="label-badge">未来</span>：指向前方延伸出不同风景的分岔道路，象征等待权衡的未来增量成本与增量收益。</li>
+            </ul>
+            <p><strong>生成记录：</strong>宿主原生工具 <code>generate_image</code>（后端 Gemini 3.1 Flash Image）返回配额耗尽（429 QUOTA_EXHAUSTED），未生成有效图像像素。按照 AhaFold 规范，不捏造图像或截图替代，在此保留画面构思与标签语义。</p>
+          </div>
+
+          <div aria-label="沉没成本与当前选项">
+            <p><strong>过去：</strong>已经发生且不可收回的支出，在当前选项间相同。</p>
+            <p><strong>选项 A，继续：</strong>分别估计从现在起增加的成本、可能得到的收益、责任与风险。</p>
+            <p><strong>选项 B，停止或转向：</strong>用相同标准估计未来的成本与收益，包括可回收价值及退出义务。</p>
+            <p>没有哪个选项天然更好。比较未来差异后，再决定下一步。</p>
+          </div>
+
+          <dl class="roles">
+            <div class="role">
+              <dt>不相关信息</dt>
+              <dd>
+                <p><strong>已经支出的金钱、过去耗费的工时、既往的感情付出。</strong></p>
+                <p class="supporting">这些已经在历史账本上结清，无论你现在哭泣、后悔还是咬牙硬撑，它们都不会凭空复原。</p>
+              </dd>
+            </div>
+            <div class="role">
+              <dt>真正相关信息</dt>
+              <dd>
+                <p><strong>未来增量成本（Incremental Costs）与未来增量收益（Incremental Benefits）。</strong></p>
+                <p class="supporting">从当前这一秒起，如果选择路径 A，还要再花多少钱、承担多大风险？选择路径 B，需要多少新成本、能带来多大价值？比较这两者的差值，才是科学决策的唯一基础。</p>
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <section aria-labelledby="hypothetical-case">
+          <h2 id="hypothetical-case">虚构推演：自研工具还是切换方案？</h2>
+          <p>以下为一个纯虚构的教学案例，不代表任何真实的商业机构，也不构成任何现实投资建议：</p>
+
+          <div class="example-box">
+            <h3>案例背景：团队的自动化排班脚本</h3>
+            <p>假设某团队为了解决内部排班混乱，在过去三个月内组织工程师自研一套定制排班系统，已经累计耗费开发成本 <strong>100,000 元</strong>。此时系统刚完成 60%，还需要追加 <strong>40,000 元</strong> 的新工时才能彻底上线投入使用。</p>
+            <p>就在此时，市场上突然出现了一款成熟稳定的通用开源排班工具，不仅功能更全面，而且对该团队完全免费，仅需投入 <strong>5,000 元</strong> 的微调与数据导入成本即可在下周无缝投产。</p>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>考量维度</th>
+                  <th>路径一：坚持自研到底</th>
+                  <th>路径二：果断切换开源</th>
+                  <th>两方案差额（增量）</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>过去已花费（沉没成本）</td>
+                  <td>100,000 元</td>
+                  <td>100,000 元</td>
+                  <td><strong>0 元（完全相同）</strong></td>
+                </tr>
+                <tr>
+                  <td>未来需追加（增量成本）</td>
+                  <td>40,000 元</td>
+                  <td>5,000 元</td>
+                  <td><strong>切换可省 35,000 元</strong></td>
+                </tr>
+                <tr>
+                  <td>未来解决排班的价值</td>
+                  <td>满足业务需求</td>
+                  <td>满足业务需求（甚至更好）</td>
+                  <td>质量相当或更优</td>
+                </tr>
+                <tr>
+                  <td><strong>理性决策结果</strong></td>
+                  <td>为了“不浪费过去的 10 万”多花 35,000 元</td>
+                  <td><strong>理性止损，将 35,000 元资源投向更有价值的业务</strong></td>
+                  <td><strong>选择路径二产生净收益</strong></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <p style="margin-top: 1rem; font-size: 1rem; color: var(--muted);">如果决策者说“我们已经砸了 10 万进去，现在放弃岂不是前功尽弃？”，他就落入了经典的沉没成本谬误。因为无论他做何决定，过去的 10 万元都回不来了；硬着头皮自研到底，只会让团队在未来多浪费 35,000 元真金白银。</p>
+          </div>
+        </section>
+
+        <section aria-labelledby="limits-and-boundaries">
+          <h2 id="limits-and-boundaries">边界与例外：类比在什么地方停止？</h2>
+          <p>“放下包袱”是一个生动的直觉比喻，但严谨的决策者必须清醒认识到类比的边界，绝不能将所有历史约束都盲目打上“沉没成本”的标签随意丢弃：</p>
+
+          <dl class="roles">
+            <div class="role">
+              <dt>可回收残值</dt>
+              <dd>
+                <p><strong>资产如果还能折价卖出或退款，那绝不是沉没成本。</strong></p>
+                <p class="supporting">例如买错的器材如果能二手转让收回 3,000 元，这 3,000 元属于选择“停止使用”时的未来增量现金流入，必须计入比较，而不是视为零。</p>
+              </dd>
+            </div>
+            <div class="role">
+              <dt>持续法律义务</dt>
+              <dd>
+                <p><strong>过去的合同承诺与法律责任不会随“放下心结”而消失。</strong></p>
+                <p class="supporting">如果你签订了未来三年的租约，即使决定关停门店，尚未履行的租金支付义务或违约赔偿依然是未来的真实成本，绝不能当成“既往不咎”的沉没成本忽略。</p>
+              </dd>
+            </div>
+            <div class="role">
+              <dt>安全与道德底线</dt>
+              <dd>
+                <p><strong>绝不能用“沉没成本”为掩盖安全隐患或伦理违规开脱。</strong></p>
+                <p class="supporting">无论过去投入了多少研发资金，如果系统测试显示存在严重安全缺陷或生命财产威胁，立即叫停是基于防止未来出现灾难性后果的责任，而不是冷冰冰的数字游戏。</p>
+              </dd>
+            </div>
+            <div class="role">
+              <dt>经验复用价值</dt>
+              <dd>
+                <p><strong>金钱可能不可回收，但认知与能力沉淀是有价值的。</strong></p>
+                <p class="supporting">在失败尝试中积累的技术经验、团队协作默契与教训，可以作为资产投入到下一个项目中，从而降低未来新项目的增量成本。</p>
+              </dd>
+            </div>
+          </dl>
+
+          <details>
+            <summary>心理机制：为什么理性人也会在沉没成本前犹豫不决？</summary>
+            <div class="detail-content">
+              <p>行为经济学与心理学指出，沉没成本谬误往往由以下人性特质驱动：</p>
+              <ul>
+                <li><strong>损失厌恶（Loss Aversion）：</strong>人类对“承认损失”带来的心理痛感，往往远大于获得同等收益的快乐。只要项目没有正式宣告停止，在心里就依然可以保留“也许还有希望”的幻觉；一旦终止，损失就成了无可辩驳的事实。</li>
+                <li><strong>承诺升级（Escalation of Commitment）：</strong>为了维护自尊、公开形象或向组织证明最初的判断正确，人们倾向于不断投入额外资源来试图挽回败局。</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+
+        <section aria-labelledby="sources-and-checks">
+          <h2 id="sources-and-checks">事实来源与核验依据</h2>
+          <p>以下资料支持本页的成本区分；查阅日期为 2026-09-05。本草稿的文字由维护者校正，原生图片生成仍因额度失败而未完成：</p>
+          <ul class="source-list">
+            <li>
+              <a href="https://openstax.org/books/principles-managerial-accounting/pages/10-5-evaluate-and-determine-whether-to-sell-or-process-further" target="_blank" rel="noopener noreferrer">OpenStax: Principles of Managerial Accounting (Section 10.5: Evaluate and Determine Whether to Sell or Process Further)</a>
+              <p class="supporting">支持论据：沉没成本是指无论企业采纳哪种后续方案均无法改变的历史成本。在对备选方案进行差额分析（Differential Analysis）时，沉没成本在所有可选路径中都恒定存在且金额相同，因此属于与当前选项比较无关的成本；当前决策应比较未来增量收益、成本以及仍需承担的责任与风险。</p>
+            </li>
+            <li>
+              <a href="https://www.economicshelp.org/blog/27047/economics/sunk-cost-fallacy/" target="_blank" rel="noopener noreferrer">Economics Help: Sunk Cost Fallacy</a>
+              <p class="supporting">支持论据：深入剖析了沉没成本谬误在个人决策与商业项目中的常见表现，指出理性决策模型严格基于未来的边际成本（Marginal Cost）与边际收益（Marginal Benefit），而非已被消耗的历史资源。</p>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </article>
+  </main>
+
+  <footer class="page-footer">
+    <p>AhaFold 离线概念解说草稿 · 内联 CSS 与原生矢量图形 · 不依赖外部网络资产或云端推理</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <title>变量与常量 — AhaFold 术语对照</title>
+  <meta name="description" content="给编程初学者的变量与常量对照：通过 JavaScript 数字示例，理解声明、赋值和重新赋值。">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --teal-ink: #17665e;
+      --line: #d9dfdd;
+      --page-width: 60rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-size: 1.0625rem; line-height: 1.8; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    .page-header, main, .page-footer {
+      width: min(calc(100% - 3rem), var(--page-width));
+      margin-inline: auto;
+    }
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: .5rem 1.5rem;
+      padding-block: 1.5rem 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+    p { margin: 0 0 1rem; overflow-wrap: anywhere; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { line-height: 1.35; text-wrap: balance; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.5rem); letter-spacing: -.035em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.5rem; }
+    h3 { margin: 0 0 .75rem; font-size: 1.25rem; }
+    strong { font-weight: 650; }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -.035em; }
+    .tagline, .supporting { color: var(--muted); font-size: .9375rem; }
+    .tagline { margin: 0; }
+    .introduction { padding-block: 3.5rem 2.5rem; }
+    .eyebrow { margin-bottom: .75rem; color: var(--teal-ink); font-size: .875rem; font-weight: 650; }
+    .lead { margin-top: 1.25rem; max-width: 40rem; font-size: 1.25rem; }
+    section { padding-block: 2rem; border-top: 1px solid var(--line); }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    code { font-size: .92em; overflow-wrap: anywhere; }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    caption { text-align: left; margin-bottom: .75rem; color: var(--muted); font-size: .9375rem; }
+    th, td { padding: 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+    thead th { background: #f5f7f6; }
+    th:first-child { width: 23%; }
+    tbody th { font-weight: 550; }
+    .english { display: block; color: var(--muted); font-size: .875rem; font-weight: 400; }
+    .examples { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+    .examples > div { min-width: 0; }
+    pre { margin: 1rem 0; padding: 1.25rem; background: #f5f7f6; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.75; }
+    .result { color: var(--teal-ink); font-weight: 650; }
+    .error { margin-top: 1.25rem; }
+    .error pre { border-left: 3px solid var(--apricot); background: var(--apricot-wash); }
+    .vocabulary { margin: 1.5rem 0 0; }
+    .term { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; padding-block: .65rem; }
+    dt { font-weight: 650; }
+    dd { margin: 0; overflow-wrap: anywhere; }
+    .takeaway { margin-top: 1.5rem; padding: 1.25rem 1.5rem; background: var(--apricot-wash); border-left: 3px solid var(--apricot); }
+    .page-footer { padding-block: 1.5rem 2.5rem; border-top: 1px solid var(--line); }
+    @media (max-width: 42rem) {
+      .introduction { padding-block: 2.5rem 2rem; }
+      .lead { font-size: 1.125rem; }
+      h2 { font-size: 1.375rem; }
+      th, td { padding: .75rem .5rem; font-size: .9375rem; }
+      th:first-child { width: 24%; }
+      .examples { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
+      .term { grid-template-columns: minmax(0, 1fr); gap: .15rem; }
+      .takeaway { padding: 1rem; }
+    }
+    @media print {
+      :root { font-size: 11pt; }
+      .page-header, main, .page-footer { width: 100%; }
+      .introduction { padding-block: 1.5rem; }
+      section, .examples > div { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。</p>
+  </header>
+  <main>
+    <article aria-labelledby="page-title">
+      <header class="introduction">
+        <p class="eyebrow">编程入门 · 术语对照</p>
+        <h1 id="page-title">变量与常量</h1>
+        <p class="lead">先看一个区别：<strong>给名字赋值以后，还能不能重新赋值？</strong></p>
+        <p class="supporting">下面用 JavaScript 的 <code>let</code> 与 <code>const</code> 数字示例说明；其他语言的规则可能不同。</p>
+      </header>
+      <section aria-labelledby="comparison-title">
+        <h2 id="comparison-title">同样给值起名字，修改规则不同</h2>
+        <table>
+          <caption>本页范围：用 let 声明变量，用 const 声明常量。</caption>
+          <thead>
+            <tr>
+              <th scope="col">对照项</th>
+              <th scope="col">变量<span class="english" lang="en">Variable</span></th>
+              <th scope="col">常量<span class="english" lang="en">Constant</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">怎么理解</th><td>这个名字可以改为对应另一个值。</td><td>这个名字初始化后，不能改为对应另一个值。</td></tr>
+            <tr><th scope="row">重新赋值</th><td><strong>允许</strong>，但不必真的修改。</td><td><strong>不允许</strong>，尝试修改会报错。</td></tr>
+            <tr><th scope="row">常见用途</th><td>会更新的分数、剩余次数。</td><td>不需重新赋值的上限、固定配置值。</td></tr>
+            <tr><th scope="row">写法示例</th><td><code>let score = 10;</code></td><td><code>const maxScore = 10;</code></td></tr>
+          </tbody>
+        </table>
+      </section>
+      <section aria-labelledby="example-title">
+        <h2 id="example-title">都从 10 开始，试着换成 20</h2>
+        <div class="examples">
+          <div>
+            <h3>变量：可以重新赋值</h3>
+            <pre><code>let score = 10;
+score = 20;</code></pre>
+            <p class="result">执行后，score 的值是 20。</p>
+            <p class="supporting">第二行把新值 20 赋给已有的名字 <code>score</code>。</p>
+          </div>
+          <div>
+            <h3>常量：初始化后不能重赋值</h3>
+            <pre><code>const maxScore = 10;</code></pre>
+            <p class="result">此时，maxScore 的值是 10。</p>
+            <div class="error">
+              <p><strong>错误反例：</strong>如果接着写这一行——</p>
+              <pre><code>maxScore = 20;</code></pre>
+              <p class="supporting">会抛出 <code>TypeError</code>，这次重新赋值失败；<code>maxScore</code> 仍是 10。</p>
+            </div>
+          </div>
+        </div>
+        <dl class="vocabulary">
+          <div class="term"><dt>声明</dt><dd>引入一个名字，例如 <code>let score</code>。</dd></div>
+          <div class="term"><dt>初始化</dt><dd>建立它的初始值；<code>let score = 10;</code> 同时完成声明与初始化。</dd></div>
+          <div class="term"><dt>赋值</dt><dd>在这些示例里，<code>=</code> 表示把右边的值赋给左边的名字，不是数学里的“相等”。</dd></div>
+          <div class="term"><dt>重新赋值</dt><dd>给已有的名字再赋一次值，例如 <code>score = 20;</code>。</dd></div>
+        </dl>
+      </section>
+      <section aria-labelledby="boundary-title">
+        <h2 id="boundary-title">记住规则，也记住边界</h2>
+        <p><strong>变量不一定会变。</strong>用 <code>let</code> 只是允许重新赋值；如果代码没有修改它，它也可以一直保持原值。</p>
+        <p><strong>JavaScript 的 const 不会冻结对象。</strong>它固定的是名字与值之间的绑定。如果值是对象或数组，其中的属性或元素仍可能被修改。</p>
+        <p class="supporting">例如，<code>const user = { age: 18 };</code> 之后，<code>user.age = 19;</code> 是允许的；<code>user = { age: 19 };</code> 则会报错。前者修改对象内容，后者试图把名字换绑到另一个对象。</p>
+        <div class="takeaway"><p>读代码时，先问：<strong>这个名字是否允许重新赋值？</strong><br>需要重新赋值，用 <code>let</code>；不需要，优先用 <code>const</code>。</p></div>
+      </section>
+    </article>
+  </main>
+  <footer class="page-footer">
+    <p class="supporting">学习范围：JavaScript 入门示例。这里的常量不等于“程序启动前就必须知道的值”。</p>
+  </footer>
+</body>
+</html>

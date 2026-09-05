@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-05",
+  "host": "Codex CLI 0.153.4",
+  "os": "macOS 26.6.2",
+  "installed_skill": true,
+  "route": "image_gen.imagegen",
+  "image_calls": 1,
+  "reference_inputs": 0,
+  "asset": "assets/recognition-recall.png",
+  "format": "PNG",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 1301313,
+  "sha256": "9e33d301cff33a59595a23402e9b6a3c2de1836647e841cf3ad49faf69bc7973",
+  "visible_watermark": "not observed",
+  "original_bytes_preserved": true,
+  "backend_snapshot": "not disclosed",
+  "cost": "unknown",
+  "sources": [
+    "https://openstax.org/books/psychology-2e/pages/8-1-how-memory-functions",
+    "https://www.nngroup.com/articles/recognition-and-recall/"
+  ]
+}

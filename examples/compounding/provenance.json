@@ -1,0 +1,23 @@
+{
+  "date": "2026-09-05",
+  "host": "Codex CLI 0.153.4",
+  "os": "macOS 26.6.2",
+  "installed_skill": true,
+  "route": "image_gen.imagegen",
+  "image_calls": 1,
+  "reference_inputs": 0,
+  "asset": "assets/fold-time.png",
+  "format": "PNG",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 1088795,
+  "sha256": "9eb3a2e7933fc6635212ee97f7403e51954034b19328ee3ca086958268ece4e6",
+  "visible_watermark": "not observed",
+  "original_bytes_preserved": true,
+  "backend_snapshot": "not disclosed",
+  "cost": "unknown",
+  "sources": [
+    "https://math.libretexts.org/Workbench/FHSU_College_Algebra/04%3A_Exponential_and_Logarithmic_Functions/4.02%3A_Compound_Interest",
+    "https://moneysmart.gov.au/saving/compound-interest"
+  ]
+}
