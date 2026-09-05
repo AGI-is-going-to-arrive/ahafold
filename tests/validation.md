@@ -147,8 +147,20 @@ found a test bug: closed nested details descendants could have layout rectangles
 but were not keyboard Tab stops. The checker now explicitly evaluates closed
 ancestors, tests nested disclosures after opening their parents, and tests native
 radio groups with Arrow keys. The corrections passed focused Node26 and installed
-Node22.22 checks. Exact current-head CI conclusions are available in
-[Actions](https://github.com/AGI-is-going-to-arrive/ahafold/actions); a queued job is
+Node22.22 checks, then all three exact Node22.20.0 jobs passed on code/evidence
+commit `7ce76db368aaf013603f4f819f198f1f21edd6c1` in
+[run33935496781](https://github.com/AGI-is-going-to-arrive/ahafold/actions/runs/33935496781).
+
+| Deterministic CI runner | Conclusion | Completed (UTC) |
+| --- | --- | --- |
+| Windows latest / Node22.20.0 | PASS | 2026-09-05 01:18:34 |
+| macOS latest / Node22.20.0 | PASS | 2026-09-05 01:14:22 |
+| Ubuntu latest / Node22.20.0 | PASS | 2026-09-05 01:14:42 |
+
+Each job completed dependency installation, browser installation and `pnpm run check`.
+Subsequent changes only record validation and improve the preview screenshot;
+their current job conclusions remain visible in
+[Actions](https://github.com/AGI-is-going-to-arrive/ahafold/actions). A queued job is
 not a pass. Deterministic CI does not establish native OAuth support on that OS.
 
 ## Remaining release gates
@@ -160,5 +172,14 @@ not a pass. Deterministic CI does not establish native OAuth support on that OS.
 - Codex/Antigravity reference-image input and raster editing remain untested.
   Grok input-image edit is verified; master-sheet fidelity remains untested.
 - Strict no-visible-watermark work is not supported by the observed Grok route.
-- Confirm all exact-head CI jobs and verify a local candidate ZIP before calling
-  this a release candidate. Public release/registry publication remain unauthorized.
+- Public release/registry publication remain unauthorized; the repository stays private.
+
+## Local package artifact
+
+The local archive `output/ahafold-v0.1.0-dev.zip` was created from commit7ce76db,
+contains only the9 skill resource files (plus containing directories), and was
+extracted into a separate directory. Every extracted file matched source bytes.
+Archive size:1,180,998 bytes. SHA-256:
+`c2b30b66462cd34ed3c63bfe3b81d6611055178a41eff01aa3c6378a30bf0545`.
+The ZIP is a private local development artifact, not a published release. Its
+resource content is unchanged by later validation-only documentation commits.
