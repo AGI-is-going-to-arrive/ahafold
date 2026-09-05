@@ -47,10 +47,17 @@ It is not evidence that a host generated a fresh image or completed a user's gui
 `pnpm run test:longform --template-only` checks that template. The full command
 requires the template, three delivered long guides and their three reviewed Grok
 variants; missing examples fail. The suite checks 320/390/768/1440px,
-contents/deep-link focus, keyboard scroll/disclosures,
+contents focus, fresh deep-link focus followed by reload, keyboard scroll/disclosures,
 screen-size SVG text, offline resources, axe, no-JS reading, A4 print and actual
 200% Chromium page zoom. Zoom uses a temporary isolated test extension, never a
 personal browser profile or a product dependency.
+
+Fresh deep links start from `about:blank` at the four regular widths and with
+JavaScript disabled, then verify reload separately. The actual 200% lane checks
+TOC navigation and reading in the already-open page, including unchanged zoom
+metrics; it does not test fresh cross-document entry or reload at 200%. Earlier
+Windows focus failures on the interactive-history reload path remain documented
+in the [navigation evidence](windows-navigation.json).
 
 Money checks compare displayed precision exactly with a full-precision oracle;
 the earlier tolerance that could hide one-cent errors is removed. Geometry uses

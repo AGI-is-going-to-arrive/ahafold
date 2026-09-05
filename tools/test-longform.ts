@@ -296,7 +296,7 @@ async function assertFragmentTarget(page: Page, target: NavigationTarget): Promi
   assert.ok(state.visible && state.unobscured, `${target.id}: target heading is outside the viewport or occluded (top ${state.top}px)`);
 }
 
-async function checkNavigation(page: Page, url: string): Promise<number> {
+async function checkContentsNavigation(page: Page): Promise<NavigationTarget[]> {
   for (const details of await page.locator('nav details').all()) {
     if (await details.getAttribute('open') === null) {
       const summary = details.locator(':scope > summary');
@@ -311,10 +311,28 @@ async function checkNavigation(page: Page, url: string): Promise<number> {
     await link.press('Enter');
     await assertFragmentTarget(page, target);
   }
+  return targets;
+}
+
+async function checkNavigation(page: Page, url: string): Promise<number> {
+  const targets = await checkContentsNavigation(page);
   const last = targets.at(-1);
   assert.ok(last);
+  const viewport = await page.evaluate(() => ({ width: innerWidth, height: innerHeight, ratio: devicePixelRatio, scale: visualViewport?.scale }));
+  const assertViewportPreserved = async (): Promise<void> => {
+    await page.waitForFunction((expected) => innerWidth === expected.width
+      && innerHeight === expected.height && Math.abs(devicePixelRatio - expected.ratio) < 0.01
+      && visualViewport?.scale === expected.scale, viewport, { timeout: 5000 });
+  };
+  // A fresh deep link must start in a different document. Reopening the already
+  // selected fragment and immediately reloading tests an interactive history
+  // restoration path instead; its Windows observations are recorded separately.
+  await page.goto('about:blank', { waitUntil: 'load' });
   await page.goto(`${url}#${encodeURIComponent(last.id)}`, { waitUntil: 'load' });
+  await assertViewportPreserved();
+  await assertFragmentTarget(page, last);
   await page.reload({ waitUntil: 'load' });
+  await assertViewportPreserved();
   await assertFragmentTarget(page, last);
   return targets.length;
 }
@@ -639,7 +657,12 @@ async function checkRealPageZoom(): Promise<void> {
       assert.equal(zoomed.scale, baseline.scale, 'This is page reflow zoom, not a pinch-zoom visualViewport crop');
       assertSameReading(await readingSnapshot(page), core, `${candidate.name}, real 200% page zoom: preserve the explanation/default state`);
       await assertNoOverflow(page, `${candidate.name}, real 200% page zoom`);
-      await checkNavigation(page, url);
+      // Verify reading and native TOC use in the zoomed document. Fresh document
+      // entry/reload is checked separately at every regular viewport and no-JS;
+      // Chrome's retention of file: zoom preferences is not an HTML guarantee.
+      await checkContentsNavigation(page);
+      const afterNavigation = await page.evaluate(() => ({ width: innerWidth, ratio: devicePixelRatio, scale: visualViewport?.scale }));
+      assert.deepEqual(afterNavigation, zoomed, 'TOC navigation preserves the verified real page zoom and viewport');
       await checkScrollRegions(page);
       await checkSvgFonts(page);
       await checkLibraryNumbers(page, candidate);

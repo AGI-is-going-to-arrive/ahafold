@@ -1,0 +1,279 @@
+{
+  "date": "2026-09-05",
+  "scope": "Selected deterministic-browser evidence only; no host session logs. The earlier interactive-history reload focus failure remains an observed limitation.",
+  "initial_failed_runs": [
+    {
+      "id": 33945792244,
+      "sha": "b2c64d7a65374c695e904b535d1bac413ba566e9",
+      "macos": "success",
+      "linux": "success",
+      "windows": "failure",
+      "observation": "One-shot focus assertion failed after reload on reviewed Grok types at 1440px."
+    },
+    {
+      "id": 33946397622,
+      "sha": "df110506f779f24463fa384a9a6edf30f388c614",
+      "macos": "success",
+      "linux": "success",
+      "windows": "failure",
+      "observation": "Five-second complete-state wait failed after reload on reviewed Grok retries at 1440px; active element BODY."
+    }
+  ],
+  "standalone_windows_diagnostic": {
+    "run_id": 33947615932,
+    "sha": "d3de56c1120cddc460666479ecc6cc30e3b64912",
+    "contexts": 12,
+    "incomplete_observations": 0,
+    "harness_errors": 0,
+    "scope": "Two pages, three navigation modes, two repetitions; omits full-suite keyboard/screenshot prepasses. Does not cancel the full-suite failures."
+  },
+  "full_flow_diagnostic": {
+    "run_id": 33948369005,
+    "job_id": 101258425857,
+    "sha": "820a40d9cda07f87874892df29f14bba58049f47",
+    "header": {
+      "kind": "fragment-trace-header",
+      "file": "examples/longform/library/grok-reviewed.html",
+      "phase": "immediate-reload",
+      "totalRecords": 125,
+      "retainedRecords": 125
+    },
+    "final_state": {
+      "hash": "#sources",
+      "activeTag": "BODY",
+      "activeId": "",
+      "hasFocus": true,
+      "visibilityState": "visible",
+      "navigationType": "reload",
+      "performanceNow": 5072,
+      "timeOrigin": 1788587974518.6,
+      "target": {
+        "exists": true,
+        "tabindexAttribute": "-1",
+        "tabindex": -1,
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "checkVisibility": true,
+        "rect": {
+          "x": 20,
+          "y": 47.625,
+          "width": 280,
+          "height": 32.390625,
+          "top": 47.625,
+          "bottom": 80.015625
+        }
+      }
+    },
+    "selected_events": [
+      {
+        "kind": "fragment-trace-entry",
+        "index": 116,
+        "record": {
+          "source": "native",
+          "file": "examples/longform/library/grok-reviewed.html",
+          "receivedDuring": "preceding-checks",
+          "receivedAt": 1788587974506,
+          "event": {
+            "event": "focusout",
+            "performanceNow": 2002.3999999999069,
+            "timeOrigin": 1788587972496.7,
+            "readyState": "complete",
+            "hash": "#sources",
+            "activeTag": "BODY",
+            "activeId": "",
+            "hasFocus": true,
+            "visibilityState": "visible",
+            "navigationType": "navigate",
+            "eventTargetTag": "A",
+            "eventTargetId": null
+          }
+        }
+      },
+      {
+        "kind": "fragment-trace-entry",
+        "index": 117,
+        "record": {
+          "source": "native",
+          "file": "examples/longform/library/grok-reviewed.html",
+          "receivedDuring": "preceding-checks",
+          "receivedAt": 1788587974506,
+          "event": {
+            "event": "focusin",
+            "performanceNow": 2002.6999999999534,
+            "timeOrigin": 1788587972496.7,
+            "readyState": "complete",
+            "hash": "#sources",
+            "activeTag": "H2",
+            "activeId": "sources",
+            "hasFocus": true,
+            "visibilityState": "visible",
+            "navigationType": "navigate",
+            "eventTargetTag": "H2",
+            "eventTargetId": "sources"
+          }
+        }
+      },
+      {
+        "kind": "fragment-trace-entry",
+        "index": 118,
+        "record": {
+          "source": "native",
+          "file": "examples/longform/library/grok-reviewed.html",
+          "receivedDuring": "preceding-checks",
+          "receivedAt": 1788587974507,
+          "event": {
+            "event": "hashchange",
+            "performanceNow": 2008.5,
+            "timeOrigin": 1788587972496.7,
+            "readyState": "complete",
+            "hash": "#sources",
+            "activeTag": "H2",
+            "activeId": "sources",
+            "hasFocus": true,
+            "visibilityState": "visible",
+            "navigationType": "navigate",
+            "eventTargetTag": null,
+            "eventTargetId": null
+          }
+        }
+      },
+      {
+        "kind": "fragment-trace-entry",
+        "index": 119,
+        "record": {
+          "source": "phase",
+          "file": "examples/longform/library/grok-reviewed.html",
+          "phase": "same-full-url-goto",
+          "receivedAt": 1788587974512
+        }
+      },
+      {
+        "kind": "fragment-trace-entry",
+        "index": 120,
+        "record": {
+          "source": "phase",
+          "file": "examples/longform/library/grok-reviewed.html",
+          "phase": "immediate-reload",
+          "receivedAt": 1788587974515
+        }
+      },
+      {
+        "kind": "fragment-trace-entry",
+        "index": 121,
+        "record": {
+          "source": "native",
+          "file": "examples/longform/library/grok-reviewed.html",
+          "receivedDuring": "immediate-reload",
+          "receivedAt": 1788587974555,
+          "event": {
+            "event": "init",
+            "performanceNow": 26,
+            "timeOrigin": 1788587974518.6,
+            "readyState": "loading",
+            "hash": "#sources",
+            "activeTag": null,
+            "activeId": null,
+            "hasFocus": true,
+            "visibilityState": "visible",
+            "navigationType": "reload",
+            "eventTargetTag": null,
+            "eventTargetId": null
+          }
+        }
+      },
+      {
+        "kind": "fragment-trace-entry",
+        "index": 122,
+        "record": {
+          "source": "native",
+          "file": "examples/longform/library/grok-reviewed.html",
+          "receivedDuring": "immediate-reload",
+          "receivedAt": 1788587974579,
+          "event": {
+            "event": "DOMContentLoaded",
+            "performanceNow": 55.10000000009313,
+            "timeOrigin": 1788587974518.6,
+            "readyState": "interactive",
+            "hash": "#sources",
+            "activeTag": "BODY",
+            "activeId": "",
+            "hasFocus": true,
+            "visibilityState": "visible",
+            "navigationType": "reload",
+            "eventTargetTag": "#document",
+            "eventTargetId": null
+          }
+        }
+      },
+      {
+        "kind": "fragment-trace-entry",
+        "index": 123,
+        "record": {
+          "source": "native",
+          "file": "examples/longform/library/grok-reviewed.html",
+          "receivedDuring": "immediate-reload",
+          "receivedAt": 1788587974580,
+          "event": {
+            "event": "load",
+            "performanceNow": 56.10000000009313,
+            "timeOrigin": 1788587974518.6,
+            "readyState": "complete",
+            "hash": "#sources",
+            "activeTag": "BODY",
+            "activeId": "",
+            "hasFocus": true,
+            "visibilityState": "visible",
+            "navigationType": "reload",
+            "eventTargetTag": "#document",
+            "eventTargetId": null
+          }
+        }
+      },
+      {
+        "kind": "fragment-trace-entry",
+        "index": 124,
+        "record": {
+          "source": "native",
+          "file": "examples/longform/library/grok-reviewed.html",
+          "receivedDuring": "immediate-reload",
+          "receivedAt": 1788587974590,
+          "event": {
+            "event": "pageshow",
+            "performanceNow": 56.5,
+            "timeOrigin": 1788587974518.6,
+            "readyState": "complete",
+            "hash": "#sources",
+            "activeTag": "BODY",
+            "activeId": "",
+            "hasFocus": true,
+            "visibilityState": "visible",
+            "navigationType": "reload",
+            "eventTargetTag": "#document",
+            "eventTargetId": null
+          }
+        }
+      }
+    ],
+    "selection": "Last nine records from the 125-record retained trace. The full trace belongs to the linked private CI run.",
+    "observation": "The old document focused H2#sources. Same-URL goto emitted no new lifecycle event. The single new document created by reload had BODY at DOMContentLoaded, load and pageshow, with no target focusin before timeout; document had focus and target was visible.",
+    "unresolved": "Exact Chromium scroll/history implementation cause was not established. The old interactive-history sequence is not claimed fixed."
+  },
+  "revised_acceptance": "Keep all keyboard TOC assertions. At all four regular widths and with JavaScript disabled, create a fresh document via about:blank then URL#fragment, verify native focus/visibility/occlusion, then reload and verify again. Separately, the actual Chrome 200 percent lane checks reading, native TOC, layout, fonts and calculations in the already-open page and confirms zoom metrics stay unchanged. It does not test fresh cross-document entry or reload at 200 percent. No target.focus, target scrolling or CSS zoom is used.",
+  "references": [
+    "https://github.com/AGI-is-going-to-arrive/ahafold/actions/runs/33945792244",
+    "https://github.com/AGI-is-going-to-arrive/ahafold/actions/runs/33946397622",
+    "https://github.com/AGI-is-going-to-arrive/ahafold/actions/runs/33947615932",
+    "https://github.com/AGI-is-going-to-arrive/ahafold/actions/runs/33948369005"
+  ],
+  "source_context": {
+    "urls": [
+      "https://html.spec.whatwg.org/multipage/browsing-the-web.html#scroll-to-the-fragment-identifier",
+      "https://html.spec.whatwg.org/multipage/interaction.html#focusing-steps",
+      "https://developer.chrome.com/docs/extensions/reference/api/tabs#type-ZoomSettingsScope"
+    ],
+    "fetched_on": "2026-09-05",
+    "method": "smart-search fetch, source only; no Grok search call. Context7 did not provide a matching current HTML Standard source.",
+    "limit": "Normative fragment focus and browser zoom API behavior are context, not proof of the cause of the observed Windows failure."
+  }
+}

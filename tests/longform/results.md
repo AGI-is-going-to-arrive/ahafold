@@ -103,16 +103,34 @@ and single-skill structure notices. The reviewer separately compiled the two
 displayed TypeScript examples with local `tsc` and verified 16 controlled outcomes,
 with no real network request; raw hashes and candidate-file privacy scans passed.
 
-The first [CI run for `b2c64d7`](https://github.com/AGI-is-going-to-arrive/ahafold/actions/runs/33945792244)
-passed macOS/Linux and failed Windows when checking native fragment focus after a
-reload of the Grok type guide at 1440px. The helper had waited for the heading to
-be visible and then sampled focus once. It now waits up to five seconds for the
-hash, actual focus, visible heading and unobscured position together. It never
-sets focus to manufacture a pass; all assertions remain, and timeout diagnostics
-include the actual focused element. Typecheck and the full seven-page long-form
-suite passed locally after this change; an independent predicate check rejected
-six incomplete states. The repository's current Actions run determines the
-cross-platform outcome of the revised helper. No skill or example bytes changed.
+Windows CI exposed an additional navigation-test problem. The first run failed a
+one-shot focus assertion after reload; waiting five seconds still failed on a
+different page. A standalone 12-context Windows diagnostic passed, but the
+instrumented full flow reproduced the failure on the Grok library at 320px: the
+visible, focusable target never received focus in the reloaded document, while
+`BODY` remained active and the document itself had focus. This is not established
+as a short delay, inactive tab, hidden target or page-specific code defect.
+
+The former “fresh deep-link” check ran after already following the last TOC link,
+then reopened that same URL and refreshed it. It did not test a genuinely fresh
+deep-link document. The corrected setup retains every TOC assertion, opens
+`about:blank` and then the full fragment URL, checks native focus/visibility/
+occlusion, and only then reloads and checks the complete contract again. At real
+200% zoom, a separate lane checks the already-open page's native TOC, reading,
+layout, fonts and calculations, including unchanged zoom metrics after navigation.
+It does not test fresh cross-document entry or reload at 200%: Chrome resets the
+file page's zoom when leaving through `about:blank`, and zooming after a fragment
+load can change the viewport's position. Browser zoom preference persistence is
+not an HTML behavior. Neither DOM focus, target scrolling nor CSS zoom is assigned
+to manufacture a pass.
+
+This changes the tested history path. **The earlier interactive-history reload
+failure remains an observed Windows limitation; it is not claimed fixed.**
+[Selected event evidence and all run references](windows-navigation.json) preserve
+the failed results and the scope of the successful standalone diagnostic. The
+exact Chromium history/scroll-restoration cause remains unestablished. The current
+Actions run determines the revised acceptance result; no skill or example bytes
+changed during this investigation.
 
 The raw Grok retry page exposed roughly 1,019px of A4 horizontal overflow. Its
 default numeric feedback was also hidden without JavaScript; the existing static
