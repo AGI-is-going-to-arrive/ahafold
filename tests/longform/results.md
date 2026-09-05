@@ -103,6 +103,17 @@ and single-skill structure notices. The reviewer separately compiled the two
 displayed TypeScript examples with local `tsc` and verified 16 controlled outcomes,
 with no real network request; raw hashes and candidate-file privacy scans passed.
 
+The first [CI run for `b2c64d7`](https://github.com/AGI-is-going-to-arrive/ahafold/actions/runs/33945792244)
+passed macOS/Linux and failed Windows when checking native fragment focus after a
+reload of the Grok type guide at 1440px. The helper had waited for the heading to
+be visible and then sampled focus once. It now waits up to five seconds for the
+hash, actual focus, visible heading and unobscured position together. It never
+sets focus to manufacture a pass; all assertions remain, and timeout diagnostics
+include the actual focused element. Typecheck and the full seven-page long-form
+suite passed locally after this change; an independent predicate check rejected
+six incomplete states. The repository's current Actions run determines the
+cross-platform outcome of the revised helper. No skill or example bytes changed.
+
 The raw Grok retry page exposed roughly 1,019px of A4 horizontal overflow. Its
 default numeric feedback was also hidden without JavaScript; the existing static
 table and capability notice remained readable. Those faults are corrected only in

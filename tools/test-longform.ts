@@ -253,14 +253,30 @@ async function navigationTargets(page: Page): Promise<NavigationTarget[]> {
 }
 
 async function assertFragmentTarget(page: Page, target: NavigationTarget): Promise<void> {
-  await page.waitForFunction((id) => decodeURIComponent(location.hash.slice(1)) === id, target.id);
-  // Fragment scrolling is asynchronous during a real browser zoom/reflow.
-  await page.waitForFunction((id) => {
-    const target = document.getElementById(id);
-    const heading = target?.matches('h1,h2,h3,h4') ? target : target?.querySelector('h1,h2,h3,h4') ?? target;
-    const bounds = heading?.getBoundingClientRect();
-    return bounds && bounds.top >= -1 && bounds.bottom <= innerHeight + 1;
-  }, target.id, { timeout: 5000 });
+  // Native fragment focus can settle after scrolling, including after reload.
+  // Wait for the full contract; never move focus on the page's behalf.
+  try {
+    await page.waitForFunction((id) => {
+      const target = document.getElementById(id);
+      const heading = target?.matches('h1,h2,h3,h4') ? target : target?.querySelector('h1,h2,h3,h4') ?? target;
+      if (!target || !heading) return false;
+      const bounds = heading.getBoundingClientRect();
+      const x = Math.max(1, Math.min(innerWidth - 1, bounds.left + bounds.width / 2));
+      const y = Math.max(1, Math.min(innerHeight - 1, bounds.top + bounds.height / 2));
+      const topmost = document.elementFromPoint(x, y);
+      return decodeURIComponent(location.hash.slice(1)) === id
+        && (document.activeElement === target || target.contains(document.activeElement))
+        && bounds.top >= -1 && bounds.bottom <= innerHeight + 1
+        && topmost !== null && (heading.contains(topmost) || target === topmost);
+    }, target.id, { timeout: 5000 });
+  } catch (error) {
+    const diagnostic = await page.evaluate(() => ({
+      hash: location.hash,
+      activeTag: document.activeElement?.tagName ?? null,
+      activeId: document.activeElement?.id ?? null,
+    }));
+    throw new Error(`${target.id}: native fragment focus/visibility did not settle within 5s; ${JSON.stringify(diagnostic)}`, { cause: error });
+  }
   const state = await page.evaluate((id) => {
     const target = document.getElementById(id);
     const heading = target?.matches('h1,h2,h3,h4') ? target : target?.querySelector('h1,h2,h3,h4') ?? target;
