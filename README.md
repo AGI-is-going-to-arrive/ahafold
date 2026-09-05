@@ -4,9 +4,10 @@
 
 [简体中文](README.zh-CN.md)
 
-A lightweight agent skill that brings original illustrations and clear HTML together.
-**Fold**, a curious paper-page character, demonstrates the idea. Add interaction when
-it helps; generate images with your current harness's native tool.
+A lightweight, single agent skill for clear HTML explanations, from one concept to
+a long document. **Fold**, a curious paper-page character, can demonstrate the idea.
+Illustrations and interaction are optional; use your current harness's native image
+tool when a scene helps explain the material.
 
 **Private v0.1 development.** Repository access is required to install. This is not a
 public release or a claim of full support on all target platforms.
@@ -16,20 +17,28 @@ tasks; the earlier examples do not establish universal reliability.
 
 ## See the result
 
-[![AhaFold sunk-cost explanation preview](examples/sunk-cost/preview.png)](examples/sunk-cost/index.html)
+[![AhaFold long Chinese tool-library guide preview](examples/longform/library/preview.png)](examples/longform/library/index.html)
 
-| Explanation | Open the complete HTML | Input, sources, and image provenance |
-| --- | --- | --- |
-| Sunk cost · 沉没成本 | [Read](examples/sunk-cost/index.html) | [Notes](examples/sunk-cost/README.md) |
-| Recognition versus recall | [Read](examples/recognition-recall/index.html) | [Notes](examples/recognition-recall/README.md) |
-| Compounding · 复利 | [Read](examples/compounding/index.html) | [Notes](examples/compounding/README.md) |
+| Explanation | Scope | Complete HTML | Input and provenance |
+| --- | --- | --- | --- |
+| Borrowing from a tool library | Chinese · 11 sections | [Read](examples/longform/library/index.html) | [Notes](examples/longform/library/README.md) |
+| Did my seats get booked? | English · 11 sections | [Read](examples/longform/retries/index.html) | [Notes](examples/longform/retries/README.md) |
+| TypeScript → JSON boundaries | Chinese + English terms/code · 10 sections | [Read](examples/longform/type-boundaries/index.html) | [Notes](examples/longform/type-boundaries/README.md) |
+| Sunk cost · 沉没成本 | Compact | [Read](examples/sunk-cost/index.html) | [Notes](examples/sunk-cost/README.md) |
+| Recognition versus recall | Compact | [Read](examples/recognition-recall/index.html) | [Notes](examples/recognition-recall/README.md) |
+| Compounding · 复利 | Compact | [Read](examples/compounding/index.html) | [Notes](examples/compounding/README.md) |
+
+The three [long guides](examples/longform/README.md) are unchanged Codex outputs
+from fresh local AhaFold installations, with zero image calls. Their notes also
+link to separately labelled, maintainer-reviewed Grok variants and preserve the
+original results. These are complete reading examples; previews show only the opening.
 
 The [Chinese recognition/recall edition](examples/recognition-recall/index.zh-CN.html)
 demonstrates a language revision that preserves the original image.
 
 Download or clone the repository, then open an example's `index.html` in your browser;
-GitHub's file view displays source. Each page includes its image, CSS, and any small
-script inline; original images are also retained in the adjacent `assets/` folder.
+GitHub's file view displays source. Pages keep their CSS and any small script inline. Illustrated pages embed their
+images and retain the originals in the adjacent `assets/` folder.
 Readers need no AI account, Node.js, server, or extra model calls.
 
 ## What you can make
@@ -37,6 +46,15 @@ Readers need no AI account, Node.js, server, or extra model calls.
 - An intuitive explanation of an unfamiliar concept.
 - A comparison that separates two easily confused ideas.
 - A short explanation with a useful step-through or a simple interactive example.
+- A long guide with an overview, linked chapters, local diagrams, worked examples,
+  and the conditions and exceptions that qualify its conclusions.
+
+Simple requests use the [compact starting point](skills/ahafold/assets/explainer.html).
+Substantial material or an explicit long-guide request uses the
+[long-form guidance](skills/ahafold/references/longform.md) and
+[original multi-section template](skills/ahafold/assets/longform.html). The skill
+chooses the representations for the material within the same local-HTML workflow.
+Longer work does not require new images.
 
 Images carry the character, situation, action, and a few useful short labels. Long
 prose, code, formulas, and complex charts stay in editable HTML/SVG. Images, Fold,
@@ -110,8 +128,21 @@ Use short labels in the illustration, and add interaction only if it helps.
 ```
 
 ```text
-Use AhaFold to explain this document for a beginner.
-Keep technical terms precise. Put long text and diagrams in HTML, not in the image.
+Use AhaFold to turn material.md into a complete long guide for a general reader.
+Write in English. Keep important conditions, exceptions, numbers, and original code.
+No images.
+```
+
+State the output language explicitly. For a Chinese or mixed-language long guide:
+
+```text
+使用 AhaFold 把 material.md 做成完整长篇图解，面向普通读者。
+用简体中文写作，保留重要条件、例外和数值；不要图片。
+```
+
+```text
+使用 AhaFold 把 material.md 做成长篇图解。
+解释用简体中文，保留 English 术语与原代码，讲清关键边界；不要图片。
 ```
 
 To skip images:
@@ -181,6 +212,15 @@ Dated versions, deterministic CI, image call counts, and remaining release gates
 are recorded in [tests/validation.md](tests/validation.md). Deterministic CI cannot
 prove OAuth image generation on a different operating system.
 
+The separate [long-form evaluation](tests/longform/results.md), dated 2026-09-05,
+used six fresh installed Codex/Grok sessions with no images; all six completed.
+Independent review found all 60 required facts consistent in the three raw Codex
+outputs. Grok mentioned all 60, but only 56 were consistent: three contradictory
+passages affected four checks. One Grok run produced Chinese from English material
+and an English prompt that had no explicit “Write in English” clause. Reviewed
+examples retain their correction records; the raw results and earlier failures
+remain part of the evidence. Browser results and outstanding checks are in that report.
+
 Short labels, Fold identity, reference-image input, and image editing are separate
 checks. A logged-in account does not guarantee quota. Cost is unknown and usage is
 not unlimited. Inspect every image: a strict no-visible-watermark task may not be
@@ -200,6 +240,12 @@ See [NOTICE.md](NOTICE.md) for AI-generated Fold provenance, image-rights limits
 and inspiration from [Ian Xiaohei Illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations)
 and [visual-explainer](https://github.com/nicobailon/visual-explainer).
 
+The original long-form template draws methodological inspiration from the local
+visual-explainer snapshot `7163c3e`: representation choice, overview/detail structure,
+contents navigation, and claim review. See the [source comparison](tests/longform/README.md).
+No upstream implementation was copied. This comparison does not establish equal or
+better generated-output quality in a matched test.
+
 Contribute reproducible examples, language improvements, and dated compatibility
 results without tokens, private material, or raw session logs. Maintainer checks:
 
@@ -211,6 +257,7 @@ pnpm run test:checks
 pnpm run test:install
 pnpm run check:package
 pnpm run test:examples
+pnpm run test:longform
 ```
 
 These development dependencies are outside the installable skill. See

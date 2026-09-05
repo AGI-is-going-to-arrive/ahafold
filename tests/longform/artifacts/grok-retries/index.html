@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>请求没回完，座位算订上了吗？ — 灯笼订票台</title>
+  <meta name="description" content="用灯笼订票台这份虚构教学约定，说明一次订座意图、多次网络尝试和一条耐久预订为什么不是同一回事；以及超时、回调和重试预算分别证明什么、不能证明什么。">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --apricot-ink: #725010;
+      --teal: #2a8c82;
+      --teal-ink: #17665e;
+      --teal-wash: #eff7f5;
+      --line: #d9dfdd;
+      --soft: #f6f8f7;
+      --danger-wash: #f8eeee;
+      --danger-ink: #8a3030;
+      --page-width: 79rem;
+      --reading-width: 42rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: 100%;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-block-start: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    a { color: var(--teal-ink); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    [id] { scroll-margin-block-start: 1.5rem; }
+    p, li, dd, th, td, figcaption, h1, h2, h3 { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.25rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { color: var(--ink); line-height: 1.35; text-wrap: balance; }
+    h1 { max-width: 16ch; margin: 0; font-size: 3.25rem; font-weight: 750; letter-spacing: -0.03em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.875rem; font-weight: 700; letter-spacing: -0.02em; }
+    h3 { margin: 2rem 0 0.75rem; font-size: 1.25rem; font-weight: 650; }
+    strong { font-weight: 650; }
+    ul, ol { margin-block: 1rem 1.5rem; padding-inline-start: 1.5rem; }
+    li + li { margin-top: 0.75rem; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: 1rem; color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    svg { display: block; }
+    svg text { fill: var(--ink); font-family: inherit; font-size: 18px; }
+    code, .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace; font-size: 0.92em; }
+    a, summary { -webkit-tap-highlight-color: #f4c96b66; }
+    details { border-block: 1px solid var(--line); }
+    summary { min-height: 2.75rem; padding-block: 1rem; color: var(--teal-ink); font-weight: 650; cursor: pointer; }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+    summary::marker { color: var(--teal-ink); }
+    .detail-body { padding-block: 0.25rem 1.5rem; }
+    .detail-body > :first-child { margin-top: 0; }
+
+    .skip-link { position: absolute; inset: 0.75rem auto auto 1rem; z-index: 3; padding: 0.5rem 1rem; background: var(--paper); transform: translateY(-200%); }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, .page-layout, .page-footer { width: min(calc(100% - 5rem), var(--page-width)); margin-inline: auto; }
+    .page-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; padding-block: 1.75rem 1.25rem; border-bottom: 1px solid var(--line); }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 1rem; }
+    .page-layout { display: grid; grid-template-columns: 12rem minmax(0, 1fr); column-gap: 4rem; align-items: start; }
+    .page-layout > * { min-width: 0; }
+    .introduction { grid-column: 2; padding-block: 4rem 3.5rem; }
+    .lead { max-width: var(--reading-width); margin-top: 1.75rem; font-size: 1.25rem; line-height: 1.8; }
+    .scope-note { max-width: var(--reading-width); margin-top: 1.25rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    .central-answer { max-width: var(--reading-width); margin-top: 2rem; padding: 1.25rem 1.5rem; background: var(--apricot-wash); border: 1px solid var(--apricot); border-radius: 12px; }
+    .contents { position: sticky; top: 1.5rem; grid-column: 1; grid-row: 1 / span 2; max-height: calc(100dvh - 3rem); margin-top: 4rem; overflow-y: auto; scrollbar-color: var(--teal) var(--soft); scrollbar-width: thin; }
+    .contents details { border-bottom: 0; }
+    .contents summary { padding-block: 1rem; color: var(--ink); font-size: 1.125rem; }
+    .contents ul { margin: 0; padding: 0 0 0.75rem; list-style: none; }
+    .contents li + li { margin-top: 0; }
+    .contents a { display: block; min-height: 2.75rem; padding: 0.5rem 0.375rem; color: var(--muted); font-size: 1rem; line-height: 1.6; text-decoration: none; }
+    .contents a:hover, .contents a:focus-visible { color: var(--teal-ink); text-decoration: underline; background: var(--teal-wash); }
+    .reading-body { grid-column: 2; min-width: 0; }
+    .chapter { padding-block: 3rem; border-top: 1px solid var(--line); }
+    .prose { max-width: var(--reading-width); }
+    .section-lead { color: var(--muted); }
+    .supporting { color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    .terms { margin: 1.75rem 0; }
+    .term { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1.25rem; border-bottom: 1px solid var(--line); }
+    .term:first-child { border-top: 1px solid var(--line); }
+    .term dt { font-weight: 650; }
+    .term dd { margin: 0; }
+    .process-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; margin: 0; padding-inline-start: 1.5rem; }
+    .process-flow li { min-width: 0; margin: 0; padding-inline-start: 0.25rem; }
+    .process-flow li::marker { color: var(--teal-ink); font-weight: 650; }
+    .process-flow h3 { margin: 0 0 0.5rem; font-size: 1.125rem; }
+    .process-flow p { font-size: 1rem; line-height: 1.75; }
+    .assumptions { padding: 1.25rem 1.5rem; background: var(--soft); }
+    .assumptions p { margin: 0; }
+    .assumptions ul { margin-bottom: 0; }
+    .legend { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin-block: 0 0.75rem; font-size: 1rem; }
+    .legend span { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .legend-mark { display: inline-block; width: 1.5rem; height: 0.75rem; flex: 0 0 auto; }
+    .legend-mark.wait { background: var(--apricot-wash); border: 2px dashed var(--apricot-ink); }
+    .legend-mark.work { background: var(--teal-ink); border: 2px solid var(--teal-ink); }
+    .legend-mark.attempt { background: var(--apricot-ink); border: 2px solid var(--apricot-ink); }
+    .legend-mark.stop { background: var(--danger-wash); border: 2px solid var(--danger-ink); }
+    .scroll-region { max-width: 100%; overflow: auto; overscroll-behavior-inline: contain; scrollbar-color: var(--teal) var(--soft); scrollbar-width: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 1.125rem; font-variant-numeric: tabular-nums; line-height: 1.65; }
+    caption { padding-block: 0 0.75rem; text-align: left; font-weight: 650; }
+    th, td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    thead { background: var(--soft); }
+    th { font-weight: 650; }
+    .decision-table { min-width: 46rem; }
+    .decision-table th:first-child { width: 28%; }
+    .timing-table { min-width: 36rem; }
+    .timing-table td:not(:first-child), .timing-table th:not(:first-child) { text-align: right; }
+    .timing-table tbody tr:last-child { background: var(--teal-wash); }
+    .wait-table { min-width: 40rem; }
+    .wait-table tbody tr.is-selected { background: var(--apricot-wash); }
+    .comparison-table { min-width: 42rem; }
+    .calculation { margin-block: 1.75rem; padding: 1.25rem 1.5rem; background: var(--teal-wash); }
+    .calculation p + p { margin-top: 0.75rem; }
+    .equation { font-variant-numeric: tabular-nums; }
+    .reasoning-steps { padding-inline-start: 1.75rem; }
+    .reasoning-steps li { padding-inline-start: 0.375rem; }
+    .reasoning-steps li::marker { color: var(--teal-ink); font-weight: 650; }
+    .reasoning-steps strong { display: block; margin-bottom: 0.25rem; }
+    .case-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-block: 2rem; }
+    .case-pair > div { min-width: 0; padding-block: 1.25rem; border-block: 1px solid var(--line); }
+    .case-pair h3 { margin-top: 0; }
+    .case-pair .result { color: var(--teal-ink); font-weight: 650; }
+    .exceptions { margin-block: 1.75rem 0; }
+    .exception { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1.5rem; border-top: 1px solid var(--line); }
+    .exception dt { font-weight: 650; }
+    .exception dd { margin: 0; }
+    .exceptions .exception:last-child { padding-bottom: 0; }
+    .source-notes { padding-inline-start: 1.5rem; }
+    .source-notes li::marker { color: var(--teal-ink); }
+    .page-footer { padding-block: 1.75rem 3rem; border-top: 1px solid var(--line); }
+    .footer-inner { margin-inline-start: 16rem; max-width: var(--reading-width); }
+    .page-footer p { color: var(--muted); font-size: 1rem; }
+    .return-link { display: inline-block; min-height: 2.75rem; padding-block: 0.375rem; }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.25rem;
+      margin: 0;
+    }
+    .overview-card {
+      min-width: 0;
+      padding: 1.15rem 1.2rem 1.25rem;
+      background: var(--soft);
+      border-top: 4px solid var(--teal);
+    }
+    .overview-card.gap {
+      background: var(--apricot-wash);
+      border-top-color: var(--apricot);
+    }
+    .overview-kicker {
+      margin: 0 0 0.4rem;
+      color: var(--teal-ink);
+      font-size: 0.875rem;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+    }
+    .overview-card.gap .overview-kicker { color: var(--apricot-ink); }
+    .overview-card h3 { margin: 0 0 0.45rem; font-size: 1.125rem; }
+    .overview-card p { margin: 0; font-size: 1rem; line-height: 1.7; }
+    .relation-list { margin: 1.5rem 0 0; padding: 0; list-style: none; max-width: var(--reading-width); }
+    .relation-list li { padding: 0.85rem 0; border-top: 1px solid var(--line); font-size: 1rem; line-height: 1.7; }
+    .relation-list li:last-child { border-bottom: 1px solid var(--line); }
+    .relation-name { display: block; color: var(--teal-ink); font-weight: 650; margin-bottom: 0.2rem; }
+
+    .code-panel {
+      margin: 1.75rem 0;
+      padding: 1.15rem 1.25rem;
+      background: var(--soft);
+    }
+    .code-panel pre {
+      margin: 0;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      white-space: pre;
+    }
+    .limit-box {
+      margin: 1.75rem 0;
+      padding: 1.25rem 1.5rem;
+      background: var(--apricot-wash);
+      border: 1px solid var(--apricot);
+    }
+    .limit-box p { margin: 0; }
+    .limit-box p + p { margin-top: 0.75rem; }
+
+    .exit-list { display: grid; gap: 0; margin: 1.75rem 0 0; }
+    .exit {
+      display: grid;
+      grid-template-columns: 13.5rem minmax(0, 1fr);
+      gap: 1.25rem;
+      padding-block: 1.15rem;
+      border-top: 1px solid var(--line);
+    }
+    .exit:last-child { border-bottom: 1px solid var(--line); }
+    .exit dt { margin: 0; font-weight: 650; }
+    .exit dd { margin: 0; }
+    .exit .next { display: block; margin-top: 0.35rem; color: var(--muted); font-size: 1rem; }
+
+    .callback-track { min-width: 44rem; }
+    .callback-track text { font-size: 16px; }
+    .retry-chart { min-width: 48rem; height: auto; }
+    .retry-chart .grid-line { stroke: var(--line); stroke-width: 1; }
+    .retry-chart .wait { fill: var(--apricot-wash); stroke: var(--apricot-ink); stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .retry-chart .attempt { fill: var(--apricot-ink); }
+    .retry-chart .success { fill: var(--teal-ink); }
+    .retry-chart .axis-label { fill: var(--muted); }
+
+    .control-panel {
+      margin: 1.75rem 0;
+      padding: 1.25rem 1.5rem;
+      background: var(--soft);
+    }
+    .control-panel fieldset {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+    .control-panel legend {
+      padding: 0;
+      font-weight: 650;
+    }
+    .choice-list {
+      display: grid;
+      gap: 0.5rem;
+      margin: 1rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .choice-list li { margin: 0; }
+    .choice-list label {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      min-height: 2.75rem;
+      padding: 0.45rem 0.25rem;
+      cursor: pointer;
+    }
+    .choice-list input { margin-top: 0.45rem; flex: 0 0 auto; }
+    .live-output {
+      display: none;
+      margin-top: 1.15rem;
+      padding: 1rem 1.15rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+    }
+    html.has-js .live-output { display: block; }
+    html.has-js .js-needed { display: none; }
+    .live-output p { margin: 0; }
+    .live-output p + p { margin-top: 0.65rem; }
+
+    .do-not {
+      margin: 1.5rem 0 0;
+      padding: 1.15rem 1.35rem;
+      background: var(--danger-wash);
+    }
+    .do-not h3 { margin: 0 0 0.65rem; color: var(--danger-ink); }
+    .do-not ul { margin: 0; }
+
+    .ledger-flow { margin: 2rem 0 0; }
+    .delivery-steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .delivery-step {
+      display: grid;
+      grid-template-columns: 6.5rem minmax(0, 1fr) minmax(12rem, 16rem);
+      gap: 0.75rem 1.5rem;
+      padding-block: 1.15rem;
+      border-top: 1px solid var(--line);
+    }
+    .delivery-step:last-child { border-bottom: 1px solid var(--line); }
+    .delivery-step h3 { margin: 0 0 0.35rem; font-size: 1.05rem; }
+    .delivery-step p { margin: 0; font-size: 1rem; line-height: 1.7; }
+    .delivery-index { margin: 0; font-weight: 650; }
+    .delivery-step .result { color: var(--teal-ink); font-weight: 650; }
+    .delivery-step.is-repeat { background: var(--apricot-wash); }
+    .delivery-step.is-stale { background: var(--danger-wash); }
+    .delivery-step.is-stale .result { color: var(--danger-ink); }
+    .delivery-step.is-repeat,
+    .delivery-step.is-stale {
+      margin-inline: -1rem;
+      padding-inline: 1rem;
+    }
+
+    @media (max-width: 67rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 3rem); }
+      .page-layout { grid-template-columns: 10.5rem minmax(0, 1fr); column-gap: 2.5rem; }
+      .process-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; }
+      .overview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .footer-inner { margin-inline-start: 13rem; }
+    }
+    @media (max-width: 55rem) {
+      .page-layout { display: block; }
+      .introduction { padding-block: 3rem 2.5rem; }
+      h1 { font-size: 2.75rem; }
+      .contents { position: static; max-height: none; max-width: var(--reading-width); margin: 0 0 2.5rem; overflow: visible; }
+      .contents ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; }
+      .contents details { border-bottom: 1px solid var(--line); }
+      .contents summary { padding-block: 0.875rem; }
+      .contents a { padding-block: 0.625rem; }
+      .footer-inner { margin-inline-start: 0; }
+    }
+    @media (max-width: 36rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 2.5rem); }
+      .page-header { padding-top: 1.25rem; }
+      .introduction { padding-block: 2.5rem 2rem; }
+      h1 { font-size: 2.125rem; letter-spacing: -0.025em; }
+      h2 { font-size: 1.5rem; }
+      .lead { font-size: 1.125rem; }
+      .central-answer, .assumptions, .calculation, .control-panel, .code-panel, .limit-box, .do-not { padding: 1rem 1.125rem; }
+      .contents ul, .case-pair, .overview-grid { grid-template-columns: minmax(0, 1fr); }
+      .case-pair { gap: 0; }
+      .case-pair > div + div { border-top: 0; }
+      .chapter { padding-block: 2.5rem; }
+      .term, .exception, .exit, .delivery-step { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+      .delivery-step.is-repeat,
+      .delivery-step.is-stale {
+        margin-inline: -1.125rem;
+        padding-inline: 1.125rem;
+      }
+      .process-flow { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+      .process-flow p { font-size: 1.125rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    @media print {
+      @page { margin: 16mm; }
+      :root { font-size: 11pt; }
+      body { font-size: 1rem; line-height: 1.65; }
+      .page-header, .page-layout, .page-footer { width: 100%; }
+      .page-layout { display: block; }
+      .skip-link, .contents, .return-link, .control-panel { display: none; }
+      .introduction { padding-block: 1.5rem 2rem; }
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 1.6rem; }
+      h2, h3 { break-after: avoid; }
+      .chapter { padding-block: 1.5rem; }
+      .prose, .lead, .central-answer, .scope-note { max-width: none; }
+      .scroll-region { overflow: visible; }
+      .retry-chart, .callback-track, .decision-table, .timing-table, .wait-table, .comparison-table { min-width: 0; }
+      .retry-chart, .callback-track { break-inside: avoid; }
+      .retry-chart text, .callback-track text { font-size: 14px; }
+      table { font-size: 0.875rem; }
+      th, td { padding: 0.5rem; }
+      thead { display: table-header-group; }
+      tr, .term, .exception, .exit, .calculation, .overview-card, .delivery-step { break-inside: avoid; }
+      details > * { display: block; }
+      details::details-content { display: block; content-visibility: visible; }
+      summary { list-style: none; }
+      summary::-webkit-details-marker { display: none; }
+      .footer-inner { margin-inline-start: 0; }
+      a { color: inherit; }
+      .supporting, figcaption { font-size: 0.875rem; }
+      .live-output { display: none; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <!--
+    Working outline (author note, not a reader form):
+    Question: when a booking HTTP attempt does not end neatly, what does the client know?
+    Answer: unknown is not failure; count identity and evidence, not requests.
+    Coverage: R01–R16, JSON intention, callback log, observation table, R10 schedule, R09 wait rule.
+    No images. Factual source: supplied material.md only.
+  -->
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。</p>
+  </header>
+
+  <main id="main" class="page-layout" tabindex="-1" aria-labelledby="page-title">
+    <header class="introduction">
+      <h1 id="page-title">请求没回完，<br>座位算订上了吗？</h1>
+      <p class="lead">灯笼订票台（Lantern）是一份教学用的虚构社区演出订座系统。真正难的不是“再点一次”，而是：网络请求没有干净结束时，客户端到底知道什么。</p>
+      <div class="central-answer">
+        <p><strong>超时或断线只说明结果未知，不证明订座失败，也不证明座位还空着。</strong>一次订座意图可以活过多次网络尝试；一次成功回应，也可能只是在描述这次尝试到达之前就已经存在的预订。数请求、数成功回应、数回调，都不是可靠的预订计数方法。自动策略一共只发四次，并在本地钥匙创建满 24 小时后停止自动重试。用尽之后，未知仍是 <code>UNKNOWN</code>，要用原来的身份去做只读核对。</p>
+      </div>
+      <p class="scope-note">下面的人名、编号、时间和演出记录都是原例子。规则是一份假定的约定，不是对真实支付机构的描述。预订会占座位；这个例子既不收钱，也不连接真实服务。本页不用插画，关系、条件和数字都写在可编辑的文字、表格和图示里。</p>
+    </header>
+
+    <nav id="contents" class="contents" aria-label="本页目录" tabindex="-1">
+      <details open>
+        <summary>本页目录</summary>
+        <ul>
+          <li><a href="#three-things">先分成三件不同的事</a></li>
+          <li><a href="#ledger">发出去之前先记账</a></li>
+          <li><a href="#same-bytes">同一把钥匙必须是同一串字节</a></li>
+          <li><a href="#unknown">缺回应留下的知识缺口</a></li>
+          <li><a href="#effect-vs-delivery">效果发生了，不等于你收到了</a></li>
+          <li><a href="#retry-budget">四次尝试和等待规则</a></li>
+          <li><a href="#decision-table">看到什么，下一步做什么</a></li>
+          <li><a href="#callbacks">回调按自己的顺序到达</a></li>
+          <li><a href="#stop-is-not-fail">停止发送不是证明失败</a></li>
+          <li><a href="#guarantees">窄保证与能带走的判断</a></li>
+          <li><a href="#sources">假设、来源与边界</a></li>
+        </ul>
+      </details>
+    </nav>
+
+    <article class="reading-body" aria-label="灯笼订票台的完整解释">
+      <section class="chapter" aria-labelledby="three-things">
+        <div class="prose">
+          <h2 id="three-things" tabindex="-1">先分成三件不同的事</h2>
+          <p class="section-lead">如果把“点一次订座”当成一件事，后面的超时、重试和回调都会缠在一起。这份约定把它们拆成三种对象。</p>
+          <dl class="terms">
+            <div class="term">
+              <dt>订座意图</dt>
+              <dd>一个人决定要请求哪些座位。它先存在于人的决定和本地记录里，不等于已经发出去的网络包，也不等于服务器上已经占座的记录。</dd>
+            </div>
+            <div class="term">
+              <dt>HTTP 尝试</dt>
+              <dd>一次把该意图送到服务器的网络请求。同一次意图可以对应好几次尝试。</dd>
+            </div>
+            <div class="term">
+              <dt>耐久预订</dt>
+              <dd>服务器上一条已提交的记录，并且会消耗那些座位。成功回应可以描述一条在这次尝试到达之前就已经存在的预订。</dd>
+            </div>
+          </dl>
+          <p>因此，计数对象一旦选错，结论就会错。请求次数、成功回应次数、回调次数，在这份约定里都不是预订次数。</p>
+        </div>
+
+        <figure aria-labelledby="overview-caption">
+          <div class="overview-grid">
+            <article class="overview-card">
+              <p class="overview-kicker">人这边</p>
+              <h3>一次意图</h3>
+              <p>例如 Mina Patel 要订 10 月 17 日秋日日场楼座 <code>C07</code>、<code>C08</code>。改座位、改姓名，都是新的意图。</p>
+            </article>
+            <article class="overview-card">
+              <p class="overview-kicker">本地账本</p>
+              <h3>身份必须先写下</h3>
+              <p>意图编号、精确的 UTF-8 请求体、幂等钥匙，以及钥匙创建时间。账本写失败，就不能发请求。</p>
+            </article>
+            <article class="overview-card">
+              <p class="overview-kicker">网络</p>
+              <h3>可以有多次尝试</h3>
+              <p>自动策略是最初一次，再加上最多三次重试，一共四次。每一次都携带同一把钥匙和同一串字节。</p>
+            </article>
+            <article class="overview-card">
+              <p class="overview-kicker">服务器</p>
+              <h3>至多一条预订</h3>
+              <p>同一把钥匙的并发请求要串行处理：最多提交一条预订，后来被接受的尝试拿到已保存的结果。</p>
+            </article>
+            <article class="overview-card gap">
+              <p class="overview-kicker">知识缺口</p>
+              <h3>回应可能在路上丢掉</h3>
+              <p>服务器可以已经占座，然后在回应到达客户端之前断开。超时因此是 <code>UNKNOWN</code>，不是失败证明。</p>
+            </article>
+            <article class="overview-card">
+              <p class="overview-kicker">另一条通道</p>
+              <h3>回调按自己的顺序来</h3>
+              <p><code>reservation.created</code> 是已提交事实的另一条投递通道。回应和回调都收到，也不能在本地记成两笔预订。</p>
+            </article>
+          </div>
+          <ul class="relation-list">
+            <li><span class="relation-name">携带</span>意图被放进 HTTP 尝试里送出；尝试不是新的意图。</li>
+            <li><span class="relation-name">可能提交</span>服务器用钥匙绑定那串字节。绑定还在保留期内时，同一把钥匙至多产生一条耐久预订。</li>
+            <li><span class="relation-name">可能丢失</span>提交之后，回应仍可能送不到。丢失的是投递，不一定是效果。</li>
+            <li><span class="relation-name">不互相证明</span>回调到达不能用来数预订；预订提交一次，事件仍可能被投递两次。</li>
+          </ul>
+          <figcaption id="overview-caption">这张总图只画对象和关系，不表示每一次请求都会走完所有格子。窗口办事的比喻在这里停止：当面窗口通常能立刻听到答复；这份网络约定里，座位可能已经记下，口头确认却丢了。</figcaption>
+        </figure>
+      </section>
+
+      <section class="chapter" aria-labelledby="ledger">
+        <div class="prose">
+          <h2 id="ledger" tabindex="-1">发出去之前，先把意图记下</h2>
+          <p>在发送任何请求之前，客户端要在耐久的本地账本里保存四样东西：意图标识、精确的 UTF-8 请求体、幂等钥匙，以及这把钥匙的创建时间。账本属于这套虚构系统的一部分，不是在要求你去实现某种存储或服务。它在这里的目的，是让客户端重启之后仍能保住“用户当时到底要订什么”。</p>
+          <p>派遣次数也要写进账本：每次真正派出之前先计数，这样重启不会把四次预算清零。</p>
+        </div>
+        <figure class="ledger-flow" aria-labelledby="ledger-flow-caption">
+          <ol class="process-flow">
+            <li>
+              <h3>写账本</h3>
+              <p>先记下意图、精确字节、钥匙和创建时间。写入失败，就阻止发送。</p>
+            </li>
+            <li>
+              <h3>再发请求</h3>
+              <p>只有账本成功后，才允许把同一串字节送出。</p>
+            </li>
+            <li>
+              <h3>重启后先读</h3>
+              <p>读取并检查已有记录，再继续。仍不确定的意图，不得发明一把新钥匙。</p>
+            </li>
+            <li>
+              <h3>派出前计数</h3>
+              <p>派遣次数耐久保存。等待不消耗次数；重启也不把预算清零。</p>
+            </li>
+          </ol>
+          <figcaption id="ledger-flow-caption">账本是这套虚构系统里的教学装置，用来在重启后保住用户当时的意图。它不是在要求实现某一种存储服务。</figcaption>
+        </figure>
+        <figure>
+          <div class="code-panel scroll-region" role="region" tabindex="0" aria-labelledby="intention-caption" aria-describedby="intention-help">
+            <pre id="intention-record"><code>{
+  "intentionId": "intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042",
+  "idempotencyKey": "idem_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042",
+  "bodyUtf8": "{\"performanceId\":\"lantern-autumn-matinee-2026-10-17\",\"seatIds\":[\"C07\",\"C08\"],\"attendeeName\":\"Mina Patel\"}",
+  "keyCreatedAt": "2026-10-01T10:00:00Z"
+}</code></pre>
+          </div>
+          <figcaption id="intention-caption">Mina Patel 这张票的本地意图记录。幂等钥匙不是口令，而是“这还是同一件事”的身份牌；<code>bodyUtf8</code> 保存的是字节，不是“看起来差不多的 JSON”。</figcaption>
+          <p id="intention-help" class="supporting">窄屏可横向滚动这段记录。后面的回调例子使用同一个 <code>intentionId</code>。</p>
+        </figure>
+        <div class="prose">
+          <p>对这张记录，保守的自动重试截止时间是钥匙创建之后 24 小时，也就是 <code>2026-10-02T10:00:00Z</code>。即使服务器实际接受第一次请求的时间更晚，客户端仍按更早的本地创建时间停手。这个 24 小时是安全边界，不是“永远恰好一次”的保证。</p>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="same-bytes">
+        <div class="prose">
+          <h2 id="same-bytes" tabindex="-1">同一把钥匙，必须是同一串字节</h2>
+          <p>对同一次意图，每一次重试都使用同一把钥匙，以及完全相同的请求体字节。服务器把钥匙绑到那些字节上，而不是绑到“看起来相似的 JSON”。</p>
+          <p>座位选择、出席者姓名，或 JSON 属性顺序一旦改变，都需要一次显式的新意图。但更早那次如果还没有对上，必须先和解，不能直接换一单了事。</p>
+          <div class="limit-box">
+            <p><strong>冲突时不要把它当成可重试的小错误。</strong>用同一把钥匙配上不同字节，服务器返回 <code>409 KEY_PAYLOAD_MISMATCH</code>，并且不为这次冲突的尝试创建新预订。客户端应停止并调查，而不是对着这场冲突继续重试。</p>
+          </div>
+          <h3>服务器只记得一段时间</h3>
+          <p>从第一次被接受的请求起，服务器保留钥匙绑定和最终结果 24 小时。同一把钥匙的并发请求会串行化：最多提交一条预订，后来被接受的尝试收到已保存的结果。</p>
+          <p>仍在处理中的请求可以返回 <code>202 PENDING</code>。这是在承认“我接到了”，不是已经提交预订的证明。保留期结束之后，服务器可能丢掉钥匙缓存；那时再拿一把旧钥匙重试，未必还能挡住一次重复的耐久效果。所以客户端要先暂停派遣，并解决原来的意图，才能开始任何显式的新意图。</p>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="unknown">
+        <div class="prose">
+          <h2 id="unknown" tabindex="-1">缺回应，留下的是知识缺口</h2>
+          <p>服务器可能已经提交了预订，随后在回应到达客户端之前丢失连接。因此，超时或网络断开的含义是：结果未知。</p>
+          <p>它不能据此成立下面任何一句：预订失败了；座位仍空着；再开一笔全新订座是安全的。</p>
+          <p>客户端把该意图标为 <code>UNKNOWN</code>，保留原来的身份，并且只能在后面的有界策略内重试。</p>
+        </div>
+        <div class="case-pair">
+          <div>
+            <h3>客户端此刻看见</h3>
+            <p>这次 HTTP 尝试没有干净结束。本地账本里仍是原来的意图、钥匙和字节。</p>
+            <p class="result">已知：结果未知。</p>
+          </div>
+          <div>
+            <h3>服务器上可能已经发生</h3>
+            <p>可能尚未占座，也可能已经写下耐久预订，只是那张回条没有送到。</p>
+            <p class="result">未知：效果在哪一边。</p>
+          </div>
+        </div>
+        <div class="prose">
+          <p class="supporting"><code>503 TEMPORARILY_UNAVAILABLE</code> 也落在这条缺口里：它可能出现在工作开始之前，也可能出现在开始之后，所以效果同样未知。这与 <code>429</code> 不同——在这份约定里，有效的限流发生在预订处理之前，这一次尝试没有造成预订。</p>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="effect-vs-delivery">
+        <div class="prose">
+          <h2 id="effect-vs-delivery" tabindex="-1">效果发生了，不等于你已经收到</h2>
+          <p>耐久效果和投递是两件事。回应是一条通道，回调是另一条。两条都在讲同一个已提交事实时，本地不能记成两笔预订。</p>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="delivery-caption" aria-describedby="delivery-help">
+          <table class="comparison-table">
+            <caption id="delivery-caption">回应分别证明什么</caption>
+            <thead>
+              <tr>
+                <th scope="col">观察到的回应</th>
+                <th scope="col">它确认的效果</th>
+                <th scope="col">它没有确认的事</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><code>201 RESERVED</code></th>
+                <td>最终成功。带有预订标识，以及服务器当前的预订修订号。确认本意图已有耐久预订。</td>
+                <td>不证明全局恰好一次投递；若稍后又收到 <code>reservation.created</code>，也不能再记一笔本地预订。</td>
+              </tr>
+              <tr>
+                <th scope="row">回放得到的 <code>200 RESERVED</code></th>
+                <td>完成过的钥匙再次出现时，可能带回同一个预订标识。</td>
+                <td>这一次尝试并没有再分配额外座位。</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>202 PENDING</code></th>
+                <td>处理仍在继续，这是确认收到。</td>
+                <td>不是已提交预订的证明。最终结果仍未知。</td>
+              </tr>
+              <tr>
+                <th scope="row">后来的 <code>reservation.created</code> 回调</th>
+                <td>已提交事实的另一条投递通道。</td>
+                <td>即使同时也收到了 HTTP 成功回应，也不能创建第二条本地预订。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="delivery-help" class="supporting">窄屏可横向滚动对照表。下一节把“还要不要再发”的规则一次列清。</p>
+        <div class="prose">
+          <h3>明确的否定回应</h3>
+          <p>这些含义属于这份虚构约定，本文不声称每一种真实 API 都使用相同的状态语义。</p>
+          <dl class="exceptions">
+            <div class="exception">
+              <dt><code>400 INVALID_REQUEST</code></dt>
+              <dd>对这次提交的请求体是最终结果，并且不造成预订。客户端应停止，并展示校验问题。</dd>
+            </div>
+            <div class="exception">
+              <dt><code>429 RATE_LIMITED</code></dt>
+              <dd>在预订处理之前拒绝这一次尝试，并提供一个有效的整数 <code>Retry-After</code>（单位：秒）。这一次没有预订。</dd>
+            </div>
+            <div class="exception">
+              <dt><code>503 TEMPORARILY_UNAVAILABLE</code></dt>
+              <dd>可能发生在工作开始前，也可能在开始后，所以效果未知。它与超时、断线走同一条“可按预算重试”的路，而不是 <code>429</code> 那条“这次没占座”的路。</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="retry-budget">
+        <div class="prose">
+          <h2 id="retry-budget" tabindex="-1">一个很小的重试预算，条件都写明</h2>
+          <div class="assumptions">
+            <p><strong>自动策略只做这些事。</strong></p>
+            <ul>
+              <li>最初一次，加上最多三次重试：一共四次尝试，不是四次重试。</li>
+              <li>派遣次数在发送前耐久计数，应用重启不会重置预算。</li>
+              <li>第 2、第 3、第 4 次尝试之前的基数等待分别是 1、2、4 秒。等待从上一轮结束或超时之后开始。</li>
+              <li>等待本身不消耗一次尝试。</li>
+              <li>尚未结束的异步处理走核对，而不是立刻再派发一次订座请求。</li>
+            </ul>
+          </div>
+          <h3>限流等待取较长的那一个</h3>
+          <p>遇到可重试的 <code>429</code> 之后，下一次等待取“即将到来的那一次尝试的基数等待”和该回应 <code>Retry-After</code> 之中较大的那个。不要把两段等待加起来。</p>
+          <div class="calculation" aria-label="第 2 次尝试之后的等待算法">
+            <p class="equation"><strong>下一次等待</strong> = max（下一次的基数等待，<code>Retry-After</code>）</p>
+            <p class="equation">第 2 次之后，基数等待是 <strong>2 秒</strong>。若 <code>Retry-After: 6</code>，就等待 <strong>6 秒</strong>，不是 2 + 6 = 8 秒。</p>
+            <p class="equation">若对方给出 0 秒延迟，也<strong>绝不会</strong>取消基数等待；此时仍等待 2 秒。</p>
+          </div>
+          <p>如果这段必需的等待会到达或越过保守的钥匙到期时间，就停止自动重试，改为核对。到期时间按更早的本地钥匙创建时间起算 24 小时。</p>
+          <h3>教学时间表：三次超时，第四次成功</h3>
+          <p>这份教学日程假定：每一次尝试都恰好用 0.5 秒到达回应或超时；时钟稳定；没有抖动。从 <code>t = 0</code> 起，三次可重试超时之后再一次最终成功，尝试开始于 0、1.5、4 和 8.5 秒；最后一次回应在第 9 秒到达。</p>
+          <p class="supporting">真实系统还要处理变化的延迟、时钟不确定、取消，以及常常存在的抖动。这些是提醒，不是偷偷加进这份时间表的额外条款。</p>
+        </div>
+
+        <figure>
+          <div class="legend" aria-label="重试时间线图例">
+            <span><i class="legend-mark wait" aria-hidden="true"></i>虚线框：等待（不消耗尝试）</span>
+            <span><i class="legend-mark attempt" aria-hidden="true"></i>深色短块：超时的尝试，各 0.5 秒</span>
+            <span><i class="legend-mark work" aria-hidden="true"></i>实心块：最终成功的第 4 次</span>
+          </div>
+          <div class="scroll-region" role="region" tabindex="0" aria-label="四次尝试的时间线，可横向滚动" aria-describedby="retry-help retry-caption">
+            <svg class="retry-chart" viewBox="0 0 920 268" role="img" aria-labelledby="retry-title retry-desc">
+              <title id="retry-title">从 0 秒到 9 秒：四次尝试的开始与结束</title>
+              <desc id="retry-desc">第 1 次从 0 秒开始，0.5 秒超时，等待 1 秒。第 2 次从 1.5 秒开始，2.0 秒超时，等待 2 秒。第 3 次从 4 秒开始，4.5 秒超时，等待 4 秒。第 4 次从 8.5 秒开始，9 秒成功。</desc>
+              <g aria-hidden="true">
+                <path class="grid-line" d="M80 28V188 M200 28V188 M400 28V188 M760 28V188 M800 28V188"></path>
+                <text x="16" y="72">尝试</text>
+                <rect class="attempt" x="80" y="52" width="40" height="28" rx="2"></rect>
+                <rect class="wait" x="120" y="52" width="80" height="28" rx="2"></rect>
+                <rect class="attempt" x="200" y="52" width="40" height="28" rx="2"></rect>
+                <rect class="wait" x="240" y="52" width="160" height="28" rx="2"></rect>
+                <rect class="attempt" x="400" y="52" width="40" height="28" rx="2"></rect>
+                <rect class="wait" x="440" y="52" width="320" height="28" rx="2"></rect>
+                <rect class="success" x="760" y="52" width="40" height="28" rx="2"></rect>
+                <text x="84" y="120">1</text>
+                <text x="204" y="120">2</text>
+                <text x="404" y="120">3</text>
+                <text x="764" y="120">4</text>
+                <text x="132" y="160" fill="#725010">等 1s</text>
+                <text x="288" y="160" fill="#725010">等 2s</text>
+                <text x="560" y="160" fill="#725010">等 4s</text>
+                <text class="axis-label" x="80" y="224" text-anchor="middle">0</text>
+                <text class="axis-label" x="200" y="224" text-anchor="middle">1.5</text>
+                <text class="axis-label" x="400" y="224" text-anchor="middle">4</text>
+                <text class="axis-label" x="760" y="224" text-anchor="middle">8.5</text>
+                <text class="axis-label" x="800" y="224" text-anchor="middle">9</text>
+                <text class="axis-label" x="16" y="224">秒</text>
+              </g>
+            </svg>
+          </div>
+          <figcaption id="retry-caption">等待段比尝试段长，但等待不占用那四次预算。第 4 次在 8.5 秒开始，0.5 秒后于第 9 秒得到成功回应。</figcaption>
+          <p id="retry-help" class="supporting">窄屏可横向滚动时间线；键盘聚焦后可用左右方向键。下面的表提供同一组未四舍五入的数字。</p>
+        </figure>
+
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="timing-caption" aria-describedby="timing-help">
+          <table class="timing-table">
+            <caption id="timing-caption">三次超时再一次成功（单位：秒）</caption>
+            <thead>
+              <tr>
+                <th scope="col">尝试</th>
+                <th scope="col">开始</th>
+                <th scope="col">结束</th>
+                <th scope="col">随后基数等待</th>
+                <th scope="col">下一次开始</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">1</th><td>0</td><td>0.5</td><td>1</td><td>1.5</td></tr>
+              <tr><th scope="row">2</th><td>1.5</td><td>2.0</td><td>2</td><td>4</td></tr>
+              <tr><th scope="row">3</th><td>4</td><td>4.5</td><td>4</td><td>8.5</td></tr>
+              <tr><th scope="row">4</th><td>8.5</td><td>9</td><td>—</td><td>成功，停止派遣</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="timing-help" class="supporting" style="margin-top: 0.75rem">开始时刻 = 上一轮结束时刻 + 等待。每次尝试时长固定为 0.5 秒，所以结束时刻 = 开始时刻 + 0.5。</p>
+
+        <div class="prose">
+          <h3>同一条时间线，不要把限流例子混进去</h3>
+          <p>上面的 0、1.5、4、8.5、9 只适用于“三次可重试超时，然后成功”。<code>Retry-After: 6</code> 是另一条规则的例子：第 2 次之后基数等待是 2 秒，实际等待取 6 秒。若还沿用“每次恰好 0.5 秒”，第 2 次在 2.0 秒结束，第 3 次会在 8.0 秒开始。8.0 不是材料里单独给出的时刻，而是把限流规则接到这条 0.5 秒假设上得到的。</p>
+        </div>
+
+        <form class="control-panel" id="wait-form" aria-describedby="wait-js-note">
+          <fieldset>
+            <legend>第 2 次尝试结束后，下一段等待按哪条规则？</legend>
+            <ul class="choice-list">
+              <li>
+                <label>
+                  <input type="radio" name="after-two" value="timeout" checked>
+                  超时、断线或 <code>503</code>（用基数等待 2 秒）
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="radio" name="after-two" value="retry6">
+                  <code>429</code>，且 <code>Retry-After: 6</code>
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="radio" name="after-two" value="retry0">
+                  <code>429</code>，且对方给出 0 秒延迟
+                </label>
+              </li>
+              <li>
+                <label>
+                  <input type="radio" name="after-two" value="pending">
+                  <code>202 PENDING</code>
+                </label>
+              </li>
+            </ul>
+          </fieldset>
+          <p id="wait-js-note" class="supporting js-needed" style="margin-top: 1rem">若页面脚本未运行，选择框不会改写数字。完整规则在下面的对照表里，对照表始终可见。</p>
+          <div class="live-output" id="wait-output" role="status" aria-live="polite">
+            <p><strong>等待 2 秒</strong>，然后若预算与 24 小时边界仍允许，用同一身份发送第 3 次。</p>
+            <p>这次观察的效果是未知。等待不消耗一次尝试。</p>
+          </div>
+        </form>
+
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="wait-caption" aria-describedby="wait-help">
+          <table class="wait-table" id="wait-table">
+            <caption id="wait-caption">第 2 次之后四种观察的下一步</caption>
+            <thead>
+              <tr>
+                <th scope="col">观察</th>
+                <th scope="col">已知效果</th>
+                <th scope="col">下一段等待</th>
+                <th scope="col">会不会立刻再派发订座请求</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-case="timeout">
+                <th scope="row">超时、断线或 <code>503</code></th>
+                <td>未知</td>
+                <td>2 秒（基数）</td>
+                <td>若预算与时间允许，重试同一身份</td>
+              </tr>
+              <tr data-case="retry6">
+                <th scope="row"><code>429</code> 且 <code>Retry-After: 6</code></th>
+                <td>这一次没有预订</td>
+                <td>6 秒（较长者）</td>
+                <td>等待结束后，若仍允许则重试同一身份</td>
+              </tr>
+              <tr data-case="retry0">
+                <th scope="row"><code>429</code> 且延迟为 0</th>
+                <td>这一次没有预订</td>
+                <td>仍为 2 秒，0 不能取消基数等待</td>
+                <td>等待结束后，若仍允许则重试同一身份</td>
+              </tr>
+              <tr data-case="pending">
+                <th scope="row"><code>202 PENDING</code></th>
+                <td>处理被确认；最终结果未知</td>
+                <td>不进入下一次订座派遣等待</td>
+                <td>核对该意图的状态；不要立刻再消耗一次尝试</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="wait-help" class="supporting" style="margin-top: 0.75rem">限流后的等待是“取较大值”，不是相加。脚本若在运行，选中的一行会加上浅底；即使脚本不运行，四行规则仍然完整可读。</p>
+      </section>
+
+      <section class="chapter" aria-labelledby="decision-table">
+        <div class="prose">
+          <h2 id="decision-table" tabindex="-1">看到什么，下一步做什么</h2>
+          <p>把一次尝试的观察、这份约定下已知的效果、以及自动策略的下一步放在同一张表里。缺字段或字段畸形时，证据本身不可信，不能当成一次干净的成功或失败。</p>
+        </div>
+        <figure>
+          <div class="scroll-region" role="region" tabindex="0" aria-labelledby="obs-caption" aria-describedby="obs-help">
+            <table class="decision-table">
+              <caption id="obs-caption">一次尝试之后的自动下一步</caption>
+              <thead>
+                <tr>
+                  <th scope="col">一次尝试中的观察</th>
+                  <th scope="col">这份约定下的已知效果</th>
+                  <th scope="col">自动的下一步</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row"><code>201 RESERVED</code> 或回放的 <code>200 RESERVED</code></th>
+                  <td>预订已提交</td>
+                  <td>记下同一个预订身份；停止派遣</td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>202 PENDING</code></th>
+                  <td>处理已被确认；最终结果未知</td>
+                  <td>核对状态；不要立刻再消耗一次尝试</td>
+                </tr>
+                <tr>
+                  <th scope="row">超时、断线或 <code>503</code></th>
+                  <td>未知</td>
+                  <td>若预算与时间允许，用同一身份重试</td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>429</code> 且带有有效的 <code>Retry-After</code></th>
+                  <td>这一次尝试没有造成预订</td>
+                  <td>遵守较长的那段等待，若仍允许则重试</td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>400 INVALID_REQUEST</code></th>
+                  <td>这个请求体没有造成预订</td>
+                  <td>停止；展示校验问题</td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>409 KEY_PAYLOAD_MISMATCH</code></th>
+                  <td>这次冲突的尝试没有造成预订</td>
+                  <td>停止并调查身份冲突</td>
+                </tr>
+                <tr>
+                  <th scope="row">必需字段缺失或畸形</th>
+                  <td>证据不可信或不完整</td>
+                  <td>保持未决；核对或上报</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <figcaption id="obs-caption-note" class="supporting">这张表是运行时出口，不是“每种观察都同样常见”。<code>409</code> 尤其不是“换个字段再试同一把钥匙”。</figcaption>
+          <p id="obs-help" class="supporting">窄屏可横向滚动。停止派遣之后，未知结果仍按原意图去核对，见<a href="#stop-is-not-fail">停止发送不是证明失败</a>。</p>
+        </figure>
+      </section>
+
+      <section class="chapter" aria-labelledby="callbacks">
+        <div class="prose">
+          <h2 id="callbacks" tabindex="-1">回调按自己的顺序到达</h2>
+          <p>事件身份不是预订身份。每一次回调都带有 <code>eventId</code>、<code>reservationId</code>、<code>intentionId</code>，以及整数 <code>revision</code>。</p>
+          <ul>
+            <li>重新投递会重复同一个事件标识。</li>
+            <li>接收方要耐久记录已经处理过的事件 ID，以及预订修订号。</li>
+            <li>只有这笔账本更新成功之后，才能确认投递。保存失败不得报告成处理成功；发送方仍可能再投一次。</li>
+            <li>即便预订本身只提交过一次，事件投递仍可能重复。</li>
+          </ul>
+          <h3>按修订号，不按到达顺序</h3>
+          <p>对同一条预订：比已保存修订号更低的回调，不能覆盖更新的状态。同一修订号却带着互相冲突的状态，是需要核对的不一致。修订号出现缺口时，可能意味着漏掉了事件：在应用一段依赖缺失历史的转换之前，接收方要先取得当前权威状态。</p>
+          <p>单靠时间戳不能安全地排列本地结果。不同预订上的修订号也没有全局可比性。</p>
+          <div class="limit-box">
+            <p><strong>先鉴别，再解释。</strong>回调必须通过这份约定的签名检查，以及意图到预订的绑定检查，才能进入上述事件流程。一个看起来像那么回事的标识，或一份整齐的 JSON，并不能建立真实性。本例不提供真实密钥或签名算法，因此也不声称实现了鉴别。点名另一个意图的回应或回调，不得悄悄替换原来的记录。</p>
+          </div>
+        </div>
+
+        <figure>
+          <p class="section-lead" style="max-width: var(--reading-width)">下面这份投递日志属于<strong>同一条预订</strong>。最后一行是迟到的旧事实，不是把已经取消的座位重新恢复。</p>
+          <ol class="delivery-steps">
+            <li class="delivery-step">
+              <p class="delivery-index">投递 1</p>
+              <div>
+                <h3><code>evt_created_7001</code></h3>
+                <p>类型 <code>reservation.created</code>，修订号 1。账本更新成功后，才能确认这次投递。</p>
+              </div>
+              <p class="result">本地保存修订号 1</p>
+            </li>
+            <li class="delivery-step is-repeat">
+              <p class="delivery-index">投递 2</p>
+              <div>
+                <h3>同一个 <code>eventId</code> 再来一次</h3>
+                <p>重新投递重复 <code>evt_created_7001</code>。预订本身只提交过一次，事件仍可能被投递两次。</p>
+              </div>
+              <p class="result">已处理，不记第二笔预订</p>
+            </li>
+            <li class="delivery-step">
+              <p class="delivery-index">投递 3</p>
+              <div>
+                <h3><code>evt_cancelled_7002</code></h3>
+                <p>类型 <code>reservation.cancelled</code>，修订号 2。高于已保存的 1，可以推进本地状态。</p>
+              </div>
+              <p class="result">本地保存修订号 2</p>
+            </li>
+            <li class="delivery-step is-stale">
+              <p class="delivery-index">投递 4</p>
+              <div>
+                <h3><code>evt_created_late_copy_7003</code></h3>
+                <p>类型仍是 <code>reservation.created</code>，修订号却是 1。这是迟到的旧事实，不是把已取消的座位重新恢复。</p>
+              </div>
+              <p class="result">更低修订号，不得覆盖</p>
+            </li>
+          </ol>
+          <figcaption id="callback-caption">四次投递都属于预订 <code>res_lantern_C07_C08_7001</code>，意图标识与 Mina Patel 那条记录相同。投递 2 是同一事件的重新投递；投递 4 换了事件标识，但修订号更低，不能覆盖修订号 2 的取消。</figcaption>
+        </figure>
+
+        <div class="code-panel scroll-region" role="region" tabindex="0" aria-labelledby="log-caption">
+          <pre><code>[
+  {"delivery":1,"eventId":"evt_created_7001","reservationId":"res_lantern_C07_C08_7001","intentionId":"intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042","revision":1,"type":"reservation.created"},
+  {"delivery":2,"eventId":"evt_created_7001","reservationId":"res_lantern_C07_C08_7001","intentionId":"intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042","revision":1,"type":"reservation.created"},
+  {"delivery":3,"eventId":"evt_cancelled_7002","reservationId":"res_lantern_C07_C08_7001","intentionId":"intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042","revision":2,"type":"reservation.cancelled"},
+  {"delivery":4,"eventId":"evt_created_late_copy_7003","reservationId":"res_lantern_C07_C08_7001","intentionId":"intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042","revision":1,"type":"reservation.created"}
+]</code></pre>
+        </div>
+        <p id="log-caption" class="supporting">完整投递日志与材料中的例子一致，便于对照图示。</p>
+      </section>
+
+      <section class="chapter" aria-labelledby="stop-is-not-fail">
+        <div class="prose">
+          <h2 id="stop-is-not-fail" tabindex="-1">停止发送，不是证明失败</h2>
+          <p>第四次尝试之后，如果结果仍未知，它继续是 <code>UNKNOWN</code>。不能只为了让界面整齐，就改标成 <code>FAILED</code>。</p>
+          <p>客户端要用原来的意图和钥匙，做这份约定里的只读状态核对。教学约定提供了一种权威状态机制，但没有真实端点。若状态仍未知，由人来调查。</p>
+          <div class="do-not">
+            <h3>这时客户端明确不做的事</h3>
+            <ul>
+              <li>不生成一把新钥匙。</li>
+              <li>不把本地“座位已经到手”的承诺当成已获证明而放开。</li>
+              <li>不告诉用户预订一定存在。</li>
+            </ul>
+          </div>
+          <h3>到期是安全边界，取消等待画面也不是取消预订</h3>
+          <p>服务器在保留期结束后可能丢弃钥匙缓存。那时再重试一把旧钥匙，也许再也不能抑制一次重复的耐久效果。因此客户端要暂停派遣，并先解决原来的意图，然后才能开始任何显式的新意图。</p>
+          <p>用户取消本地等待画面，同样只停止本地重试，并不取消服务器上可能已经存在的预订。一次经确认的服务器端取消是另一项操作，并且落在这份重试策略之外。</p>
+          <dl class="exit-list">
+            <div class="exit">
+              <dt>预算用尽，结果未知</dt>
+              <dd>保持 <code>UNKNOWN</code>，用原意图和原钥匙做只读核对。<span class="next">下一步是证据，不是新的占座请求。</span></dd>
+            </div>
+            <div class="exit">
+              <dt>等待将触及 24 小时边界</dt>
+              <dd>停止自动重试，改为核对。客户端按更早的本地钥匙创建时间计算这条边界。<span class="next">24 小时保留不是永恒的恰好一次保证。</span></dd>
+            </div>
+            <div class="exit">
+              <dt>关掉等待画面</dt>
+              <dd>停止本地重试。服务器上的预订可能仍在。<span class="next">真正取消预订需要单独、已确认的服务器操作。</span></dd>
+            </div>
+            <div class="exit">
+              <dt>想改座位或姓名</dt>
+              <dd>那是新的意图，但必须先和解尚未解决的旧意图。<span class="next">把新字节塞进旧钥匙会得到 <code>409</code>，并且不为冲突尝试创建预订。</span></dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="guarantees">
+        <div class="prose">
+          <h2 id="guarantees" tabindex="-1">窄保证，以及能带走的判断</h2>
+          <p>在所述的服务器约定下，保留期内一把被接受的钥匙，保护<strong>那一串精确字节</strong>不会被重复创建预订。理解重试，就是像数秒一样仔细地追踪证据和身份。最稳妥且仍然有用的结果，可以是一个诚实的未决状态，并保住原来的记录。</p>
+          <div class="limit-box">
+            <p><strong>它没有承诺这些事：</strong>全局恰好一次投递；换一把新钥匙也不会重复；座位一定还有；人会在多快之内消除不确定性。</p>
+          </div>
+          <ol class="reasoning-steps">
+            <li><strong>先问计数对象是哪一种。</strong>意图、尝试、回应、回调、预订，五种东西可以不是一对一。</li>
+            <li><strong>没有干净结束时，先写 UNKNOWN。</strong>不要把缺口补成失败，也不要补成成功。</li>
+            <li><strong>重试只重复身份，不发明身份。</strong>同一把钥匙、同一串字节；派遣次数写在账本里，重启不得清零。</li>
+            <li><strong>等待取较长者，零延迟不能删掉基数等待。</strong>必需等待会碰到 24 小时边界时，停手去核对。</li>
+            <li><strong>回调看事件 ID 和修订号。</strong>重复事件不是第二笔预订；更低的修订号不能覆盖更新状态；迟到的 <code>created</code> 不能恢复已经取消的座位。</li>
+            <li><strong>停发之后仍有工作。</strong>只读核对、保留原记录。本地取消等待不是服务器取消。</li>
+          </ol>
+          <details>
+            <summary>用 Mina Patel 这一单，把容易走错的一步标出来</summary>
+            <div class="detail-body">
+              <p>账本已经写下 <code>C07</code>、<code>C08</code> 和姓名 Mina Patel。第一次尝试超时。这时座位可能已经被占，也可能没有。若立刻换一张“看起来更正”的请求——比如把 JSON 字段调换顺序，或改出席者姓名——却仍使用同一把钥匙，得到的是 <code>409 KEY_PAYLOAD_MISMATCH</code>，并且不为这次冲突尝试创建预订。</p>
+              <p>正确的路是：保留原来的意图，按预算用同一串字节重试或核对。只有旧意图被解决之后，显式的新意图才可以开始。</p>
+              <p>若第四次仍未知，界面可以继续显示“尚未确定”，而不能显示“订座失败”或“座位已锁定”。教学约定里的权威状态机制此时是只读的；本页没有真实端点可供查询。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="sources">
+        <div class="prose">
+          <h2 id="sources" tabindex="-1">假设、来源与能说到哪里</h2>
+          <p>本页只使用所附教学材料中的虚构约定与原例子，没有查阅外部接口文档，也没有连接真实服务。材料声明：所有名称、标识、时间戳和事件记录都是原创例子；规则不是对真实支付机构的主张。</p>
+          <ul class="source-notes">
+            <li><strong>可以支持的结论：</strong>在这套写明的钥匙绑定、24 小时保留、四次尝试、等待规则和回调修订号之下，一次不完整的网络往返究竟证明什么、不能证明什么。</li>
+            <li><strong>不能支持的结论：</strong>某个真实票务或支付 API 使用相同状态码含义；现实网络会按 0.5 秒一次、无抖动运行；座位库存、收费或签名算法的具体实现。</li>
+            <li><strong>教学假设：</strong>每次尝试恰好 0.5 秒；时钟稳定；无抖动。真实系统还要处理变化延迟、时钟不确定、取消和抖动——材料把这些标为提醒，而不是时间表里的隐藏条款。</li>
+            <li><strong>本页形态：</strong>离线静态文档，不含插画，阅读时不发起网络请求。版式、深链接、打印与无脚本阅读需要在浏览器中另行检查。</li>
+          </ul>
+          <p>若把这些规则用于真实系统，需要另给实际的状态查询端点、签名算法和保留期限，并且逐项核对这些条件是否仍然成立。</p>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="page-footer">
+    <div class="footer-inner">
+      <p>本页可离线阅读、搜索和打印。文字、表格与图示均可编辑；选择等待规则不调用模型、不访问网络。灯笼订票台是教学用的虚构约定。</p>
+      <a class="return-link" href="#contents">返回本页目录</a>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var form = document.getElementById("wait-form");
+      var output = document.getElementById("wait-output");
+      var table = document.getElementById("wait-table");
+      if (!form || !output || !table) return;
+      document.documentElement.classList.add("has-js");
+
+      var copy = {
+        timeout: {
+          html:
+            "<p><strong>等待 2 秒</strong>，然后若预算与 24 小时边界仍允许，用同一身份发送第 3 次。</p>" +
+            "<p>这次观察的效果是未知。等待不消耗一次尝试。</p>"
+        },
+        retry6: {
+          html:
+            "<p><strong>等待 6 秒</strong>，取 max(2, 6)，不要把 2 和 6 加总成 8。</p>" +
+            "<p>这一次尝试没有预订。若这段等待会到达或越过钥匙创建后 24 小时，则停止自动重试并改为核对。</p>"
+        },
+        retry0: {
+          html:
+            "<p><strong>仍等待 2 秒</strong>。对方给出的 0 秒延迟不能取消基数等待。</p>" +
+            "<p>这一次尝试没有预订。等待本身不消耗一次尝试。</p>"
+        },
+        pending: {
+          html:
+            "<p><strong>不要立刻再派发订座请求。</strong>改为核对此意图的状态。</p>" +
+            "<p><code>202 PENDING</code> 只确认处理仍在继续，不是已提交预订的证明，也不消耗下一次尝试来“再订一次”。</p>"
+        }
+      };
+
+      function selectedValue() {
+        var checked = form.querySelector('input[name="after-two"]:checked');
+        return checked ? checked.value : "timeout";
+      }
+
+      function paint() {
+        var value = selectedValue();
+        var rows = table.querySelectorAll("tbody tr");
+        for (var i = 0; i < rows.length; i += 1) {
+          rows[i].classList.toggle("is-selected", rows[i].getAttribute("data-case") === value);
+        }
+        output.innerHTML = copy[value].html;
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+      });
+      form.addEventListener("change", paint);
+      paint();
+    })();
+  </script>
+</body>
+</html>

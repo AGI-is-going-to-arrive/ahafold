@@ -6,13 +6,16 @@ import { PNG } from 'pngjs';
 import { parseDocument } from 'yaml';
 
 export const requiredSkillFiles: readonly string[] = [
+  'LICENSE',
   'SKILL.md',
   'references/explanation.md',
+  'references/longform.md',
   'references/fold.md',
   'references/native-codex.md',
   'references/native-grok.md',
   'references/native-antigravity-cli.md',
   'assets/explainer.html',
+  'assets/longform.html',
   'assets/fold/reference-sheet.png',
 ];
 

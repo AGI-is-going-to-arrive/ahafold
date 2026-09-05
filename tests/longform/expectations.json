@@ -1,0 +1,1482 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Independent content oracle for original long-form AhaFold evaluation materials.",
+  "exposure": "Evaluator-only. Copy only the three input Markdown files into generating-host workspaces. Do not put this oracle, its answers, expected controls, or scoring instructions into generation prompts.",
+  "provenance": "All three source materials are original fixtures. Library and booking rules are explicitly fictional supplied contracts; technical examples are supplied code with independently checkable language/runtime behavior. No real API, institution, transaction, credential, or private path is required.",
+  "judgmentRules": [
+    "Judge semantic claims in the entire rendered artifact, including headings, diagrams, captions, alt text, interactive outputs, collapsed sections, and final delivery messages. A correct caveat elsewhere does not cancel a contradictory headline.",
+    "A must-preserve fact can be accurately condensed or combined. Literal keyword presence alone is not evidence of correctness.",
+    "Any critical false assertion fails correctness even if aesthetics, tool exit status, screenshots, or package checks pass.",
+    "Material omission is recorded separately from falsehood. If a user requests a bounded summary, identify what was intentionally omitted; these long-form runs request coverage of the supplied complex material.",
+    "Do not count a saved file as completed delivery if the host timed out or exceeded its turn budget. Preserve such artifacts and report completion separately.",
+    "Use the numeric/code oracles only after generation. Do not repair the generated artifact before scoring the initial result.",
+    "Question answers support expert assessment of explanatory coverage, not a claim that real readers passed a comprehension experiment."
+  ],
+  "evaluationDimensions": [
+    {
+      "id": "correctness",
+      "focus": "Preserved facts, exceptions, causal sequence, no internal contradictions, source-versus-inference attribution."
+    },
+    {
+      "id": "explanatory-value",
+      "focus": "A reader can answer the supplied transfer questions and distinguish nearby concepts without already knowing the answer."
+    },
+    {
+      "id": "long-form-navigation",
+      "focus": "Sections and navigation help locate definitions, exceptions, examples, and consequences without flattening all content into repetitive cards."
+    },
+    {
+      "id": "visual-hierarchy",
+      "focus": "Typography, spacing, density, contrast, diagrams, and emphasis communicate relative importance and make a long artifact readable."
+    },
+    {
+      "id": "representation-fidelity",
+      "focus": "Diagrams, labels, captions, alt text, and interactions agree with source facts and with actual visible imagery."
+    },
+    {
+      "id": "numeric-and-code-fidelity",
+      "focus": "Exact code behavior and all tested numeric states match this oracle; formatting does not alter executable meaning."
+    },
+    {
+      "id": "responsive-accessibility",
+      "focus": "Desktop/mobile layout, readable graph labels, keyboard access, logical reading order, focus visibility, table/code overflow containment, and reduced motion."
+    },
+    {
+      "id": "language",
+      "focus": "Chinese, English, and mixed-language prose remain natural, correct, consistent in terminology, and faithful to identifiers and code."
+    },
+    {
+      "id": "interaction-purpose",
+      "focus": "Any controls demonstrate a material relationship, report state accessibly, and retain a useful readable explanation when scripts are absent."
+    },
+    {
+      "id": "delivery-and-scope",
+      "focus": "Offline artifact opens successfully, assets remain local, claims about validation are honest, no real API calls occur, and the host completes within its authorized budget."
+    },
+    {
+      "id": "limits",
+      "focus": "Distinguish tested observations from untested browser/device/assistive-technology/human-comprehension or cross-platform claims."
+    }
+  ],
+  "cases": [
+    {
+      "id": "library",
+      "input": "inputs/library.md",
+      "language": "zh-CN",
+      "subject": "Fictional community tool library with three concurrent state records, timed allocation, eligibility exceptions, and refundable-deposit mathematics.",
+      "mustPreserveFacts": [
+        {
+          "id": "L01",
+          "statement": "The service is fictional. Inventory states are ready, held, on loan, awaiting inspection, repair, and retired. Only ready inventory can be allocated; total stock is not immediately available stock."
+        },
+        {
+          "id": "L02",
+          "statement": "A request can be received, queued, held, rejected, cancelled, expired, or fulfilled. Fulfilled means handed over, not returned. A held request names a concrete asset and pickup deadline; queued requests do not."
+        },
+        {
+          "id": "L03",
+          "statement": "A loan begins at handover. Loan states distinguish active, overdue, return recorded, and settled. Return recording stops the late-fee clock; the asset awaits inspection and does not automatically become ready."
+        },
+        {
+          "id": "L04",
+          "statement": "Pickup requires age at least 18, active membership, no unreturned overdue loan, and current training for tools that require it. A plain measuring ruler does not require drill training. Eligibility is checked again later."
+        },
+        {
+          "id": "L05",
+          "statement": "At most two loans without a recorded return per member, and at most one unfinished request per tool category. A hold is not already a loan and does not reserve future loan capacity."
+        },
+        {
+          "id": "L06",
+          "statement": "A receipt with a request ID only acknowledges submission. A separate hold confirmation with asset, location, and pickup deadline is needed to establish a hold. Receipt is not reservation or guaranteed availability."
+        },
+        {
+          "id": "L07",
+          "statement": "Allocation changes the ready asset and request to held atomically; simultaneous claimants cannot both receive the final asset. Another eligible claimant queues."
+        },
+        {
+          "id": "L08",
+          "statement": "Hold confirmations are produced during daily 09:00–18:00 service hours. The 24-hour hold runs from confirmation, not submission. Handover must occur strictly before the hold deadline; exactly at it is expired."
+        },
+        {
+          "id": "L09",
+          "statement": "Unexpected closure requires an explicit corrected confirmation with a new deadline or cancellation with notice. There is no inferred automatic extension. An expired applicant must apply again."
+        },
+        {
+          "id": "L10",
+          "statement": "A pre-handover cancellation has no cancellation fee and no collected loan deposit. A viable held asset is released to the next eligible request. After handover the user must return the tool, not cancel the request to erase the loan."
+        },
+        {
+          "id": "L11",
+          "statement": "Queue order is server receipt time with a monotonic sequence as tie-breaker. Queuing collects no deposit and promises no availability date; inspection or repair after a return can extend waiting."
+        },
+        {
+          "id": "L12",
+          "statement": "Promotion rechecks eligibility and the two-loan limit. An ineligible queued candidate is rejected and notified, not paused; a later new request gets a new timestamp. The next eligible candidate gets a fresh 24-hour confirmation."
+        },
+        {
+          "id": "L13",
+          "statement": "Only the named applicant can collect with identity evidence. Pickup rechecks eligibility, capacity, and required training; actual recorded handover after condition confirmation starts the loan. Paying a deposit cannot bypass eligibility."
+        },
+        {
+          "id": "L14",
+          "statement": "The deposit is 100 fictional units per established loan. The initial due time is handover plus 7×24 hours. The hold period does not consume the loan period. The deposit is refundable, not a membership fee or purchase price."
+        },
+        {
+          "id": "L15",
+          "statement": "One renewal may be requested and processed strictly before due time. Processing requires no queue for the category, valid membership/training, and no other unreturned overdue loan. An explicit approval adds 7×24 hours to the old due time, for at most 14 total days. A receipt alone does not renew."
+        },
+        {
+          "id": "L16",
+          "statement": "Any queued request at renewal-processing time blocks renewal even if its applicant might later fail promotion eligibility. Rejected renewal leaves the current loan and original due time intact."
+        },
+        {
+          "id": "L17",
+          "statement": "The service-desk recorded receipt of the tool is the return timestamp. There is no unattended return box in this case. A message, arrival at the door, or inspection appointment does not stop the clock. Return exactly at due time is on time."
+        },
+        {
+          "id": "L18",
+          "statement": "Overdue days are ceil(positive elapsed time after due / 24 hours), not calendar-midnight crossings. A positive one-second delay is one day. This fee contract is defined only for 0–14 overdue days; longer cases need staff handling."
+        },
+        {
+          "id": "L19",
+          "statement": "Late fee is 3.75 per overdue day capped at 22.50. Confirmed new damage adds 20; otherwise zero. Refund is max(0, 100 − min(3.75×days, 22.50) − damage). The cap applies only to late fees, not their sum with damage."
+        },
+        {
+          "id": "L20",
+          "statement": "Calculate in integer cents and display two decimals. Refund is 100.00 for day 0/no damage, 92.50 for day 2/no damage, 72.50 for day 2/confirmed damage, and 77.50 or 57.50 for day 14. The late-fee cap is already reached at day 6."
+        },
+        {
+          "id": "L21",
+          "statement": "Disputed damage suspends settlement for evidence-based staff review; pending damage is not automatically charged as 20. The recorded return time and stopped late-fee clock remain intact. No promised review result or payout date is specified."
+        },
+        {
+          "id": "L22",
+          "statement": "A safety fault requires stopping use and contacting staff. Reporting it is not recorded return and does not automatically waive fees; pre-existing damage or exemptions require separate review."
+        },
+        {
+          "id": "L23",
+          "statement": "A refundable deposit is not wholly a sunk cost just because it was paid earlier. Separate irreversible costs from still-recoverable money, and consider future time, travel, and obligations."
+        },
+        {
+          "id": "L24",
+          "statement": "A capped late fee does not eliminate the value or obligation of return: return ends occupancy and starts inspection/settlement. It does not instantly make a damaged tool available or promise real financial returns."
+        }
+      ],
+      "questions": [
+        {
+          "id": "LQ01",
+          "sourceFacts": [
+            "L01",
+            "L02",
+            "L03"
+          ],
+          "question": "A tool was accepted at the desk but is waiting for inspection. Is it available, is the loan still accruing late time, and is the deposit necessarily settled?",
+          "answer": "It is awaiting inspection and unavailable; return recording stopped late time; settlement may still be pending."
+        },
+        {
+          "id": "LQ02",
+          "sourceFacts": [
+            "L06",
+            "L07"
+          ],
+          "question": "Two people receive submission receipts for the last drill. Do they both have reservations?",
+          "answer": "No. Receipt acknowledges submission only. Atomic allocation can issue a concrete hold for the asset to only one eligible request; the other can queue."
+        },
+        {
+          "id": "LQ03",
+          "sourceFacts": [
+            "L08",
+            "L09",
+            "L17"
+          ],
+          "question": "At exactly the stated deadline, is pickup allowed and is return overdue?",
+          "answer": "The hold has expired so pickup is not allowed under that hold. A service-desk return registered exactly at its due time is on time. These are different boundaries."
+        },
+        {
+          "id": "LQ04",
+          "sourceFacts": [
+            "L05",
+            "L13"
+          ],
+          "question": "A member obtains a hold, then borrows two other tools before pickup. Does the hold guarantee pickup anyway?",
+          "answer": "No. A hold did not reserve loan capacity. Pickup rechecks the maximum of two unreturned loans and rejects/releases the hold if the member is full."
+        },
+        {
+          "id": "LQ05",
+          "sourceFacts": [
+            "L11",
+            "L12"
+          ],
+          "question": "The first queued member is ineligible when an asset is released, then renews membership later. Is the original place paused?",
+          "answer": "No. That request is rejected and notified; promotion continues. A later application uses a new receipt time and queue position."
+        },
+        {
+          "id": "LQ06",
+          "sourceFacts": [
+            "L15",
+            "L16"
+          ],
+          "question": "Can staff approve a renewal because the only queued applicant is expected to fail eligibility later?",
+          "answer": "No. The existence of a queue when renewal is processed blocks it. Promotion eligibility is a separate later event."
+        },
+        {
+          "id": "LQ07",
+          "sourceFacts": [
+            "L18",
+            "L19"
+          ],
+          "question": "A return is 24 hours and one second late with no new damage. How much is refundable?",
+          "answer": "Two overdue days, 7.50 late fee, 92.50 refundable."
+        },
+        {
+          "id": "LQ08",
+          "sourceFacts": [
+            "L19",
+            "L20"
+          ],
+          "question": "For 14 overdue days with confirmed new damage, does the 22.50 cap include the damage fee?",
+          "answer": "No. Late fee is capped at 22.50 and confirmed damage adds 20.00, leaving a 57.50 refund."
+        },
+        {
+          "id": "LQ09",
+          "sourceFacts": [
+            "L21",
+            "L22"
+          ],
+          "question": "Does reporting a defect or disputing damage automatically end the loan, waive fees, or continue the late-fee clock after recorded return?",
+          "answer": "Reporting alone does not record return or automatically waive fees. A dispute pauses settlement, while an already recorded return still stops late time."
+        },
+        {
+          "id": "LQ10",
+          "sourceFacts": [
+            "L23",
+            "L24"
+          ],
+          "question": "Once the fee is capped, is the paid deposit all sunk and returning pointless?",
+          "answer": "No. Much of the deposit remains recoverable; return ends occupancy and enables inspection and settlement. A fee cap does not erase obligations or instantly repair the tool."
+        },
+        {
+          "id": "LQ11",
+          "sourceFacts": [
+            "L14",
+            "L15"
+          ],
+          "question": "A tool is held for a day before handover. Does that shorten its initial loan, and does an unapproved renewal receipt change the due time?",
+          "answer": "No to both. Seven continuous days start at recorded handover; only explicit renewal approval with a new due time changes the deadline."
+        },
+        {
+          "id": "LQ12",
+          "sourceFacts": [
+            "L18"
+          ],
+          "question": "Can the supplied formula be advertised as the complete policy for a tool still missing after 30 overdue days?",
+          "answer": "No. The case defines only 0–14 overdue days and supplies no loss, purchase, or beyond-14-day policy."
+        }
+      ],
+      "criticalForbiddenOverclaims": [
+        {
+          "id": "LF01",
+          "sourceFacts": [
+            "L02",
+            "L06",
+            "L07"
+          ],
+          "claim": "Received or queued means an asset has been reserved or a loan has begun.",
+          "reason": "It merges acknowledgment, queue, concrete hold, and handover.",
+          "severity": "critical"
+        },
+        {
+          "id": "LF02",
+          "sourceFacts": [
+            "L01",
+            "L03",
+            "L17"
+          ],
+          "claim": "Returned automatically means ready to lend, or inspection delay continues late fees.",
+          "reason": "Inventory readiness and loan timing have separate records.",
+          "severity": "critical"
+        },
+        {
+          "id": "LF03",
+          "sourceFacts": [
+            "L08",
+            "L09",
+            "L15",
+            "L17"
+          ],
+          "claim": "Every deadline has the same inclusive boundary, a submission starts the hold clock, or closure automatically extends it.",
+          "reason": "The contract specifies distinct starting events and strict/inclusive endpoints.",
+          "severity": "critical"
+        },
+        {
+          "id": "LF04",
+          "sourceFacts": [
+            "L12",
+            "L13",
+            "L16"
+          ],
+          "claim": "A hold bypasses eligibility, a rejected queue candidate keeps the old position, or staff may ignore a queue to renew.",
+          "reason": "These remove material eligibility and fairness exceptions.",
+          "severity": "critical"
+        },
+        {
+          "id": "LF05",
+          "sourceFacts": [
+            "L19",
+            "L20"
+          ],
+          "claim": "The total deduction is always capped at 22.50, or damage is always 20 even when merely disputed.",
+          "reason": "Only the late fee is capped; confirmed damage and pending review are distinct.",
+          "severity": "critical"
+        },
+        {
+          "id": "LF06",
+          "sourceFacts": [
+            "L18",
+            "L23",
+            "L24"
+          ],
+          "claim": "All 100 already paid is sunk, capped fees make return pointless, or the supplied policy establishes real financial returns or loss rules.",
+          "reason": "Refundability and the fictional bounded scope prohibit those conclusions.",
+          "severity": "critical"
+        }
+      ],
+      "numericOracle": {
+        "unit": "fictional units, display two decimal places",
+        "calculationUnit": "integer cents",
+        "inputs": {
+          "depositCents": 10000,
+          "latePerDayCents": 375,
+          "lateCapCents": 2250,
+          "confirmedDamageCents": [
+            0,
+            2000
+          ],
+          "overdueDays": {
+            "minimum": 0,
+            "maximum": 14,
+            "step": 1
+          }
+        },
+        "formulaCents": "max(0, 10000 - min(375 * overdueDays, 2250) - damageCents)",
+        "samples": [
+          {
+            "overdueDays": 0,
+            "damageCents": 0,
+            "lateFeeCents": 0,
+            "refundCents": 10000,
+            "lateFee": "0.00",
+            "damage": "0.00",
+            "refund": "100.00"
+          },
+          {
+            "overdueDays": 0,
+            "damageCents": 2000,
+            "lateFeeCents": 0,
+            "refundCents": 8000,
+            "lateFee": "0.00",
+            "damage": "20.00",
+            "refund": "80.00"
+          },
+          {
+            "overdueDays": 1,
+            "damageCents": 0,
+            "lateFeeCents": 375,
+            "refundCents": 9625,
+            "lateFee": "3.75",
+            "damage": "0.00",
+            "refund": "96.25"
+          },
+          {
+            "overdueDays": 1,
+            "damageCents": 2000,
+            "lateFeeCents": 375,
+            "refundCents": 7625,
+            "lateFee": "3.75",
+            "damage": "20.00",
+            "refund": "76.25"
+          },
+          {
+            "overdueDays": 2,
+            "damageCents": 0,
+            "lateFeeCents": 750,
+            "refundCents": 9250,
+            "lateFee": "7.50",
+            "damage": "0.00",
+            "refund": "92.50"
+          },
+          {
+            "overdueDays": 2,
+            "damageCents": 2000,
+            "lateFeeCents": 750,
+            "refundCents": 7250,
+            "lateFee": "7.50",
+            "damage": "20.00",
+            "refund": "72.50"
+          },
+          {
+            "overdueDays": 3,
+            "damageCents": 0,
+            "lateFeeCents": 1125,
+            "refundCents": 8875,
+            "lateFee": "11.25",
+            "damage": "0.00",
+            "refund": "88.75"
+          },
+          {
+            "overdueDays": 3,
+            "damageCents": 2000,
+            "lateFeeCents": 1125,
+            "refundCents": 6875,
+            "lateFee": "11.25",
+            "damage": "20.00",
+            "refund": "68.75"
+          },
+          {
+            "overdueDays": 4,
+            "damageCents": 0,
+            "lateFeeCents": 1500,
+            "refundCents": 8500,
+            "lateFee": "15.00",
+            "damage": "0.00",
+            "refund": "85.00"
+          },
+          {
+            "overdueDays": 4,
+            "damageCents": 2000,
+            "lateFeeCents": 1500,
+            "refundCents": 6500,
+            "lateFee": "15.00",
+            "damage": "20.00",
+            "refund": "65.00"
+          },
+          {
+            "overdueDays": 5,
+            "damageCents": 0,
+            "lateFeeCents": 1875,
+            "refundCents": 8125,
+            "lateFee": "18.75",
+            "damage": "0.00",
+            "refund": "81.25"
+          },
+          {
+            "overdueDays": 5,
+            "damageCents": 2000,
+            "lateFeeCents": 1875,
+            "refundCents": 6125,
+            "lateFee": "18.75",
+            "damage": "20.00",
+            "refund": "61.25"
+          },
+          {
+            "overdueDays": 6,
+            "damageCents": 0,
+            "lateFeeCents": 2250,
+            "refundCents": 7750,
+            "lateFee": "22.50",
+            "damage": "0.00",
+            "refund": "77.50"
+          },
+          {
+            "overdueDays": 6,
+            "damageCents": 2000,
+            "lateFeeCents": 2250,
+            "refundCents": 5750,
+            "lateFee": "22.50",
+            "damage": "20.00",
+            "refund": "57.50"
+          },
+          {
+            "overdueDays": 7,
+            "damageCents": 0,
+            "lateFeeCents": 2250,
+            "refundCents": 7750,
+            "lateFee": "22.50",
+            "damage": "0.00",
+            "refund": "77.50"
+          },
+          {
+            "overdueDays": 7,
+            "damageCents": 2000,
+            "lateFeeCents": 2250,
+            "refundCents": 5750,
+            "lateFee": "22.50",
+            "damage": "20.00",
+            "refund": "57.50"
+          },
+          {
+            "overdueDays": 8,
+            "damageCents": 0,
+            "lateFeeCents": 2250,
+            "refundCents": 7750,
+            "lateFee": "22.50",
+            "damage": "0.00",
+            "refund": "77.50"
+          },
+          {
+            "overdueDays": 8,
+            "damageCents": 2000,
+            "lateFeeCents": 2250,
+            "refundCents": 5750,
+            "lateFee": "22.50",
+            "damage": "20.00",
+            "refund": "57.50"
+          },
+          {
+            "overdueDays": 9,
+            "damageCents": 0,
+            "lateFeeCents": 2250,
+            "refundCents": 7750,
+            "lateFee": "22.50",
+            "damage": "0.00",
+            "refund": "77.50"
+          },
+          {
+            "overdueDays": 9,
+            "damageCents": 2000,
+            "lateFeeCents": 2250,
+            "refundCents": 5750,
+            "lateFee": "22.50",
+            "damage": "20.00",
+            "refund": "57.50"
+          },
+          {
+            "overdueDays": 10,
+            "damageCents": 0,
+            "lateFeeCents": 2250,
+            "refundCents": 7750,
+            "lateFee": "22.50",
+            "damage": "0.00",
+            "refund": "77.50"
+          },
+          {
+            "overdueDays": 10,
+            "damageCents": 2000,
+            "lateFeeCents": 2250,
+            "refundCents": 5750,
+            "lateFee": "22.50",
+            "damage": "20.00",
+            "refund": "57.50"
+          },
+          {
+            "overdueDays": 11,
+            "damageCents": 0,
+            "lateFeeCents": 2250,
+            "refundCents": 7750,
+            "lateFee": "22.50",
+            "damage": "0.00",
+            "refund": "77.50"
+          },
+          {
+            "overdueDays": 11,
+            "damageCents": 2000,
+            "lateFeeCents": 2250,
+            "refundCents": 5750,
+            "lateFee": "22.50",
+            "damage": "20.00",
+            "refund": "57.50"
+          },
+          {
+            "overdueDays": 12,
+            "damageCents": 0,
+            "lateFeeCents": 2250,
+            "refundCents": 7750,
+            "lateFee": "22.50",
+            "damage": "0.00",
+            "refund": "77.50"
+          },
+          {
+            "overdueDays": 12,
+            "damageCents": 2000,
+            "lateFeeCents": 2250,
+            "refundCents": 5750,
+            "lateFee": "22.50",
+            "damage": "20.00",
+            "refund": "57.50"
+          },
+          {
+            "overdueDays": 13,
+            "damageCents": 0,
+            "lateFeeCents": 2250,
+            "refundCents": 7750,
+            "lateFee": "22.50",
+            "damage": "0.00",
+            "refund": "77.50"
+          },
+          {
+            "overdueDays": 13,
+            "damageCents": 2000,
+            "lateFeeCents": 2250,
+            "refundCents": 5750,
+            "lateFee": "22.50",
+            "damage": "20.00",
+            "refund": "57.50"
+          },
+          {
+            "overdueDays": 14,
+            "damageCents": 0,
+            "lateFeeCents": 2250,
+            "refundCents": 7750,
+            "lateFee": "22.50",
+            "damage": "0.00",
+            "refund": "77.50"
+          },
+          {
+            "overdueDays": 14,
+            "damageCents": 2000,
+            "lateFeeCents": 2250,
+            "refundCents": 5750,
+            "lateFee": "22.50",
+            "damage": "20.00",
+            "refund": "57.50"
+          }
+        ],
+        "overdueBoundarySamples": [
+          {
+            "secondsAfterDue": -1,
+            "overdueDays": 0
+          },
+          {
+            "secondsAfterDue": 0,
+            "overdueDays": 0
+          },
+          {
+            "secondsAfterDue": 1,
+            "overdueDays": 1
+          },
+          {
+            "secondsAfterDue": 86400,
+            "overdueDays": 1
+          },
+          {
+            "secondsAfterDue": 86401,
+            "overdueDays": 2
+          },
+          {
+            "secondsAfterDue": 172800,
+            "overdueDays": 2
+          },
+          {
+            "secondsAfterDue": 1209600,
+            "overdueDays": 14
+          }
+        ],
+        "holdBoundarySamples": [
+          {
+            "secondsRelativeToHoldDeadline": -1,
+            "canHandoverUnderHold": true
+          },
+          {
+            "secondsRelativeToHoldDeadline": 0,
+            "canHandoverUnderHold": false
+          },
+          {
+            "secondsRelativeToHoldDeadline": 1,
+            "canHandoverUnderHold": false
+          }
+        ],
+        "renewalBoundarySamples": [
+          {
+            "secondsRelativeToDue": -1,
+            "passesTimeCondition": true
+          },
+          {
+            "secondsRelativeToDue": 0,
+            "passesTimeCondition": false
+          }
+        ],
+        "outsideDefinedDomain": "Any overdue period above 14 days, negative day input, fractional day input, unconfirmed damage, or different amounts must not silently acquire an invented policy. Elapsed time is converted to integer overdue days by the source rule."
+      }
+    },
+    {
+      "id": "retries",
+      "input": "inputs/retries.md",
+      "language": "en",
+      "subject": "Fictional booking contract with idempotent retries, uncertain outcomes, bounded cache retention, callback deduplication, and fail-closed reconciliation.",
+      "mustPreserveFacts": [
+        {
+          "id": "R01",
+          "statement": "Intention, HTTP attempt, durable reservation, HTTP response, and callback delivery are distinct. Several attempts or deliveries may correspond to one committed reservation."
+        },
+        {
+          "id": "R02",
+          "statement": "Before dispatch, persist intention ID, exact body bytes, idempotency key, and key creation time. A failed write blocks dispatch. Restart reads the existing identity rather than inventing a new one."
+        },
+        {
+          "id": "R03",
+          "statement": "Retries preserve both key and exact UTF-8 body bytes. Same key with changed bytes, even JSON property reordering, yields a 409 conflict with no new effect for that attempt. A changed intention must not bypass reconciliation of an uncertain old one."
+        },
+        {
+          "id": "R04",
+          "statement": "The server serializes accepted attempts for a key and retains binding/final outcome for 24 hours after first acceptance. Pending 202 is acknowledgment only. The client uses the earlier local creation time as its conservative 24-hour cutoff; protection is not eternal."
+        },
+        {
+          "id": "R05",
+          "statement": "A timeout or disconnect leaves outcome unknown because a durable commit may precede a lost response. It does not prove failure, free seats, or safety of a fresh booking identity."
+        },
+        {
+          "id": "R06",
+          "statement": "201 RESERVED confirms a durable reservation; replayed 200 RESERVED names the same reservation without a new allocation. 202 PENDING does not confirm commit. Response and callback can both describe the same effect."
+        },
+        {
+          "id": "R07",
+          "statement": "Under this fictional contract, 400 is a terminal invalid body and 429 rejects before reservation processing with valid integer Retry-After. A 503 may precede or follow started work, so its effect is unknown. These are not universal real-API promises."
+        },
+        {
+          "id": "R08",
+          "statement": "The budget is four attempts total: original plus three retries. Dispatch count is durable and survives restart. Base waits are 1, 2, 4 seconds, measured after previous completion/timeout. Waiting is not an attempt. Pending async work goes to reconciliation rather than immediate re-dispatch."
+        },
+        {
+          "id": "R09",
+          "statement": "After 429, use max(upcoming base wait, Retry-After), not their sum or the smaller value. Zero cannot remove the base wait. Stop if the required wait reaches or passes the conservative key expiry."
+        },
+        {
+          "id": "R10",
+          "statement": "For the fixed no-jitter example, attempts each last 0.5 seconds. Three timeouts then success start at 0, 1.5, 4, 8.5 seconds and finish at 9. Real variable latency/jitter are stated caveats, not changes to these fixed assumptions."
+        },
+        {
+          "id": "R11",
+          "statement": "Callbacks have event ID, reservation ID, intention ID, and revision. Record processed IDs and revisions durably before acknowledging. Redelivery may repeat one event ID without another booking; failed persistence must not receive a successful processing acknowledgment."
+        },
+        {
+          "id": "R12",
+          "statement": "A lower revision cannot overwrite newer reservation state. Same revision with conflicting state requires reconciliation. Revision gaps may need authoritative status before history-dependent transitions. Arrival timestamps do not replace revisions; revisions from different reservations are not globally comparable."
+        },
+        {
+          "id": "R13",
+          "statement": "Signature and intention/reservation binding checks precede callback processing. Plausible JSON or identifiers alone do not establish authenticity. No real secret or signature implementation is supplied."
+        },
+        {
+          "id": "R14",
+          "statement": "Exhausted unknown outcomes remain UNKNOWN, not FAILED. Use read-only authoritative status reconciliation with original identity; unresolved cases need a person. Do not invent a fresh key or claim definite success/failure."
+        },
+        {
+          "id": "R15",
+          "statement": "The server may discard the cache after retention, so later old-key retry is not guaranteed deduplicated. Stop and resolve the old intention before a new one. Closing/cancelling local waiting stops local retries but does not cancel a possible server reservation."
+        },
+        {
+          "id": "R16",
+          "statement": "The guarantee is narrow: one accepted key and exact body within retention suppress duplicate reservation creation. It does not guarantee global exactly-once delivery, no duplicates across new keys, seat availability, or fast human reconciliation. No real calls or payments are part of this fixture."
+        }
+      ],
+      "questions": [
+        {
+          "id": "RQ01",
+          "sourceFacts": [
+            "R01",
+            "R05",
+            "R06"
+          ],
+          "question": "The first response times out, and a second attempt returns a reservation ID. Did the second attempt necessarily create that reservation?",
+          "answer": "No. The first attempt may have committed before its response was lost. The second can replay the same stored outcome with no additional allocation."
+        },
+        {
+          "id": "RQ02",
+          "sourceFacts": [
+            "R02",
+            "R03"
+          ],
+          "question": "After restart, may the client use a new key or reorder JSON fields while keeping the old key?",
+          "answer": "No. It must load the original durable intention, count, key, and exact body. A byte-different body with the old key conflicts under this supplied contract; unresolved old work must be reconciled first."
+        },
+        {
+          "id": "RQ03",
+          "sourceFacts": [
+            "R07",
+            "R08",
+            "R09"
+          ],
+          "question": "How do 400, 429, 503, and timeout differ for the next decision?",
+          "answer": "400 stops as a final invalid request. 429 has no effect for that attempt and permits bounded retry after max(base, Retry-After). 503 and timeout leave effect unknown and permit only bounded same-identity retry."
+        },
+        {
+          "id": "RQ04",
+          "sourceFacts": [
+            "R08",
+            "R10"
+          ],
+          "question": "Are there four retries, and do attempt starts occur at 0, 1, 3, and 7 seconds in the fixed example?",
+          "answer": "No. There are four attempts including the original. With 0.5-second attempt duration and post-attempt waits of 1, 2, 4 seconds, starts are 0, 1.5, 4, 8.5 and final completion is 9 seconds."
+        },
+        {
+          "id": "RQ05",
+          "sourceFacts": [
+            "R09"
+          ],
+          "question": "After attempt two returns Retry-After: 6, what delay precedes attempt three?",
+          "answer": "Six seconds: max(base 2, Retry-After 6), neither 2 nor 8. It may proceed only if budget and the conservative expiry boundary still allow it."
+        },
+        {
+          "id": "RQ06",
+          "sourceFacts": [
+            "R06",
+            "R08"
+          ],
+          "question": "Does a 202 PENDING permit showing confirmed seats or immediately issuing the next booking request?",
+          "answer": "No. It acknowledges pending processing. Reconcile status instead of treating it as a commit or immediately consuming another booking attempt."
+        },
+        {
+          "id": "RQ07",
+          "sourceFacts": [
+            "R11",
+            "R12"
+          ],
+          "question": "What is the final reservation state after the supplied four deliveries?",
+          "answer": "Cancelled at revision 2. Delivery two is an event-ID duplicate; delivery four has a different event ID but an older revision and must not resurrect revision-1 reserved state."
+        },
+        {
+          "id": "RQ08",
+          "sourceFacts": [
+            "R11",
+            "R13"
+          ],
+          "question": "May the receiver acknowledge a plausible callback before authentication or before its ledger update succeeds?",
+          "answer": "No. Check signature/binding first and durably record valid processing before acknowledgment. A write failure must remain unacknowledged as successful processing."
+        },
+        {
+          "id": "RQ09",
+          "sourceFacts": [
+            "R04",
+            "R14",
+            "R15"
+          ],
+          "question": "After four unknown attempts, after cache expiry, or after the user closes the waiting screen, is server failure or cancellation established?",
+          "answer": "No. Attempt exhaustion leaves UNKNOWN; cache expiry ends the deduplication guarantee; closing the screen only stops local retry. Resolve the original identity via authoritative status or a person."
+        },
+        {
+          "id": "RQ10",
+          "sourceFacts": [
+            "R12",
+            "R16"
+          ],
+          "question": "Do idempotency and callbacks establish exactly-once delivery or an order shared across all reservations?",
+          "answer": "No. Delivery may duplicate or reorder. Revisions order state only within a reservation; one key/body has a bounded effect-deduplication guarantee, not global exactly-once delivery."
+        }
+      ],
+      "criticalForbiddenOverclaims": [
+        {
+          "id": "RF01",
+          "sourceFacts": [
+            "R01",
+            "R05",
+            "R14"
+          ],
+          "claim": "Timeout, disconnect, or retry exhaustion proves reservation failure or that another fresh booking is safe.",
+          "reason": "Missing delivery and budget exhaustion do not establish the durable effect.",
+          "severity": "critical"
+        },
+        {
+          "id": "RF02",
+          "sourceFacts": [
+            "R02",
+            "R03",
+            "R04"
+          ],
+          "claim": "Every retry should get a fresh key, payload changes are safe with the old key, or idempotency lasts forever.",
+          "reason": "Identity/body binding and a bounded retention window are essential to the given guarantee.",
+          "severity": "critical"
+        },
+        {
+          "id": "RF03",
+          "sourceFacts": [
+            "R06",
+            "R08"
+          ],
+          "claim": "202 means committed reservation, or a response plus callback represents two reservations.",
+          "reason": "Acknowledgment, durable effect, and delivery channel differ.",
+          "severity": "critical"
+        },
+        {
+          "id": "RF04",
+          "sourceFacts": [
+            "R07",
+            "R08",
+            "R09",
+            "R10"
+          ],
+          "claim": "Retry 400; allow four retries; ignore Retry-After; add it to the base wait; or ignore the fixed request duration in the schedule.",
+          "reason": "These change the action policy or numeric timing assumptions.",
+          "severity": "critical"
+        },
+        {
+          "id": "RF05",
+          "sourceFacts": [
+            "R11",
+            "R12",
+            "R13"
+          ],
+          "claim": "Process unauthenticated callbacks, acknowledge before a successful durable record, or let late revision 1 restore revision 2 cancellation.",
+          "reason": "These violate the fail-closed ledger, authenticity boundary, or causal state order.",
+          "severity": "critical"
+        },
+        {
+          "id": "RF06",
+          "sourceFacts": [
+            "R15",
+            "R16"
+          ],
+          "claim": "Stopping local retries cancels the server reservation, or this hypothetical case proves real-provider exactly-once delivery.",
+          "reason": "The case supplies neither that cancellation operation nor any real provider evidence.",
+          "severity": "critical"
+        }
+      ],
+      "numericOracle": {
+        "maximumAttempts": 4,
+        "maximumRetries": 3,
+        "attemptDurationSeconds": 0.5,
+        "baseWaitsSeconds": [
+          1,
+          2,
+          4
+        ],
+        "fixedTimeoutThenSuccess": {
+          "observations": [
+            "timeout",
+            "timeout",
+            "timeout",
+            "201 RESERVED"
+          ],
+          "startsSeconds": [
+            0,
+            1.5,
+            4,
+            8.5
+          ],
+          "endsSeconds": [
+            0.5,
+            2,
+            4.5,
+            9
+          ],
+          "waitsSeconds": [
+            1,
+            2,
+            4
+          ],
+          "totalElapsedSeconds": 9
+        },
+        "secondAttemptRateLimited": {
+          "observations": [
+            "timeout",
+            "429 Retry-After: 6",
+            "timeout",
+            "201 RESERVED"
+          ],
+          "startsSeconds": [
+            0,
+            1.5,
+            8,
+            12.5
+          ],
+          "endsSeconds": [
+            0.5,
+            2,
+            8.5,
+            13
+          ],
+          "waitsSeconds": [
+            1,
+            6,
+            4
+          ],
+          "totalElapsedSeconds": 13
+        },
+        "retryAfterSamples": [
+          {
+            "upcomingAttempt": 2,
+            "baseWaitSeconds": 1,
+            "retryAfterSeconds": 0,
+            "waitSeconds": 1
+          },
+          {
+            "upcomingAttempt": 3,
+            "baseWaitSeconds": 2,
+            "retryAfterSeconds": 6,
+            "waitSeconds": 6
+          },
+          {
+            "upcomingAttempt": 4,
+            "baseWaitSeconds": 4,
+            "retryAfterSeconds": 2,
+            "waitSeconds": 4
+          }
+        ],
+        "retentionSeconds": 86400,
+        "conservativeExpiry": "keyCreatedAt + 86400 seconds, at or beyond which dispatch is paused",
+        "allFourUnknownFinalStatus": "UNKNOWN",
+        "callbackOracle": [
+          {
+            "delivery": 1,
+            "eventId": "evt_created_7001",
+            "incomingRevision": 1,
+            "storedRevision": 1,
+            "state": "reserved"
+          },
+          {
+            "delivery": 2,
+            "eventId": "evt_created_7001",
+            "incomingRevision": 1,
+            "storedRevision": 1,
+            "state": "reserved",
+            "reason": "duplicate event ID"
+          },
+          {
+            "delivery": 3,
+            "eventId": "evt_cancelled_7002",
+            "incomingRevision": 2,
+            "storedRevision": 2,
+            "state": "cancelled"
+          },
+          {
+            "delivery": 4,
+            "eventId": "evt_created_late_copy_7003",
+            "incomingRevision": 1,
+            "storedRevision": 2,
+            "state": "cancelled",
+            "reason": "older reservation revision despite new event ID"
+          }
+        ]
+      },
+      "identifierFidelity": [
+        "intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042",
+        "idem_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042",
+        "res_lantern_C07_C08_7001"
+      ]
+    },
+    {
+      "id": "type-boundaries",
+      "input": "inputs/type-boundaries.md",
+      "language": "zh-CN + English technical terms and TypeScript",
+      "subject": "Compile-time assumptions versus runtime URI encoding, network, HTTP, JSON syntax, shape validation, and downstream use.",
+      "mustPreserveFacts": [
+        {
+          "id": "T01",
+          "statement": "Keep the supplied original function as the analyzed original. It has no explicit input or JSON shape validator. The optional parser must be presented separately."
+        },
+        {
+          "id": "T02",
+          "statement": "id: string and Promise<User> are static declarations; JavaScript callers or bypassed checking can violate those assumptions. The main analysis assumes a string input and does not credit the original with runtime input validation."
+        },
+        {
+          "id": "T03",
+          "statement": "as User is a TypeScript assertion erased by normal transpilation. It does not run after JSON parsing, validate, convert fields, or add a fourth executable assertion step. Type aliases/annotations likewise do not execute shape checks."
+        },
+        {
+          "id": "T04",
+          "statement": "An async function returns a Promise; thrown errors reject it. Promise<User> describes the static fulfilled-value type, not guaranteed success. await can propagate rejection and does not itself catch errors."
+        },
+        {
+          "id": "T05",
+          "statement": "encodeURIComponent encodes a string for a single URI component, for example A/B ? becomes A%2FB%20%3F. It does not authenticate, authorize, validate user existence, or sanitize response JSON."
+        },
+        {
+          "id": "T06",
+          "statement": "fetch can reject before any Response on network or abort failures. A non-2xx HTTP status itself usually yields a Response rather than a status-driven rejection; the following explicit branch handles it."
+        },
+        {
+          "id": "T07",
+          "statement": "response.ok is true for status 200–299 only. For a non-2xx status this original function throws HTTP <status> before calling response.json(). ok does not inspect body syntax or shape."
+        },
+        {
+          "id": "T08",
+          "statement": "response.json() asynchronously parses JSON syntax and can reject for HTML, malformed JSON, or an empty 204 body even when ok is true. Successful parsing does not establish User shape, nor does a Content-Type label guarantee success."
+        },
+        {
+          "id": "T09",
+          "statement": "Valid JSON may be null, arrays, primitives, or unsuitable objects. The original fulfills null and {id:17,name:false} for a 200 valid-JSON response; the assertion does not convert values. A later field use can fail."
+        },
+        {
+          "id": "T10",
+          "statement": "URI component encoding can throw URIError on a string containing a lone UTF-16 surrogate before fetch is called; async turns that throw into rejection. Not every failure occurs after a server response."
+        },
+        {
+          "id": "T11",
+          "statement": "The supplied parseUser is an optional alternative with runtime checks. Replacing only the last return with return parseUser(await response.json()); changes runtime behavior. Do not attribute the parser to the original assertion."
+        },
+        {
+          "id": "T12",
+          "statement": "typeof null and arrays are object, so the parser separately rejects null and arrays. It requires actual string id and name fields and does not coerce numbers into strings."
+        },
+        {
+          "id": "T13",
+          "statement": "The minimal parser allows empty strings and extra input fields, but returns a new object containing only id and name. It does not validate authenticity, authorization, nonempty values, length, format, freshness, or signatures."
+        },
+        {
+          "id": "T14",
+          "statement": "The intended parser input is JSON-derived data. For arbitrary JavaScript objects, in can accept inherited properties and property access may invoke getters; this is not a general hardened object-validation library."
+        },
+        {
+          "id": "T15",
+          "statement": "The response cases are invented offline records, not live request logs. Original and parsed variants have the distinct alpha–theta outcomes in the oracle."
+        },
+        {
+          "id": "T16",
+          "statement": "Keep code identifiers and relative request path accurate. The long example.invalid URL is a reserved-invalid reading example, not a request target or replacement for the original relative URL."
+        },
+        {
+          "id": "T17",
+          "statement": "Attribute original behavior and suggested improvement separately. Neither HTTP ok nor as User establishes valid user data; the parser does not solve network failures. Do not label every failure a type-assertion failure."
+        },
+        {
+          "id": "T18",
+          "statement": "JavaScript can create content at page load, run on timers, and handle interaction. Native HTML details can expand/collapse without JavaScript. Simplified role explanations must not become exclusive capability claims."
+        },
+        {
+          "id": "T19",
+          "statement": "A try block containing both await loadUser and downstream field use can catch either loading rejection or a later field-use error. A rejection handler attached only to the loadUser Promise does not catch an independent later statement. Diagnose from where an error arose."
+        },
+        {
+          "id": "T20",
+          "statement": "Changing erased static declarations affects checking assumptions but does not change server body data. Adding executable parseUser conditions changes which concrete runtime values are accepted; editor type fixes and data fixes need not be identical."
+        }
+      ],
+      "questions": [
+        {
+          "id": "TQ01",
+          "sourceFacts": [
+            "T02",
+            "T03",
+            "T09"
+          ],
+          "question": "What does as User do when a 200 response contains {\"id\":17,\"name\":false}?",
+          "answer": "It changes the static interpretation and is erased; it performs no runtime check or conversion. The original fulfills that unsuitable object."
+        },
+        {
+          "id": "TQ02",
+          "sourceFacts": [
+            "T06",
+            "T07"
+          ],
+          "question": "Does a 404 reject fetch because it is 404, and is its well-formed JSON body parsed by this function?",
+          "answer": "Normally fetch produces a Response for 404. The explicit !response.ok branch throws HTTP 404 and does not call response.json()."
+        },
+        {
+          "id": "TQ03",
+          "sourceFacts": [
+            "T07",
+            "T08",
+            "T09"
+          ],
+          "question": "Why can HTTP 200 still reject at JSON parsing, while HTTP 200 with null fulfills in the original?",
+          "answer": "HTML or malformed JSON violates JSON syntax and parsing rejects. null is valid JSON, so parsing succeeds; there is no shape validator in the original."
+        },
+        {
+          "id": "TQ04",
+          "sourceFacts": [
+            "T03",
+            "T04"
+          ],
+          "question": "Is the type assertion a fourth runtime validation step, and does Promise<User> guarantee fulfillment?",
+          "answer": "No to both. The assertion is erased. The async function can reject at executable operations even though its static fulfilled-value type is User."
+        },
+        {
+          "id": "TQ05",
+          "sourceFacts": [
+            "T05",
+            "T10"
+          ],
+          "question": "Does URI encoding provide access control, and can it fail before any request?",
+          "answer": "It supplies neither authentication nor authorization. It can throw URIError on a lone surrogate before fetch, resulting in Promise rejection."
+        },
+        {
+          "id": "TQ06",
+          "sourceFacts": [
+            "T11",
+            "T12",
+            "T13"
+          ],
+          "question": "Which values does the optional parser accept: null, an array, numeric id, empty id/name strings, or a string-field object with extra role?",
+          "answer": "Reject null, arrays, and numeric id. Accept empty string fields and the extra-field object, then return only id and name in a new object."
+        },
+        {
+          "id": "TQ07",
+          "sourceFacts": [
+            "T11",
+            "T13",
+            "T14"
+          ],
+          "question": "After the parser succeeds, are identity, access rights, meaningful names, and arbitrary-object safety established?",
+          "answer": "No. It provides a minimal structural check for JSON-derived data. Those business/security guarantees and stricter arbitrary-object handling are outside its contract."
+        },
+        {
+          "id": "TQ08",
+          "sourceFacts": [
+            "T17",
+            "T19"
+          ],
+          "question": "A catch around loading and uppercasing sees an error. Does that alone prove a network failure?",
+          "answer": "No. The error could come from loading or from a later field-use TypeError. Inspect the actual thrown location/category rather than guessing from a shared catch."
+        },
+        {
+          "id": "TQ09",
+          "sourceFacts": [
+            "T18"
+          ],
+          "question": "Does JavaScript run only after user interaction, and does all expand/collapse require it?",
+          "answer": "No. JavaScript may run at load or on timers. Native details supports expand/collapse without JavaScript."
+        },
+        {
+          "id": "TQ10",
+          "sourceFacts": [
+            "T01",
+            "T11",
+            "T20"
+          ],
+          "question": "Can an explanation silently replace the original return statement with parseUser and describe validation as existing original behavior?",
+          "answer": "No. Preserve the original and label the parser as a separate proposed runtime change; static assertions and executable validation have different behavior."
+        }
+      ],
+      "criticalForbiddenOverclaims": [
+        {
+          "id": "TF01",
+          "sourceFacts": [
+            "T01",
+            "T03",
+            "T09",
+            "T11"
+          ],
+          "claim": "as User validates, converts, guarantees correct User data, or is a fourth runtime step.",
+          "reason": "It is erased and supplies no runtime validation. Any parser is a separate proposed implementation.",
+          "severity": "critical"
+        },
+        {
+          "id": "TF02",
+          "sourceFacts": [
+            "T04",
+            "T06",
+            "T07",
+            "T08"
+          ],
+          "claim": "Promise<User> guarantees success, every HTTP error automatically rejects fetch, or ok proves valid User JSON.",
+          "reason": "Promise fulfillment, Response delivery, status, JSON syntax, and value shape are separate boundaries.",
+          "severity": "critical"
+        },
+        {
+          "id": "TF03",
+          "sourceFacts": [
+            "T07",
+            "T09",
+            "T15"
+          ],
+          "claim": "The original parses a 404 body, rejects valid null because of as User, or normalizes wrong field types.",
+          "reason": "The actual control flow and erased assertion contradict these claimed outcomes.",
+          "severity": "critical"
+        },
+        {
+          "id": "TF04",
+          "sourceFacts": [
+            "T05",
+            "T10",
+            "T13",
+            "T14"
+          ],
+          "claim": "URI encoding authenticates/authorizes, or the minimal parser proves all data is safe and handles all arbitrary JavaScript objects securely.",
+          "reason": "These exceed the stated encoding and JSON-structure contracts.",
+          "severity": "critical"
+        },
+        {
+          "id": "TF05",
+          "sourceFacts": [
+            "T12",
+            "T13",
+            "T15"
+          ],
+          "claim": "The supplied parser rejects extra fields or empty strings, preserves role, or coerces id:17 to a string.",
+          "reason": "Its actual conditions accept extra/empty string fields, project two fields, and reject non-string fields.",
+          "severity": "critical"
+        },
+        {
+          "id": "TF06",
+          "sourceFacts": [
+            "T15",
+            "T16",
+            "T18"
+          ],
+          "claim": "The example URL was called, the sample logs are real, JavaScript runs only on interaction, or native details requires JavaScript.",
+          "reason": "These contradict explicit provenance or independently reachable language/browser behavior.",
+          "severity": "critical"
+        }
+      ],
+      "requiredCode": {
+        "language": "typescript",
+        "originalFunction": "type User={id:string;name:string}; async function loadUser(id:string):Promise<User>{const response=await fetch(`/api/users/${encodeURIComponent(id)}`);if(!response.ok)throw new Error(`HTTP ${response.status}`);return(await response.json())as User;}",
+        "normalization": "For this comment-free original, remove whitespace outside complete quoted/template literals and preserve all literal content exactly. Do not repair or translate identifiers, operators, template literals, or strings. normalizedWhitespaceOnly is only a coarse precheck and also needs literal checks.",
+        "normalizedWhitespaceOnly": "typeUser={id:string;name:string};asyncfunctionloadUser(id:string):Promise<User>{constresponse=awaitfetch(`/api/users/${encodeURIComponent(id)}`);if(!response.ok)thrownewError(`HTTP${response.status}`);return(awaitresponse.json())asUser;}",
+        "optionalReplacement": "return parseUser(await response.json());",
+        "requiredDistinction": "The original is preserved as given; parseUser is clearly labeled optional/proposed and cannot be silently inserted into its runtime sequence.",
+        "parserSignature": "function parseUser(value: unknown): User",
+        "parserReturn": "return { id: value.id, name: value.name };",
+        "originalFetchExpression": "fetch(`/api/users/${encodeURIComponent(id)}`)",
+        "originalHttpError": "throw new Error(`HTTP ${response.status}`)",
+        "normalized": "typeUser={id:string;name:string};asyncfunctionloadUser(id:string):Promise<User>{constresponse=awaitfetch(`/api/users/${encodeURIComponent(id)}`);if(!response.ok)thrownewError(`HTTP ${response.status}`);return(awaitresponse.json())asUser;}"
+      },
+      "controlledOutcomeOracle": [
+        {
+          "case": "alpha",
+          "status": 200,
+          "body": "{\"id\":\"u-17\",\"name\":\"林 Ada\"}",
+          "original": {
+            "outcome": "fulfilled",
+            "value": {
+              "id": "u-17",
+              "name": "林 Ada"
+            },
+            "jsonCalled": true
+          },
+          "withParser": {
+            "outcome": "fulfilled",
+            "value": {
+              "id": "u-17",
+              "name": "林 Ada"
+            }
+          }
+        },
+        {
+          "case": "beta",
+          "status": 404,
+          "body": "{\"id\":\"u-17\",\"name\":\"林 Ada\"}",
+          "original": {
+            "outcome": "rejected",
+            "errorMessage": "HTTP 404",
+            "jsonCalled": false
+          },
+          "withParser": {
+            "outcome": "rejected",
+            "stage": "HTTP status",
+            "parserCalled": false
+          }
+        },
+        {
+          "case": "gamma",
+          "status": 200,
+          "body": "<html><body>Sign in required</body></html>",
+          "original": {
+            "outcome": "rejected",
+            "stage": "JSON parsing",
+            "jsonCalled": true
+          },
+          "withParser": {
+            "outcome": "rejected",
+            "stage": "JSON parsing",
+            "parserCalled": false
+          }
+        },
+        {
+          "case": "delta",
+          "status": 204,
+          "body": "",
+          "original": {
+            "outcome": "rejected",
+            "stage": "JSON parsing",
+            "jsonCalled": true
+          },
+          "withParser": {
+            "outcome": "rejected",
+            "stage": "JSON parsing",
+            "parserCalled": false
+          }
+        },
+        {
+          "case": "epsilon",
+          "status": 200,
+          "body": "null",
+          "original": {
+            "outcome": "fulfilled",
+            "value": null,
+            "jsonCalled": true
+          },
+          "withParser": {
+            "outcome": "rejected",
+            "errorMessage": "Expected a user object",
+            "parserCalled": true
+          }
+        },
+        {
+          "case": "zeta",
+          "status": 200,
+          "body": "{\"id\":17,\"name\":false}",
+          "original": {
+            "outcome": "fulfilled",
+            "value": {
+              "id": 17,
+              "name": false
+            },
+            "jsonCalled": true
+          },
+          "withParser": {
+            "outcome": "rejected",
+            "errorMessage": "Expected string id and name",
+            "parserCalled": true
+          }
+        },
+        {
+          "case": "eta",
+          "networkFailure": true,
+          "original": {
+            "outcome": "rejected",
+            "stage": "fetch before Response",
+            "jsonCalled": false
+          },
+          "withParser": {
+            "outcome": "rejected",
+            "stage": "fetch before Response",
+            "parserCalled": false
+          }
+        },
+        {
+          "case": "theta",
+          "status": 200,
+          "body": "{\"id\":\"\",\"name\":\"\",\"role\":\"maintainer\"}",
+          "original": {
+            "outcome": "fulfilled",
+            "value": {
+              "id": "",
+              "name": "",
+              "role": "maintainer"
+            },
+            "jsonCalled": true
+          },
+          "withParser": {
+            "outcome": "fulfilled",
+            "value": {
+              "id": "",
+              "name": ""
+            },
+            "parserCalled": true
+          }
+        }
+      ],
+      "extraBoundaryOracle": {
+        "ordinaryEncoding": {
+          "input": "A/B ?",
+          "output": "A%2FB%20%3F"
+        },
+        "loneSurrogateEncoding": {
+          "inputUtf16CodeUnits": [
+            "D800"
+          ],
+          "expectedErrorName": "URIError",
+          "fetchCalled": false
+        },
+        "parserArrayInput": {
+          "input": [],
+          "outcome": "rejected",
+          "errorMessage": "Expected a user object"
+        },
+        "emptyStringFields": {
+          "input": {
+            "id": "",
+            "name": ""
+          },
+          "outcome": "fulfilled",
+          "value": {
+            "id": "",
+            "name": ""
+          }
+        },
+        "bodyShapeIsNotAuth": true,
+        "realApiCallsRequired": 0
+      }
+    }
+  ]
+}

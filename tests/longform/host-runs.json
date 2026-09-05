@@ -1,0 +1,281 @@
+{
+  "schemaVersion": 1,
+  "image_calls_this_batch": 0,
+  "image_calls_cumulative": 9,
+  "image_budget_total": 15,
+  "runtime_limit": "1200 seconds per case; Grok40turns; serial cases within each host. These conditions differ from earlier short-case caps, so timing/completion are not a controlled causal benchmark.",
+  "cases": [
+    {
+      "host": "codex",
+      "case": "codex-library",
+      "prompt": "使用AhaFold将material.md整理为完整的中文长篇图解，面向普通读者，保留重要条件、例外和数值；不要图片。\n\n输出到 ahafold-output/guide/index.html。范围仅限当前工作区的 material.md、已安装 AhaFold 资源和生成成果。原生图片调用预算为 0。不要使用其他 harness、网络请求或浏览器工具，也不要查看凭据或全局配置。浏览器验收由父级测试执行，请如实说明未执行的检查。\n",
+      "input_sha256": {
+        "material.md": "8ea0d020e78e335416507b7d4e598191729c8389511d88962f3f6d2ece2d77f2"
+      },
+      "skill_hashes": {
+        "LICENSE": "aa64793e25f1c069207d4e3a6571e2b72356102771f962fe9f4c1e858d6f479a",
+        "SKILL.md": "d276875e315046ec746cbb3e52d564d974e4d6af3a5e21266967036a1336c598",
+        "assets/explainer.html": "c7eb69ada1c7b69b065688d42b22e639e1b97f523f52a78ceac5e040346ca33e",
+        "assets/fold/reference-sheet.png": "ce069334946531bb7a6b361bb1902d5f3469a9adc5fcfc900d4e89e07d7dd36a",
+        "assets/longform.html": "ab9b23b5928f8d1593fa8708b715e7de202cc942108409603532e7f7a58bfe7c",
+        "references/explanation.md": "709cac02c534e5c0d4652c9a27abf924a554436120bdbdfca5b18a3dec5f6a2c",
+        "references/fold.md": "8e5f4a4d696c79b4f550a8a6355b288263217a11261807f1d40a02dc7e98ff7f",
+        "references/longform.md": "c82aee0f1cfc9c0d3efc6f2714e50be805f805c58afa49728caf189da56df4b3",
+        "references/native-antigravity-cli.md": "d2d53a95c4083465de3dbee77c7a7673613c832088f7504bd2706110d7c1a05a",
+        "references/native-codex.md": "3e1ae799b57bd770b1b6dd840abe73067bf1d98950d70a9cd968563b90a2541e",
+        "references/native-grok.md": "37e3954a87689762368e17815bd5f762925051aff6349a5a762984044c5d0745"
+      },
+      "execution": {
+        "started_at": "2026-09-05T03:31:54.755349+00:00",
+        "ended_at": "2026-09-05T03:46:12.453999+00:00",
+        "elapsed_seconds": 857.709,
+        "returncode": 0,
+        "timed_out": false,
+        "completion_status": "EXITED_ZERO",
+        "output_exists": true,
+        "first_artifact_elapsed_seconds": 633.212,
+        "host_output_write_stages_observed": 3,
+        "new_files": [
+          "ahafold-output/guide/index.html"
+        ],
+        "modified_existing_files": [],
+        "deleted_existing_files": [],
+        "installed_skill_unchanged": true,
+        "source_skill_unchanged": true,
+        "input_unchanged": true,
+        "malformed_json_lines": 0
+      },
+      "output_sha256": {
+        "guide/index.html": "346d108b12af14167db7c4ed722559b7aaaef1eff5505afe727ff448b99e236a"
+      },
+      "first_complete_markup_observed_seconds": 633.212,
+      "markup_note": "A complete HTML envelope is a structural observation, not verified source coverage or readable-draft acceptance.",
+      "image_calls_observed": 0,
+      "scope": "Original host output, no parent repair; browser and semantic review are separate."
+    },
+    {
+      "host": "codex",
+      "case": "codex-retries",
+      "prompt": "Use AhaFold to turn material.md into a complete long visual explanation for a general reader, retaining important conditions, exceptions and examples. No images.\n\nWrite the output to ahafold-output/guide/index.html. Scope is limited to material.md, the installed AhaFold resources, and generated work in this workspace. The native image-call budget is 0. Do not use another harness, network requests, or browser tools; do not inspect credentials or global configuration. Browser QA will be performed by the parent test runner; report unperformed checks honestly.\n",
+      "input_sha256": {
+        "material.md": "c82aa5233ce055bb9565e709aa9729eb639eaaad592faa43928b674f82cdc9de"
+      },
+      "skill_hashes": {
+        "LICENSE": "aa64793e25f1c069207d4e3a6571e2b72356102771f962fe9f4c1e858d6f479a",
+        "SKILL.md": "d276875e315046ec746cbb3e52d564d974e4d6af3a5e21266967036a1336c598",
+        "assets/explainer.html": "c7eb69ada1c7b69b065688d42b22e639e1b97f523f52a78ceac5e040346ca33e",
+        "assets/fold/reference-sheet.png": "ce069334946531bb7a6b361bb1902d5f3469a9adc5fcfc900d4e89e07d7dd36a",
+        "assets/longform.html": "ab9b23b5928f8d1593fa8708b715e7de202cc942108409603532e7f7a58bfe7c",
+        "references/explanation.md": "709cac02c534e5c0d4652c9a27abf924a554436120bdbdfca5b18a3dec5f6a2c",
+        "references/fold.md": "8e5f4a4d696c79b4f550a8a6355b288263217a11261807f1d40a02dc7e98ff7f",
+        "references/longform.md": "c82aee0f1cfc9c0d3efc6f2714e50be805f805c58afa49728caf189da56df4b3",
+        "references/native-antigravity-cli.md": "d2d53a95c4083465de3dbee77c7a7673613c832088f7504bd2706110d7c1a05a",
+        "references/native-codex.md": "3e1ae799b57bd770b1b6dd840abe73067bf1d98950d70a9cd968563b90a2541e",
+        "references/native-grok.md": "37e3954a87689762368e17815bd5f762925051aff6349a5a762984044c5d0745"
+      },
+      "execution": {
+        "started_at": "2026-09-05T03:46:26.352955+00:00",
+        "ended_at": "2026-09-05T03:57:33.939001+00:00",
+        "elapsed_seconds": 667.597,
+        "returncode": 0,
+        "timed_out": false,
+        "completion_status": "EXITED_ZERO",
+        "output_exists": true,
+        "first_artifact_elapsed_seconds": 172.623,
+        "host_output_write_stages_observed": 2,
+        "new_files": [
+          "ahafold-output/guide/index.html"
+        ],
+        "modified_existing_files": [],
+        "deleted_existing_files": [],
+        "installed_skill_unchanged": true,
+        "source_skill_unchanged": true,
+        "input_unchanged": true,
+        "malformed_json_lines": 0
+      },
+      "output_sha256": {
+        "guide/index.html": "43d99754083eb0f44bf8019fdc451bc974ce8b07ab2b6c0e33b227adc49b9365"
+      },
+      "first_complete_markup_observed_seconds": 541.061,
+      "markup_note": "A complete HTML envelope is a structural observation, not verified source coverage or readable-draft acceptance.",
+      "image_calls_observed": 0,
+      "scope": "Original host output, no parent repair; browser and semantic review are separate."
+    },
+    {
+      "host": "codex",
+      "case": "codex-types",
+      "prompt": "使用AhaFold把material.md做成长篇图解：中文解释，保留English术语与原代码，讲清关键边界，不要图片。\n\n输出到 ahafold-output/guide/index.html。范围仅限当前工作区的 material.md、已安装 AhaFold 资源和生成成果。原生图片调用预算为 0。不要使用其他 harness、网络请求或浏览器工具，也不要查看凭据或全局配置。浏览器验收由父级测试执行，请如实说明未执行的检查。\n",
+      "input_sha256": {
+        "material.md": "0e8ba4ecda88617e9d6f35bee3b81c992661bbb7ac6d524d44761e5fa65de1e6"
+      },
+      "skill_hashes": {
+        "LICENSE": "aa64793e25f1c069207d4e3a6571e2b72356102771f962fe9f4c1e858d6f479a",
+        "SKILL.md": "d276875e315046ec746cbb3e52d564d974e4d6af3a5e21266967036a1336c598",
+        "assets/explainer.html": "c7eb69ada1c7b69b065688d42b22e639e1b97f523f52a78ceac5e040346ca33e",
+        "assets/fold/reference-sheet.png": "ce069334946531bb7a6b361bb1902d5f3469a9adc5fcfc900d4e89e07d7dd36a",
+        "assets/longform.html": "ab9b23b5928f8d1593fa8708b715e7de202cc942108409603532e7f7a58bfe7c",
+        "references/explanation.md": "709cac02c534e5c0d4652c9a27abf924a554436120bdbdfca5b18a3dec5f6a2c",
+        "references/fold.md": "8e5f4a4d696c79b4f550a8a6355b288263217a11261807f1d40a02dc7e98ff7f",
+        "references/longform.md": "c82aee0f1cfc9c0d3efc6f2714e50be805f805c58afa49728caf189da56df4b3",
+        "references/native-antigravity-cli.md": "d2d53a95c4083465de3dbee77c7a7673613c832088f7504bd2706110d7c1a05a",
+        "references/native-codex.md": "3e1ae799b57bd770b1b6dd840abe73067bf1d98950d70a9cd968563b90a2541e",
+        "references/native-grok.md": "37e3954a87689762368e17815bd5f762925051aff6349a5a762984044c5d0745"
+      },
+      "execution": {
+        "started_at": "2026-09-05T03:57:47.401743+00:00",
+        "ended_at": "2026-09-05T04:10:41.261600+00:00",
+        "elapsed_seconds": 773.87,
+        "returncode": 0,
+        "timed_out": false,
+        "completion_status": "EXITED_ZERO",
+        "output_exists": true,
+        "first_artifact_elapsed_seconds": 665.437,
+        "host_output_write_stages_observed": 1,
+        "new_files": [
+          "ahafold-output/guide/index.html"
+        ],
+        "modified_existing_files": [],
+        "deleted_existing_files": [],
+        "installed_skill_unchanged": true,
+        "source_skill_unchanged": true,
+        "input_unchanged": true,
+        "malformed_json_lines": 0
+      },
+      "output_sha256": {
+        "guide/index.html": "cc02d980fbd15b28d79567da648bff368d731486c89f4fad935276597824489d"
+      },
+      "first_complete_markup_observed_seconds": 665.437,
+      "markup_note": "A complete HTML envelope is a structural observation, not verified source coverage or readable-draft acceptance.",
+      "image_calls_observed": 0,
+      "scope": "Original host output, no parent repair; browser and semantic review are separate."
+    },
+    {
+      "host": "grok",
+      "case": "library",
+      "prompt": "使用 AhaFold 将 material.md 整理为完整的中文长篇图解，面向普通读者，保留重要条件、例外和数值；不要图片。\n\nSave to ahafold-output/guide/index.html. Use only the supplied material as the factual source. Image-call budget is zero. Do not access the network, other workspaces, credentials, global settings, other harnesses or subagents. Browser verification is performed by an independent tester; this run saves the work and reports actual status.\n",
+      "input_sha256": "8ea0d020e78e335416507b7d4e598191729c8389511d88962f3f6d2ece2d77f2",
+      "installed_hashes": {
+        "LICENSE": "aa64793e25f1c069207d4e3a6571e2b72356102771f962fe9f4c1e858d6f479a",
+        "SKILL.md": "d276875e315046ec746cbb3e52d564d974e4d6af3a5e21266967036a1336c598",
+        "references/native-codex.md": "3e1ae799b57bd770b1b6dd840abe73067bf1d98950d70a9cd968563b90a2541e",
+        "references/explanation.md": "709cac02c534e5c0d4652c9a27abf924a554436120bdbdfca5b18a3dec5f6a2c",
+        "references/longform.md": "c82aee0f1cfc9c0d3efc6f2714e50be805f805c58afa49728caf189da56df4b3",
+        "references/fold.md": "8e5f4a4d696c79b4f550a8a6355b288263217a11261807f1d40a02dc7e98ff7f",
+        "references/native-grok.md": "37e3954a87689762368e17815bd5f762925051aff6349a5a762984044c5d0745",
+        "references/native-antigravity-cli.md": "d2d53a95c4083465de3dbee77c7a7673613c832088f7504bd2706110d7c1a05a",
+        "assets/longform.html": "ab9b23b5928f8d1593fa8708b715e7de202cc942108409603532e7f7a58bfe7c",
+        "assets/explainer.html": "c7eb69ada1c7b69b065688d42b22e639e1b97f523f52a78ceac5e040346ca33e",
+        "assets/fold/reference-sheet.png": "ce069334946531bb7a6b361bb1902d5f3469a9adc5fcfc900d4e89e07d7dd36a"
+      },
+      "installed_unchanged": true,
+      "started_utc": "2026-09-05T03:31:44.746757+00:00",
+      "duration_seconds": 755.89,
+      "exit_code": 0,
+      "timeout": false,
+      "stop_reason": "end_turn",
+      "image_calls": 0,
+      "tool_counts": {
+        "read_file": 8,
+        "list_dir": 1,
+        "todo_write": 2,
+        "run_terminal_command": 3,
+        "write": 1,
+        "grep": 3,
+        "search_replace": 8
+      },
+      "output_files": [
+        {
+          "file": "ahafold-output/guide/index.html",
+          "bytes": 70163,
+          "sha256": "d3f7761951ccf165faaac223b9b220c7872ed42952108fce690015408e97dc07"
+        }
+      ],
+      "scope": "First fresh installed-host run; no oracle; no maintainer output correction."
+    },
+    {
+      "host": "grok",
+      "case": "retries",
+      "prompt": "Use AhaFold to turn material.md into a complete long visual explanation for a general reader, retaining important conditions, exceptions and examples. No images.\n\nSave to ahafold-output/guide/index.html. Use only the supplied material as the factual source. Image-call budget is zero. Do not access the network, other workspaces, credentials, global settings, other harnesses or subagents. Browser verification is performed by an independent tester; this run saves the work and reports actual status.\n",
+      "input_sha256": "c82aa5233ce055bb9565e709aa9729eb639eaaad592faa43928b674f82cdc9de",
+      "installed_hashes": {
+        "LICENSE": "aa64793e25f1c069207d4e3a6571e2b72356102771f962fe9f4c1e858d6f479a",
+        "SKILL.md": "d276875e315046ec746cbb3e52d564d974e4d6af3a5e21266967036a1336c598",
+        "references/native-codex.md": "3e1ae799b57bd770b1b6dd840abe73067bf1d98950d70a9cd968563b90a2541e",
+        "references/explanation.md": "709cac02c534e5c0d4652c9a27abf924a554436120bdbdfca5b18a3dec5f6a2c",
+        "references/longform.md": "c82aee0f1cfc9c0d3efc6f2714e50be805f805c58afa49728caf189da56df4b3",
+        "references/fold.md": "8e5f4a4d696c79b4f550a8a6355b288263217a11261807f1d40a02dc7e98ff7f",
+        "references/native-grok.md": "37e3954a87689762368e17815bd5f762925051aff6349a5a762984044c5d0745",
+        "references/native-antigravity-cli.md": "d2d53a95c4083465de3dbee77c7a7673613c832088f7504bd2706110d7c1a05a",
+        "assets/longform.html": "ab9b23b5928f8d1593fa8708b715e7de202cc942108409603532e7f7a58bfe7c",
+        "assets/explainer.html": "c7eb69ada1c7b69b065688d42b22e639e1b97f523f52a78ceac5e040346ca33e",
+        "assets/fold/reference-sheet.png": "ce069334946531bb7a6b361bb1902d5f3469a9adc5fcfc900d4e89e07d7dd36a"
+      },
+      "installed_unchanged": true,
+      "started_utc": "2026-09-05T03:44:23.281326+00:00",
+      "duration_seconds": 816.28,
+      "exit_code": 0,
+      "timeout": false,
+      "stop_reason": "end_turn",
+      "image_calls": 0,
+      "tool_counts": {
+        "read_file": 7,
+        "list_dir": 1,
+        "todo_write": 2,
+        "run_terminal_command": 4,
+        "write": 1,
+        "grep": 4,
+        "search_replace": 12
+      },
+      "output_files": [
+        {
+          "file": "ahafold-output/guide/index.html",
+          "bytes": 65500,
+          "sha256": "1641f599cc994b5a430ca31d5f7a965853f2c435334e72c4af19e08d0ca43a12"
+        }
+      ],
+      "scope": "First fresh installed-host run; no oracle; no maintainer output correction."
+    },
+    {
+      "host": "grok",
+      "case": "types",
+      "prompt": "使用 AhaFold 把 material.md 做成长篇图解：中文解释，保留 English 术语与原代码，讲清关键边界，不要图片。\n\nSave to ahafold-output/guide/index.html. Use only the supplied material as the factual source. Image-call budget is zero. Do not access the network, other workspaces, credentials, global settings, other harnesses or subagents. Browser verification is performed by an independent tester; this run saves the work and reports actual status.\n",
+      "input_sha256": "0e8ba4ecda88617e9d6f35bee3b81c992661bbb7ac6d524d44761e5fa65de1e6",
+      "installed_hashes": {
+        "LICENSE": "aa64793e25f1c069207d4e3a6571e2b72356102771f962fe9f4c1e858d6f479a",
+        "SKILL.md": "d276875e315046ec746cbb3e52d564d974e4d6af3a5e21266967036a1336c598",
+        "references/native-codex.md": "3e1ae799b57bd770b1b6dd840abe73067bf1d98950d70a9cd968563b90a2541e",
+        "references/explanation.md": "709cac02c534e5c0d4652c9a27abf924a554436120bdbdfca5b18a3dec5f6a2c",
+        "references/longform.md": "c82aee0f1cfc9c0d3efc6f2714e50be805f805c58afa49728caf189da56df4b3",
+        "references/fold.md": "8e5f4a4d696c79b4f550a8a6355b288263217a11261807f1d40a02dc7e98ff7f",
+        "references/native-grok.md": "37e3954a87689762368e17815bd5f762925051aff6349a5a762984044c5d0745",
+        "references/native-antigravity-cli.md": "d2d53a95c4083465de3dbee77c7a7673613c832088f7504bd2706110d7c1a05a",
+        "assets/longform.html": "ab9b23b5928f8d1593fa8708b715e7de202cc942108409603532e7f7a58bfe7c",
+        "assets/explainer.html": "c7eb69ada1c7b69b065688d42b22e639e1b97f523f52a78ceac5e040346ca33e",
+        "assets/fold/reference-sheet.png": "ce069334946531bb7a6b361bb1902d5f3469a9adc5fcfc900d4e89e07d7dd36a"
+      },
+      "installed_unchanged": true,
+      "started_utc": "2026-09-05T03:58:01.909441+00:00",
+      "duration_seconds": 586.88,
+      "exit_code": 0,
+      "timeout": false,
+      "stop_reason": "end_turn",
+      "image_calls": 0,
+      "tool_counts": {
+        "read_file": 6,
+        "list_dir": 1,
+        "run_terminal_command": 3,
+        "write": 1,
+        "grep": 2,
+        "search_replace": 8
+      },
+      "output_files": [
+        {
+          "file": "ahafold-output/guide/index.html",
+          "bytes": 49771,
+          "sha256": "b703ecfcd07d0c748140455625f03e87ed43af928efd7e96070c296482f501d0"
+        }
+      ],
+      "scope": "First fresh installed-host run; no oracle; no maintainer output correction."
+    }
+  ]
+}

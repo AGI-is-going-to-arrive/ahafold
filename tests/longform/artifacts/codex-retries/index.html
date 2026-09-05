@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A complete visual guide to the fictional Lantern booking contract: intentions, idempotency, uncertain responses, bounded retries, callback revisions, and reconciliation.">
+<title>Did my seats get booked? — The Lantern guide · AhaFold</title>
+<style>
+
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --apricot-ink: #725010;
+      --teal: #2a8c82;
+      --teal-ink: #17665e;
+      --teal-wash: #eff7f5;
+      --line: #d9dfdd;
+      --soft: #f6f8f7;
+      --page-width: 79rem;
+      --reading-width: 42rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: 100%;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-block-start: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    a { color: var(--teal-ink); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    [id] { scroll-margin-block-start: 1.5rem; }
+    p, li, dd, th, td, figcaption, h1, h2, h3 { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.25rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { color: var(--ink); line-height: 1.35; text-wrap: balance; }
+    h1 { max-width: 18ch; margin: 0; font-size: 3.25rem; font-weight: 750; letter-spacing: -0.03em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.875rem; font-weight: 700; letter-spacing: -0.02em; }
+    h3 { margin: 2rem 0 0.75rem; font-size: 1.25rem; font-weight: 650; }
+    strong { font-weight: 650; }
+    ul, ol { margin-block: 1rem 1.5rem; padding-inline-start: 1.5rem; }
+    li + li { margin-top: 0.75rem; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: 1rem; color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    svg { display: block; }
+    svg text { fill: var(--ink); font-family: inherit; font-size: 18px; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 1em; }
+    a, summary { -webkit-tap-highlight-color: #f4c96b66; }
+    details { border-block: 1px solid var(--line); }
+    summary { min-height: 2.75rem; padding-block: 1rem; color: var(--teal-ink); font-weight: 650; cursor: pointer; }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+    summary::marker { color: var(--teal-ink); }
+    .detail-body { padding-block: 0.25rem 1.5rem; }
+    .detail-body > :first-child { margin-top: 0; }
+
+    .skip-link { position: absolute; inset: 0.75rem auto auto 1rem; z-index: 3; padding: 0.5rem 1rem; background: var(--paper); transform: translateY(-200%); }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, .page-layout, .page-footer { width: min(calc(100% - 5rem), var(--page-width)); margin-inline: auto; }
+    .page-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; padding-block: 1.75rem 1.25rem; border-bottom: 1px solid var(--line); }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 1rem; }
+    .page-layout { display: grid; grid-template-columns: 12rem minmax(0, 1fr); column-gap: 4rem; align-items: start; }
+    .page-layout > * { min-width: 0; }
+    .introduction { grid-column: 2; padding-block: 4rem 3.5rem; }
+    .lead { max-width: var(--reading-width); margin-top: 1.75rem; font-size: 1.25rem; line-height: 1.8; }
+    .template-note { max-width: var(--reading-width); margin-top: 1.25rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    .central-answer { max-width: var(--reading-width); margin-top: 2rem; padding: 1.25rem 1.5rem; background: var(--apricot-wash); border: 1px solid var(--apricot); border-radius: 12px; }
+    .contents { position: sticky; top: 1.5rem; grid-column: 1; grid-row: 1 / span 2; max-height: calc(100dvh - 3rem); margin-top: 4rem; overflow-y: auto; scrollbar-color: var(--teal) var(--soft); scrollbar-width: thin; }
+    .contents details { border-bottom: 0; }
+    .contents summary { padding-block: 1rem; color: var(--ink); font-size: 1.125rem; }
+    .contents ul { margin: 0; padding: 0 0 0.75rem; list-style: none; }
+    .contents li + li { margin-top: 0; }
+    .contents a { display: block; min-height: 2.75rem; padding: 0.5rem 0.375rem; color: var(--muted); font-size: 1rem; line-height: 1.6; text-decoration: none; }
+    .contents a:hover, .contents a:focus-visible { color: var(--teal-ink); text-decoration: underline; background: var(--teal-wash); }
+    .reading-body { grid-column: 2; min-width: 0; }
+    .chapter { padding-block: 3rem; border-top: 1px solid var(--line); }
+    .prose { max-width: var(--reading-width); }
+    .section-lead { color: var(--muted); }
+    .supporting { color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    .terms { margin: 1.75rem 0; }
+    .term { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1.25rem; border-bottom: 1px solid var(--line); }
+    .term:first-child { border-top: 1px solid var(--line); }
+    .term dt { font-weight: 650; }
+    .term dd { margin: 0; }
+    .process-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; margin: 0; padding-inline-start: 1.5rem; }
+    .process-flow li { min-width: 0; margin: 0; padding-inline-start: 0.25rem; }
+    .process-flow li::marker { color: var(--teal-ink); font-weight: 650; }
+    .process-flow h3 { margin: 0 0 0.5rem; font-size: 1.125rem; }
+    .process-flow p { font-size: 1rem; line-height: 1.75; }
+    .assumptions { padding: 1.25rem 1.5rem; background: var(--soft); }
+    .assumptions p { margin: 0; }
+    .assumptions ul { margin-bottom: 0; }
+    .legend { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin-block: 0 0.75rem; font-size: 1rem; }
+    .legend span { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .legend-mark { display: inline-block; width: 1.5rem; height: 0.75rem; flex: 0 0 auto; }
+    .legend-mark.wait { background: var(--apricot-wash); border: 2px dashed var(--apricot-ink); }
+    .legend-mark.work { background: var(--teal-ink); border: 2px solid var(--teal-ink); }
+    .scroll-region { max-width: 100%; overflow: auto; overscroll-behavior-inline: contain; scrollbar-color: var(--teal) var(--soft); scrollbar-width: auto; }
+    .timeline { width: 100%; min-width: 46rem; height: auto; }
+    .timeline .grid-line { stroke: var(--line); stroke-width: 1; }
+    .timeline .wait { fill: var(--apricot-wash); stroke: var(--apricot-ink); stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .timeline .work { fill: var(--teal-ink); }
+    .timeline .arrival { fill: var(--ink); }
+    .timeline .axis-label { fill: var(--muted); }
+    table { width: 100%; border-collapse: collapse; font-size: 1.125rem; font-variant-numeric: tabular-nums; line-height: 1.65; }
+    caption { padding-block: 0 0.75rem; text-align: left; font-weight: 650; }
+    th, td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    thead { background: var(--soft); }
+    th { font-weight: 650; }
+    .numbers-table { min-width: 35rem; }
+    .numbers-table td:not(:first-child), .numbers-table th:not(:first-child) { text-align: right; }
+    .numbers-table tbody tr:last-child { background: var(--apricot-wash); }
+    .comparison-table { min-width: 44rem; }
+    .comparison-table th:first-child { width: 24%; }
+    .comparison-table td:last-child { min-width: 17rem; }
+    .comparison-table td:nth-child(2), .comparison-table td:nth-child(3) { white-space: nowrap; }
+    .calculation { margin-block: 1.75rem; padding: 1.25rem 1.5rem; background: var(--teal-wash); }
+    .calculation p + p { margin-top: 0.75rem; }
+    .equation { font-variant-numeric: tabular-nums; }
+    .reasoning-steps { padding-inline-start: 1.75rem; }
+    .reasoning-steps li { padding-inline-start: 0.375rem; }
+    .reasoning-steps li::marker { color: var(--teal-ink); font-weight: 650; }
+    .reasoning-steps strong { display: block; margin-bottom: 0.25rem; }
+    .case-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-block: 2rem; }
+    .case-pair > div { min-width: 0; padding-block: 1.25rem; border-block: 1px solid var(--line); }
+    .case-pair h3 { margin-top: 0; }
+    .case-pair .result { color: var(--teal-ink); font-weight: 650; }
+    .exceptions { margin-block: 1.75rem 0; }
+    .exception { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1.5rem; border-top: 1px solid var(--line); }
+    .exception dt { font-weight: 650; }
+    .exception dd { margin: 0; }
+    .exceptions .exception:last-child { padding-bottom: 0; }
+    .source-notes { padding-inline-start: 1.5rem; }
+    .source-notes li::marker { color: var(--teal-ink); }
+    .page-footer { padding-block: 1.75rem 3rem; border-top: 1px solid var(--line); }
+    .footer-inner { margin-inline-start: 16rem; max-width: var(--reading-width); }
+    .page-footer p { color: var(--muted); font-size: 1rem; }
+    .return-link { display: inline-block; min-height: 2.75rem; padding-block: 0.375rem; }
+
+    @media (max-width: 67rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 3rem); }
+      .page-layout { grid-template-columns: 10.5rem minmax(0, 1fr); column-gap: 2.5rem; }
+      .process-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; }
+      .footer-inner { margin-inline-start: 13rem; }
+    }
+    @media (max-width: 55rem) {
+      .page-layout { display: block; }
+      .introduction { padding-block: 3rem 2.5rem; }
+      h1 { font-size: 2.75rem; }
+      .contents { position: static; max-height: none; max-width: var(--reading-width); margin: 0 0 2.5rem; overflow: visible; }
+      .contents ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; }
+      .contents details { border-bottom: 1px solid var(--line); }
+      .contents summary { padding-block: 0.875rem; }
+      .contents a { padding-block: 0.625rem; }
+      .footer-inner { margin-inline-start: 0; }
+    }
+    @media (max-width: 36rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 2.5rem); }
+      .page-header { padding-top: 1.25rem; }
+      .introduction { padding-block: 2.5rem 2rem; }
+      h1 { font-size: 2.125rem; letter-spacing: -0.025em; }
+      h2 { font-size: 1.5rem; }
+      .lead { font-size: 1.125rem; }
+      .central-answer, .assumptions, .calculation { padding: 1rem 1.125rem; }
+      .contents ul, .case-pair { grid-template-columns: minmax(0, 1fr); }
+      .case-pair { gap: 0; }
+      .case-pair > div + div { border-top: 0; }
+      .chapter { padding-block: 2.5rem; }
+      .term, .exception { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+      .process-flow { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+      .process-flow p { font-size: 1.125rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    @media print {
+      @page { margin: 16mm; }
+      :root { font-size: 11pt; }
+      body { font-size: 1rem; line-height: 1.65; }
+      .page-header, .page-layout, .page-footer { width: 100%; }
+      .page-layout { display: block; }
+      .skip-link, .contents, .return-link { display: none; }
+      .introduction { padding-block: 1.5rem 2rem; }
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 1.6rem; }
+      h2, h3 { break-after: avoid; }
+      .chapter { padding-block: 1.5rem; }
+      .prose, .lead, .central-answer, .template-note { max-width: none; }
+      .scroll-region { overflow: visible; }
+      .timeline, .numbers-table, .comparison-table { min-width: 0; }
+      .timeline { break-inside: avoid; }
+      .timeline text { font-size: 20px; }
+      table { font-size: 0.875rem; }
+      th, td { padding: 0.5rem; }
+      .comparison-table td:last-child { min-width: 0; }
+      .comparison-table td:nth-child(2), .comparison-table td:nth-child(3) { white-space: normal; }
+      thead { display: table-header-group; }
+      tr, .term, .exception, .calculation { break-inside: avoid; }
+      details > * { display: block; }
+      details::details-content { display: block; content-visibility: visible; }
+      summary { list-style: none; }
+      summary::-webkit-details-marker { display: none; }
+      .footer-inner { margin-inline-start: 0; }
+      a { color: inherit; }
+      .supporting, figcaption { font-size: 0.875rem; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  
+    :root { --paper: #fffdf8; --ink: #232c2b; --muted: #53615e; --line: #d5ded7; --soft: #f0f3ee; --teal-ink: #175d53; --teal-wash: #edf5ef; --apricot-wash: #fff3d9; --reading-width: 43rem; }
+    body { line-height: 1.75; }
+    h1 { max-width: 17ch; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.5rem, 5.2vw, 4.7rem); font-weight: 500; line-height: 1.08; letter-spacing: -.045em; }
+    h2 { font-family: Georgia, 'Times New Roman', serif; font-size: 2.1rem; font-weight: 500; line-height: 1.2; }
+    h3 { line-height: 1.4; }
+    .page-header { padding-block: 1.25rem; }
+    .wordmark { font-size: 1.25rem; }
+    .eyebrow, .section-no { color: var(--teal-ink); font-size: .8125rem; font-weight: 750; letter-spacing: .1em; text-transform: uppercase; }
+    .section-no { display: block; margin-bottom: .7rem; }
+    .lead { font-size: 1.3rem; line-height: 1.7; }
+    .central-answer { border-radius: 0; border-width: 0 0 0 4px; }
+    .central-answer p { font-size: 1.2rem; }
+    .contents a { font-size: .9375rem; }
+    .chapter { padding-block: 3.5rem; }
+    .chapter > :last-child { margin-bottom: 0; }
+    .rule-ref { color: var(--muted); font: 500 .8125rem/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; margin-bottom: 1.25rem; }
+    .rule-ref a { color: inherit; }
+    .notice { padding: 1.25rem 1.5rem; border-left: 4px solid var(--apricot-ink); background: var(--apricot-wash); margin-block: 1.5rem; }
+    .notice.good { border-color: var(--teal-ink); background: var(--teal-wash); }
+    .notice p + p { margin-top: .75rem; }
+    .micro { color: var(--muted); font-size: .9375rem; }
+    .overview { margin: 2rem 0; padding: 0; list-style: none; counter-reset: overview; border-top: 1px solid var(--line); }
+    .overview li { counter-increment: overview; display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: 1rem; margin: 0; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+    .overview li::before { content: '0' counter(overview); color: var(--teal-ink); font: 500 1.25rem/1.6 Georgia, serif; }
+    .overview strong { display: block; }
+    .overview a { text-decoration: none; }
+    .identity-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 0; margin-block: 2rem; border-block: 1px solid var(--line); }
+    .identity-grid > div { padding: 1.25rem; min-width: 0; border-right: 1px solid var(--line); }
+    .identity-grid > div:first-child { padding-left: 0; }
+    .identity-grid > div:last-child { border-right: 0; }
+    .identity-grid h3 { margin: .5rem 0; }
+    .big-number { display: block; font: 500 3rem/1.1 Georgia,serif; color: var(--teal-ink); }
+    .identity-grid p { font-size: 1rem; }
+    .flow-stack { list-style: none; padding: 0; margin: 1.5rem 0; }
+    .flow-stack li { display: grid; grid-template-columns: 2.5rem minmax(0,1fr); gap: 1rem; margin: 0; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+    .step-number { display: flex; justify-content: center; align-items: center; width: 2.25rem; height: 2.25rem; border: 1px solid var(--teal-ink); color: var(--teal-ink); font-weight: 650; }
+    .flow-stack h3 { margin: 0 0 .4rem; font-size: 1.125rem; }
+    .flow-stack p { font-size: 1rem; }
+    code { font-size: .88em; overflow-wrap: anywhere; }
+    pre { max-width: 100%; margin: 1.25rem 0; padding: 1.25rem; background: var(--soft); white-space: pre-wrap; overflow-wrap: anywhere; font: .875rem/1.75 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    pre code { font-size: inherit; }
+    .code-pair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.25rem; }
+    .code-pair > div { min-width: 0; }
+    .code-pair h3 { margin: .5rem 0; font-size: 1rem; }
+    .code-pair pre { margin-top: .5rem; }
+    .label { display: inline-block; padding: .15rem .55rem; background: var(--soft); color: var(--ink); font-size: .8125rem; font-weight: 700; }
+    .label.unknown { background: var(--apricot-wash); color: #725010; }
+    .label.confirmed { background: var(--teal-wash); color: var(--teal-ink); }
+    .lane-header, .lane-row { display: grid; grid-template-columns: 7rem minmax(0,1fr) minmax(0,1fr); gap: 1rem; padding: 1rem; }
+    .lane-header { background: var(--soft); font-size: .9375rem; font-weight: 700; }
+    .lane-row { border-bottom: 1px solid var(--line); font-size: 1rem; }
+    .lane-row > * { min-width: 0; }
+    .lane-row p { margin: 0; }
+    .lane-row .lane-key { color: var(--muted); font-size: .9375rem; }
+    .evidence-table { min-width: 43rem; table-layout: fixed; }
+    .evidence-table th:first-child { width: 27%; }
+    .evidence-table th:nth-child(2) { width: 34%; }
+    table { font-size: 1rem; line-height: 1.7; }
+    .timeline-html { min-width: 43rem; padding: 1.4rem 1.25rem 1rem; background: var(--soft); font-size: 1rem; }
+    .timeline-title { font-weight: 700; margin-bottom: .75rem; }
+    .time-ruler { display: flex; justify-content: space-between; margin: 0 0 .5rem; font-variant-numeric: tabular-nums; font-size: .875rem; }
+    .time-track { height: 2.75rem; display: grid; grid-template-columns: 1fr 2fr 1fr 4fr 1fr 8fr 1fr; gap: 0; border: 1px solid var(--teal-ink); }
+    .time-track > span { display: flex; align-items: center; justify-content: center; min-width: 0; font-weight: 700; font-size: .875rem; }
+    .attempt-block { background: var(--teal-ink); color: white; }
+    .wait-block { border-block: 2px dashed var(--apricot-ink); background: var(--apricot-wash); color: #725010; }
+    .timeline-html .micro { margin-top: .85rem; }
+    .math-row { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 1rem; padding-block: .65rem; border-bottom: 1px solid var(--line); }
+    .math-row:last-child { border: 0; }
+    .math-result { font-weight: 700; color: var(--teal-ink); font-variant-numeric: tabular-nums; }
+    .expiry-strip { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); margin-block: 1rem; }
+    .expiry-strip > div { padding: 1rem; min-width: 0; }
+    .expiry-strip > div:first-child { border-right: 1px solid var(--line); background: var(--apricot-wash); }
+    .expiry-strip h3 { margin: 0 0 .5rem; font-size: 1.0625rem; }
+    .expiry-strip p { font-size: 1rem; }
+    .event-log { list-style: none; padding: 0; margin-block: 2rem; border-top: 1px solid var(--line); }
+    .event-log li { display: grid; grid-template-columns: 2.5rem minmax(0,1fr) 11rem; gap: 1rem; margin: 0; padding: 1.25rem 0; border-bottom: 1px solid var(--line); align-items: start; }
+    .event-log h3 { margin: 0 0 .4rem; font-size: 1.125rem; }
+    .event-log p { margin-bottom: .5rem; font-size: 1rem; }
+    .event-result { padding: .6rem .8rem; border-left: 3px solid var(--teal-ink); background: var(--teal-wash); font-size: .9375rem; }
+    .event-result strong { display: block; }
+    .boundary-list { margin: 2rem 0; }
+    .boundary-list > div { padding: 1.2rem 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 12rem minmax(0,1fr); gap: 1.5rem; }
+    .boundary-list dt { font-weight: 700; }
+    .boundary-list dd { margin: 0; }
+    .source-map { columns: 2; column-gap: 2rem; padding-left: 1.2rem; font-size: 1rem; }
+    .source-map li { break-inside: avoid; margin: 0 0 .65rem; }
+    .question { margin-block: 1rem; }
+    .page-footer { margin-top: 1rem; }
+    @media (max-width: 67rem) { .identity-grid { grid-template-columns: 1fr; } .identity-grid > div { padding: 1.25rem 0; border-right: 0; border-bottom: 1px solid var(--line); } .identity-grid > div:last-child { border-bottom: 0; } }
+    @media (max-width: 55rem) { .identity-grid { grid-template-columns: repeat(3,minmax(0,1fr)); } .identity-grid > div { padding: 1rem; border-right: 1px solid var(--line); border-bottom: 0; } .contents { margin-bottom: 2rem; } }
+    @media (max-width: 36rem) {
+      h2 { font-size: 1.7rem; }
+      .lead { font-size: 1.125rem; }
+      .chapter { padding-block: 2.5rem; }
+      .identity-grid, .code-pair, .expiry-strip { grid-template-columns: minmax(0,1fr); }
+      .identity-grid > div { padding: 1.25rem 0; border: 0; border-bottom: 1px solid var(--line); }
+      .identity-grid > div:last-child { border: 0; }
+      .lane-header { display: none; }
+      .lane-row { grid-template-columns: minmax(0,1fr); gap: .75rem; padding-inline: 0; }
+      .lane-key { font-weight: 700; }
+      .expiry-strip > div:first-child { border-right: 0; border-bottom: 1px solid var(--line); }
+      .event-log li { grid-template-columns: 2rem minmax(0,1fr); gap: .75rem; }
+      .event-result { grid-column: 2; }
+      .boundary-list > div { grid-template-columns: 1fr; gap: .5rem; }
+      .notice { padding: 1rem; }
+      .source-map { columns: 1; }
+      .math-row { grid-template-columns: 1fr; gap: .25rem; }
+      .big-number { font-size: 2.5rem; }
+    }
+    @media print {
+      :root { --paper: white; }
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 1.6rem; }
+      .chapter { padding-block: 1.6rem; }
+      .evidence-table, .timeline-html { min-width: 0; }
+      .timeline-html { padding: .75rem; }
+      .identity-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+      .identity-grid > div { padding: .75rem; border: 0; }
+      .time-track { height: 2rem; }
+      .event-log li { break-inside: avoid; }
+      .notice { break-inside: avoid; }
+      pre { white-space: pre-wrap; overflow: visible; font-size: .8rem; }
+      details .detail-body { display: block !important; }
+      details { break-inside: auto; }
+      details::details-content { content-visibility: visible !important; height: auto !important; }
+    }
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the guide</a>
+<header class="page-header">
+  <p class="wordmark">AhaFold <span class="micro">/ The Lantern guide</span></p>
+  <p class="tagline">A booking is a fact. A response is evidence.</p>
+</header>
+<main id="main" class="page-layout" tabindex="-1" aria-labelledby="page-title">
+  <header class="introduction">
+    <p class="eyebrow">Networks, explained through two theatre seats</p>
+    <h1 id="page-title">Did my seats<br>get booked?</h1>
+    <p class="lead">You ask for seats C07 and C08. The screen waits, then times out. The ticket desk may already have reserved them. How can you try again without accidentally making a second booking?</p>
+    <div class="central-answer">
+      <p><strong>A missing response leaves the outcome unknown.</strong> Preserve the original booking identity, retry only within its attempt and time limits, and check the authoritative record when the evidence is incomplete.</p>
+    </div>
+    <p class="template-note">Lantern is a fictional community performance booking system. Its supplied rules allocate seats; they collect no money and contact no real service. All people, identifiers, dates, and events here are teaching examples. These status meanings are Lantern’s contract, not universal rules for other APIs.</p>
+  </header>
+
+  <nav id="contents" class="contents" aria-label="Guide contents" tabindex="-1">
+    <details open>
+      <summary>Inside this guide</summary>
+      <ul>
+        <li><a href="#overview">The whole journey</a></li>
+        <li><a href="#identity">01 · One intention, several attempts</a></li>
+        <li><a href="#uncertainty">02 · What a timeout hides</a></li>
+        <li><a href="#responses">03 · Read the evidence</a></li>
+        <li><a href="#retry-clock">04 · Count attempts and seconds</a></li>
+        <li><a href="#expiry">05 · Respect the two clocks</a></li>
+        <li><a href="#callbacks">06 · Receive callbacks safely</a></li>
+        <li><a href="#revisions">07 · Follow revision, not arrival</a></li>
+        <li><a href="#reconcile">08 · Stop and resolve uncertainty</a></li>
+        <li><a href="#boundaries">09 · Know the guarantee’s limits</a></li>
+        <li><a href="#source-notes">Source and complete examples</a></li>
+      </ul>
+    </details>
+  </nav>
+
+  <article class="reading-body" aria-label="The complete Lantern explanation">
+    <section class="chapter" aria-labelledby="overview">
+      <div class="prose">
+        <p class="section-no">The whole journey</p>
+        <h2 id="overview" tabindex="-1">Keep the intention steady as the evidence changes</h2>
+        <p>The <strong>client</strong> is the app making the request. The <strong>server</strong> is the ticket desk’s system, which commits the reservation. A network message connects them, but that message can disappear after the server has done its work.</p>
+        <ol class="overview">
+          <li><div><strong><a href="#identity">Preserve what the person meant.</a></strong>Save the intention, exact request bytes, key, and creation time before sending.</div></li>
+          <li><div><strong><a href="#uncertainty">Separate the record from the reply.</a></strong>A reservation may exist even when its response never arrives.</div></li>
+          <li><div><strong><a href="#responses">Choose an action from the evidence.</a></strong>Confirmed, pending, rejected, and unknown outcomes lead to different next steps.</div></li>
+          <li><div><strong><a href="#retry-clock">Retry within both limits.</a></strong>At most four total attempts, with the same key and body, before the client’s conservative 24-hour cutoff.</div></li>
+          <li><div><strong><a href="#callbacks">Check later deliveries.</a></strong>Authenticate callbacks, recognize repeats, and use revisions to protect newer state.</div></li>
+          <li><div><strong><a href="#reconcile">Resolve what remains uncertain.</a></strong>Read authoritative status using the original records; involve a person if that still cannot settle it.</div></li>
+        </ol>
+        <p class="supporting">This is a map of responsibilities, not a promise that every booking follows every step. A valid final response stops dispatching; a pending response goes to reconciliation; an identity conflict stops for investigation.</p>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="identity">
+      <div class="prose">
+        <p class="section-no">01 / Identity</p>
+        <h2 id="identity" tabindex="-1">One decision can travel more than once</h2>
+        <p class="rule-ref">Source rules <a href="#r01">R01</a>–<a href="#r03">R03</a></p>
+        <p>Mina Patel wants C07 and C08 for the Lantern autumn matinee. Her <strong>booking intention</strong> is that one decision. An <strong>HTTP attempt</strong> is one network request carrying it. A <strong>durable reservation</strong> is the committed server record that actually consumes the seats.</p>
+      </div>
+      <figure aria-labelledby="identity-caption">
+        <div class="identity-grid">
+          <div><span class="big-number">1</span><h3>Intention</h3><p>“Reserve C07 and C08 for Mina.” The person’s request stays the same.</p></div>
+          <div><span class="big-number">1–4</span><h3>Attempts</h3><p>The original dispatch plus up to three automatic retries, if eligible.</p></div>
+          <div><span class="big-number">0 or 1</span><h3>Reservation</h3><p>For the same accepted key and exact body during retention, at most one is committed. Success is not guaranteed.</p></div>
+        </div>
+        <figcaption id="identity-caption">These count different things. Three requests, two successful replies, or a response plus a callback do not tell you how many reservations were created. A reply can describe a reservation that existed before that attempt arrived.</figcaption>
+      </figure>
+      <div class="prose">
+        <h3>Write the intention down before sending it</h3>
+        <p>The client’s <strong>durable local ledger</strong> is a record that survives a restart. In this teaching contract, the client saves four things before the first dispatch:</p>
+        <dl class="terms">
+          <div class="term"><dt>Intention ID</dt><dd>A stable label for the person’s decision.</dd></div>
+          <div class="term"><dt>Exact body</dt><dd>The original UTF-8 bytes, including the performance, seat choices, and attendee name. UTF-8 is the text encoding; the comparison is of the encoded bytes.</dd></div>
+          <div class="term"><dt>Idempotency key</dt><dd>The server’s label for recognizing repeat attempts for that body. “Idempotent” here means repeat accepted requests can refer to the same effect instead of creating another reservation.</dd></div>
+          <div class="term"><dt>Creation time</dt><dd>When the client created the key, used to calculate its conservative retry cutoff.</dd></div>
+        </dl>
+        <p><strong>If saving fails, do not dispatch.</strong> After a restart, read and check the existing record before resuming. A restart must not invent a new key for an intention whose outcome is still uncertain. The attempt count also persists, as <a href="#retry-clock">the retry policy</a> explains.</p>
+        <p>In the supplied example, the performance is <code>lantern-autumn-matinee-2026-10-17</code>, the seats are <code>C07</code> and <code>C08</code>, the attendee is <code>Mina Patel</code>, and the local key creation time is <code>2026-10-01T10:00:00Z</code>. The <a href="#ledger-example">complete ledger record</a> preserves the long identifiers and exact request text.</p>
+        <h3>“Same meaning” is weaker than “same bytes”</h3>
+        <p>Every retry must reuse <strong>both the original key and the exact original body bytes</strong>. Lantern does not decide that two differently written JSON objects are close enough.</p>
+      </div>
+      <div class="code-pair" aria-label="Illustrative JSON property-order comparison">
+        <div><h3>Original fragment</h3><pre><code>{"seatIds":["C07","C08"],"attendeeName":"Mina Patel"}</code></pre></div>
+        <div><h3>Reordered fragment</h3><pre><code>{"attendeeName":"Mina Patel","seatIds":["C07","C08"]}</code></pre></div>
+      </div>
+      <div class="prose">
+        <p class="supporting">These are abbreviated teaching fragments, not the complete request. They describe the same fields, but their byte sequences differ. Lantern’s key binding cares about that difference.</p>
+        <div class="notice">
+          <p><strong>Changed seats, changed name, or changed JSON property order require an explicit new intention.</strong> Reconcile any unresolved earlier intention first. Reusing its key with different bytes returns <code>409 KEY_PAYLOAD_MISMATCH</code>; that conflicting attempt creates no new reservation, and the client stops to investigate.</p>
+        </div>
+        <p>Think of the key as a claim ticket attached to one exact request. The analogy ends at the contract boundary: a ticket alone does not promise seats, and the server’s memory of it is limited to <a href="#expiry">24 hours from first acceptance</a>.</p>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="uncertainty">
+      <div class="prose">
+        <p class="section-no">02 / Uncertainty</p>
+        <h2 id="uncertainty" tabindex="-1">The server can finish before the client knows</h2>
+        <p class="rule-ref">Source rules <a href="#r05">R05</a>–<a href="#r06">R06</a></p>
+        <p>A response is a message about the server’s work. Delivering that message is a separate event from committing the work. The gap between those events is where uncertainty appears.</p>
+      </div>
+      <figure aria-labelledby="lost-reply-caption">
+        <div class="lane-header" aria-hidden="true"><span>Sequence</span><span>At the ticket desk</span><span>In Mina’s app</span></div>
+        <div class="lane-row"><span class="lane-key">1 · Send</span><p><strong>Server:</strong> receives the booking request.</p><p><strong>Client:</strong> sends the saved key and exact body.</p></div>
+        <div class="lane-row"><span class="lane-key">2 · Commit</span><p><strong>Server:</strong> commits a reservation consuming C07 and C08.</p><p><strong>Client:</strong> is still waiting for evidence.</p></div>
+        <div class="lane-row"><span class="lane-key">3 · Lose reply</span><p><strong>Server:</strong> sends a success response, but the connection is lost before delivery.</p><p><strong>Client:</strong> receives no final response.</p></div>
+        <div class="lane-row"><span class="lane-key">4 · Timeout</span><p><strong>Server record:</strong> the reservation exists.</p><p><strong>Client knowledge:</strong> <span class="label unknown">UNKNOWN</span></p></div>
+        <figcaption id="lost-reply-caption">One possible sequence under Lantern’s rules. The client also could time out before any reservation exists. The same visible timeout fits both possibilities, so it cannot distinguish them.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>A timeout or disconnect does not prove the booking failed, that the seats remain free, or that a fresh booking is safe. The app keeps the original identity and records <code>UNKNOWN</code>. A retry is permitted only if <a href="#retry-clock">the response, budget, and time rules</a> allow it.</p>
+        <h3>A replay can be successful without doing new work</h3>
+        <p>A valid final <code>201 RESERVED</code> supplies a reservation identifier and the server’s current reservation revision. It confirms a durable reservation for this intention. If the client repeats a completed key, it may receive <code>200 RESERVED</code> with the <strong>same reservation identifier</strong>. That attempt allocated no additional seats.</p>
+        <p>A later <code>reservation.created</code> callback is another channel carrying a committed fact. If the client gets both the response and that callback, it must connect them to the same local booking.</p>
+        <div class="notice">
+          <p><strong><code>202 PENDING</code> means “processing acknowledged.”</strong> It does not prove a reservation has committed. The next action is to reconcile status, not immediately send another booking request.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="responses">
+      <div class="prose">
+        <p class="section-no">03 / Evidence</p>
+        <h2 id="responses" tabindex="-1">Read the outcome before choosing the next action</h2>
+        <p class="rule-ref">Source rules <a href="#r06">R06</a>–<a href="#r09">R09</a>, <a href="#r13">R13</a>–<a href="#r14">R14</a></p>
+        <p>HTTP status numbers are shorthand. Use Lantern’s specific meaning, the required fields, and the matching intention identity together. A success-looking number with incomplete or contradictory evidence is not enough.</p>
+      </div>
+      <div class="scroll-region" role="region" tabindex="0" aria-labelledby="responses-caption" aria-describedby="responses-help">
+        <table class="evidence-table">
+          <caption id="responses-caption">Observation → known effect → next action, under this contract</caption>
+          <thead><tr><th scope="col">What arrives</th><th scope="col">What it establishes</th><th scope="col">What the client does</th></tr></thead>
+          <tbody>
+            <tr><th scope="row"><code>201 RESERVED</code><br>or replayed <code>200 RESERVED</code></th><td>A reservation is committed. The final evidence must include the reservation identity and revision for this intention.</td><td>Record the same reservation identity and stop dispatching. A replay does not add another booking.</td></tr>
+            <tr><th scope="row"><code>202 PENDING</code></th><td>The server acknowledged processing. The final result is still unknown.</td><td>Reconcile status. Do not immediately consume another booking attempt.</td></tr>
+            <tr><th scope="row">Timeout, disconnect, or <code>503 TEMPORARILY_UNAVAILABLE</code></th><td>The effect is unknown. A <code>503</code> can happen before or after work starts.</td><td>Retry the same key and exact body only if the remaining attempt budget and time allow it; otherwise reconcile.</td></tr>
+            <tr><th scope="row"><code>429 RATE_LIMITED</code> with valid <code>Retry-After</code></th><td>This attempt was rejected before reservation processing. The supplied delay is an integer number of seconds.</td><td>Wait for the larger of the base delay and <code>Retry-After</code>, then retry if eligible.</td></tr>
+            <tr><th scope="row"><code>400 INVALID_REQUEST</code></th><td>Final for that submitted body; it causes no reservation under the contract.</td><td>Stop and show the validation problem. Do not automatically retry the invalid body.</td></tr>
+            <tr><th scope="row"><code>409 KEY_PAYLOAD_MISMATCH</code></th><td>The conflicting attempt creates no new reservation. The key was bound to different bytes.</td><td>Stop and investigate the identity conflict.</td></tr>
+            <tr><th scope="row">Missing or malformed required fields</th><td>The evidence is untrusted or incomplete, even if part of it looks plausible.</td><td>Keep the intention unresolved; reconcile or escalate. Do not assume a missing delay is zero or a missing reservation ID means success.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p id="responses-help" class="supporting" style="margin-top:.8rem">On a narrow screen, scroll this table horizontally. The scroll area can receive keyboard focus. Each row keeps the observation, its meaning, and its action together.</p>
+      <div class="prose">
+        <div class="notice">
+          <p><strong>“This attempt made no reservation” is a scoped claim.</strong> A <code>429</code> after an earlier timeout does not tell you what that earlier attempt did. Likewise, a conflicting request’s rejection does not erase a reservation made for the original body.</p>
+        </div>
+        <p>A response or callback naming a different intention must not silently replace the original record. Callback signatures and bindings have an additional <a href="#callbacks">authentication gate</a>.</p>
+        <details class="question">
+          <summary>Check your reasoning: a “success” response has no reservation identifier. Are the seats confirmed?</summary>
+          <div class="detail-body"><p>No. Required evidence is missing. Keep the intention unresolved and reconcile or escalate; the status label alone does not establish which durable reservation belongs to this intention.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="retry-clock">
+      <div class="prose">
+        <p class="section-no">04 / Attempts and seconds</p>
+        <h2 id="retry-clock" tabindex="-1">Four attempts total. Three waits between them.</h2>
+        <p class="rule-ref">Source rules <a href="#r08">R08</a>–<a href="#r10">R10</a></p>
+        <p>The automatic budget is <strong>one original attempt plus at most three retries</strong>. Count each dispatch durably <strong>before sending</strong>. Restarting the application does not reset that count. Waiting itself does not consume an attempt.</p>
+        <div class="assumptions">
+          <p><strong>Fix the teaching assumptions before calculating.</strong></p>
+          <ul>
+            <li>Every attempt takes exactly <strong>0.5 seconds</strong> to reach its response or timeout.</li>
+            <li>The base waits before attempts 2, 3, and 4 are <strong>1, 2, and 4 seconds</strong>.</li>
+            <li>Each wait begins <strong>after the previous attempt finishes or times out</strong>.</li>
+            <li>Clocks are stable and there is no jitter, meaning no random adjustment to the delays.</li>
+            <li>For the baseline below, the first three attempts time out, the fourth succeeds, and enough time remains before expiry.</li>
+          </ul>
+        </div>
+        <h3>Build the time line from the previous finish</h3>
+        <div class="calculation">
+          <p class="equation"><strong>Next start</strong> = previous finish + required wait</p>
+          <p class="equation"><strong>Finish</strong> = start + 0.5 seconds</p>
+        </div>
+      </div>
+      <figure aria-labelledby="timing-caption">
+        <div class="scroll-region" role="region" tabindex="0" aria-label="Nine-second retry timeline; horizontally scrollable" aria-describedby="timing-caption timing-help">
+          <div class="timeline-html">
+            <p class="timeline-title">From the first dispatch to the final response: 9 seconds</p>
+            <div class="time-ruler"><span>0 seconds</span><span>9 seconds</span></div>
+            <div class="time-track" aria-label="Attempt 1 for 0.5 seconds, wait 1 second, attempt 2 for 0.5 seconds, wait 2 seconds, attempt 3 for 0.5 seconds, wait 4 seconds, attempt 4 for 0.5 seconds">
+              <span class="attempt-block" title="Attempt 1: 0 to 0.5 seconds">1</span><span class="wait-block">1 s</span><span class="attempt-block" title="Attempt 2: 1.5 to 2 seconds">2</span><span class="wait-block">2 s</span><span class="attempt-block" title="Attempt 3: 4 to 4.5 seconds">3</span><span class="wait-block">4 s</span><span class="attempt-block" title="Attempt 4: 8.5 to 9 seconds">4</span>
+            </div>
+            <p class="micro">Solid numbered blocks = attempts, each 0.5 s. Dashed blocks = waits. Widths represent durations; the table gives every boundary.</p>
+          </div>
+        </div>
+        <figcaption id="timing-caption">The start times are <strong>0, 1.5, 4, and 8.5 seconds</strong>. The final response arrives at <strong>9 seconds</strong>. The waits are measured from the preceding finish, so adding only 1 + 2 + 4 would omit the time spent making requests.</figcaption>
+      </figure>
+      <div class="scroll-region" role="region" tabindex="0" aria-labelledby="times-caption" aria-describedby="timing-help">
+        <table class="numbers-table" id="baseline-timing">
+          <caption id="times-caption">The complete fixed schedule (seconds from the first dispatch)</caption>
+          <thead><tr><th scope="col">Attempt</th><th scope="col">Wait before it</th><th scope="col">Starts</th><th scope="col">Finishes</th><th scope="col">Observation</th></tr></thead>
+          <tbody>
+            <tr data-attempt="1"><th scope="row">1 · Original</th><td>0</td><td>0</td><td>0.5</td><td>Timeout</td></tr>
+            <tr data-attempt="2"><th scope="row">2 · Retry 1</th><td>1</td><td>1.5</td><td>2</td><td>Timeout</td></tr>
+            <tr data-attempt="3"><th scope="row">3 · Retry 2</th><td>2</td><td>4</td><td>4.5</td><td>Timeout</td></tr>
+            <tr data-attempt="4"><th scope="row">4 · Retry 3</th><td>4</td><td>8.5</td><td>9</td><td>Final success</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p id="timing-help" class="supporting" style="margin-top:.8rem">The timeline and table each scroll locally on narrow screens. The table’s times are also fully explained by the calculation above.</p>
+      <div class="prose">
+        <h3>Rate limiting can lengthen a wait</h3>
+        <p>After a retryable <code>429</code>, compare the next base wait with that response’s valid integer <code>Retry-After</code>, measured in seconds. <code>max</code> means “take the larger value.”</p>
+        <div class="calculation">
+          <p class="equation"><strong>Required wait after 429</strong> = max(next base wait, Retry-After)</p>
+          <div class="math-row"><span>After attempt 2: max(2 s, 6 s)</span><span class="math-result">6 seconds</span></div>
+          <div class="math-row"><span>With a zero delay: max(2 s, 0 s)</span><span class="math-result">2 seconds</span></div>
+          <div class="math-row"><span>With an equal delay: max(2 s, 2 s)</span><span class="math-result">2 seconds</span></div>
+        </div>
+        <p><strong>Do not add the two waits.</strong> A base wait of 2 seconds and <code>Retry-After: 6</code> requires 6 seconds, not 8. A zero delay never removes the base wait.</p>
+      </div>
+      <div class="case-pair">
+        <div><h3>Baseline: attempt 2 times out</h3><p>It finishes at t = 2 s. Wait 2 s.</p><p class="result">Attempt 3 starts at t = 4 s.</p><p>It finishes at 4.5 s; after another timeout, attempt 4 starts at 8.5 s and ends at 9 s.</p></div>
+        <div><h3>Variant: attempt 2 returns 429 with 6 s</h3><p>It still finishes at t = 2 s. Wait 6 s.</p><p class="result">Attempt 3 starts at t = 8 s.</p><p>If attempt 3 then times out at 8.5 s, attempt 4 starts at 12.5 s and ends at 13 s.</p></div>
+      </div>
+      <div class="prose">
+        <p class="supporting">The variant changes only the second observation and its required delay. It uses the same 0.5-second attempt duration, sufficient remaining key time, and a successful fourth attempt. These additional times are derived from the supplied rules, not observed network measurements.</p>
+        <div class="notice">
+          <p><strong>A calculated next start is still conditional.</strong> Stop if the budget is exhausted or the required wait reaches or passes the conservative expiry time. A pending asynchronous operation goes to reconciliation instead of an immediate new booking dispatch.</p>
+        </div>
+        <p>Real systems must account for variable latency, clock uncertainty, cancellation, and often jitter. Those considerations can change a real schedule. They are not hidden extra terms in this fixed teaching example.</p>
+        <details class="question">
+          <summary>Check your reasoning: the app restarts after attempt 3. How many automatic attempts remain?</summary>
+          <div class="detail-body"><p>At most one: attempt 4. The persisted count still includes the first three dispatches. That last attempt is allowed only if the observation is retryable and the time limit still permits it. A restart supplies neither a new budget nor a new identity.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="expiry">
+      <div class="prose">
+        <p class="section-no">05 / The retention boundary</p>
+        <h2 id="expiry" tabindex="-1">The server and client start their 24-hour clocks at different moments</h2>
+        <p class="rule-ref">Source rules <a href="#r04">R04</a>, <a href="#r09">R09</a>, <a href="#r15">R15</a></p>
+        <p>The server keeps the key’s binding and final outcome for <strong>24 hours from the first accepted request</strong>. Concurrent requests with that same key are serialized: they are handled in an order that allows at most one reservation to commit. Later accepted attempts receive the stored outcome; an operation still processing may return <code>202 PENDING</code>.</p>
+        <p>The client uses an earlier, conservative boundary: <strong>24 hours after local key creation</strong>. It stops automatic retries then, even if the server first accepted the request later.</p>
+      </div>
+      <figure aria-labelledby="clocks-caption">
+        <div class="expiry-strip">
+          <div><h3>Client’s safety clock</h3><p><strong>Starts:</strong> key creation in the local ledger.</p><p><strong>Stops automatic retries:</strong> creation time + 24 hours.</p></div>
+          <div><h3>Server’s retention clock</h3><p><strong>Starts:</strong> first accepted request.</p><p><strong>Retains:</strong> key binding and final outcome for 24 hours from acceptance.</p></div>
+        </div>
+        <figcaption id="clocks-caption">The client’s earlier clock avoids relying on extra time from a possibly later first acceptance. This is bounded duplicate-creation protection, not an eternal exactly-once guarantee.</figcaption>
+      </figure>
+      <div class="prose">
+        <h3>Calculate the stop boundary from the supplied record</h3>
+        <p>The key was created at <code>2026-10-01T10:00:00Z</code>. Its conservative client cutoff is therefore <strong><code>2026-10-02T10:00:00Z</code></strong>. The <code>Z</code> marks UTC. The material does not give the server’s first acceptance timestamp, so there is no basis for replacing this with a later cutoff.</p>
+        <div class="calculation">
+          <p class="equation"><strong>Expiry</strong> = local key creation time + 24 hours</p>
+          <p class="equation"><strong>Required next start</strong> = previous finish + required wait</p>
+          <p><strong>If required next start ≥ expiry:</strong> stop automatic dispatch and reconcile. Equality is already outside the retry policy.</p>
+        </div>
+        <h3>The exact edge matters</h3>
+        <p>As a derived boundary example, suppose attempt 2 finishes at <code>09:59:54Z</code> on October 2 with <code>Retry-After: 6</code>. The required 6-second wait ends at <code>10:00:00Z</code>, exactly the cutoff. <strong>Do not send attempt 3.</strong> A finish one second later would pass the cutoff and also stop. A finish one second earlier would place the next start at <code>09:59:59Z</code>, inside the time gate, but the other retry conditions must still hold.</p>
+        <div class="notice">
+          <p><strong>Expiry does not establish failure.</strong> The server may discard its key cache after retention. Even retrying the <em>old</em> key could then create a duplicate durable effect. Pause dispatch and resolve the original intention before any explicit new one.</p>
+        </div>
+        <p>The cutoff limits when the client sends more requests. It cannot undo a reservation already committed or make an uncertain record suddenly certain.</p>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="callbacks">
+      <div class="prose">
+        <p class="section-no">06 / Another delivery channel</p>
+        <h2 id="callbacks" tabindex="-1">A callback can repeat a fact you already know</h2>
+        <p class="rule-ref">Source rules <a href="#r06">R06</a>, <a href="#r11">R11</a>, <a href="#r13">R13</a></p>
+        <p>A <strong>callback</strong> is a later message sent to the receiver about a reservation. It may arrive after an HTTP response, instead of a response the client saw, or more than once. Delivery can duplicate even when creation happened only once.</p>
+        <dl class="terms">
+          <div class="term"><dt><code>eventId</code></dt><dd>Identifies the event. A redelivery repeats this same identifier.</dd></div>
+          <div class="term"><dt><code>reservationId</code></dt><dd>Identifies the durable booking whose state is being described.</dd></div>
+          <div class="term"><dt><code>intentionId</code></dt><dd>Connects the event to the original booking intention.</dd></div>
+          <div class="term"><dt><code>revision</code></dt><dd>An integer used to order state for this reservation. It is not a global clock.</dd></div>
+        </dl>
+        <h3>Trust first, interpret second, acknowledge after saving</h3>
+        <ol class="flow-stack">
+          <li><span class="step-number" aria-hidden="true">1</span><div><h3>Check authenticity and binding</h3><p>The callback must pass the contract’s signature check and intention-to-reservation binding check before entering the event flow. Plausible IDs and neatly formatted JSON are not authentication. A different intention must not replace the original record.</p></div></li>
+          <li><span class="step-number" aria-hidden="true">2</span><div><h3>Check event identity and reservation revision</h3><p>Recognize processed event IDs, compare the revision for this reservation, and reconcile conflicts or missing history when required. The next section works through those decisions.</p></div></li>
+          <li><span class="step-number" aria-hidden="true">3</span><div><h3>Save the receiver’s decision durably</h3><p>Record processed event IDs and reservation revisions in the receiver’s ledger. The event’s effect must survive a restart.</p></div></li>
+          <li><span class="step-number" aria-hidden="true">4</span><div><h3>Acknowledge only after the ledger update succeeds</h3><p>If saving fails, do not report successful processing. The sender may deliver the event again, and the receiver must remain able to handle that repeat.</p></div></li>
+        </ol>
+        <p class="supporting">This sequence describes prerequisites for successful processing. A failed authenticity check does not advance into event interpretation; unresolved evidence requires reconciliation rather than an invented state transition.</p>
+        <div class="notice">
+          <p><strong>This is a contract explanation, not an authentication implementation.</strong> The material supplies no actual secret or signature algorithm. The formatted example records below do not establish that any real callback passed authentication.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="revisions">
+      <div class="prose">
+        <p class="section-no">07 / State over time</p>
+        <h2 id="revisions" tabindex="-1">A later delivery can contain an older fact</h2>
+        <p class="rule-ref">Source rules <a href="#r11">R11</a>–<a href="#r13">R13</a></p>
+        <p>Deduplicating event IDs solves one problem: the same event arriving twice. It does not solve a different event identifier carrying older reservation state. For that, compare <strong>revisions within the same reservation</strong>.</p>
+        <p>The four supplied deliveries all concern reservation <code>res_lantern_C07_C08_7001</code> and Mina’s original intention. To follow the state changes below, assume each delivery first passes the required authenticity and binding checks and the necessary ledger updates succeed.</p>
+      </div>
+      <figure aria-labelledby="event-caption">
+        <ol class="event-log">
+          <li><span class="step-number" aria-hidden="true">1</span><div><h3>Created · revision 1</h3><p><code>evt_created_7001</code><br><code>reservation.created</code></p><p>Record this event and the reservation’s created state.</p></div><div class="event-result"><strong>Stored: created</strong>Revision 1</div></li>
+          <li><span class="step-number" aria-hidden="true">2</span><div><h3>The same event again · revision 1</h3><p><code>evt_created_7001</code><br><code>reservation.created</code></p><p>The event ID is already processed. This redelivery does not create a second local booking.</p></div><div class="event-result"><strong>Still: created</strong>Revision 1</div></li>
+          <li><span class="step-number" aria-hidden="true">3</span><div><h3>Cancelled · revision 2</h3><p><code>evt_cancelled_7002</code><br><code>reservation.cancelled</code></p><p>This is the newer state for the same reservation. Save the cancellation and revision 2.</p></div><div class="event-result"><strong>Stored: cancelled</strong>Revision 2</div></li>
+          <li><span class="step-number" aria-hidden="true">4</span><div><h3>A different event ID, but revision 1</h3><p><code>evt_created_late_copy_7003</code><br><code>reservation.created</code></p><p>The ID is new, but its revision is older than the stored revision 2. It cannot overwrite the cancellation.</p></div><div class="event-result"><strong>Still: cancelled</strong>Revision 2</div></li>
+        </ol>
+        <figcaption id="event-caption">The fourth message is an old fact delivered late. It does not restore cancelled seats. Comparing event IDs alone would miss this case; comparing arrival order would also give the wrong answer. The <a href="#event-example">complete original JSON delivery log</a> is retained below.</figcaption>
+      </figure>
+      <div class="prose">
+        <h3>The edge cases around a revision</h3>
+        <dl class="boundary-list">
+          <div><dt>Lower revision</dt><dd>It cannot overwrite newer stored state for that reservation, even if it arrived later or uses a previously unseen event ID.</dd></div>
+          <div><dt>Same revision, conflicting state</dt><dd>This is an inconsistency. Reconcile it; do not let the last arrival win.</dd></div>
+          <div><dt>A gap in revisions</dt><dd>Events may be missing. Obtain current authoritative status before applying a transition that depends on the missing history. A larger number alone does not supply that history.</dd></div>
+          <div><dt>A timestamp</dt><dd>A timestamp alone cannot safely order the local outcome. Use the contract’s revision rules and reconcile where they require it.</dd></div>
+          <div><dt>A different reservation</dt><dd>Revision numbers across separate reservations are not globally comparable. Revision 8 on one reservation does not order an event at revision 2 on another.</dd></div>
+        </dl>
+        <details class="question">
+          <summary>Check your reasoning: why isn’t delivery 4 a harmless duplicate that the event-ID check will catch?</summary>
+          <div class="detail-body"><p>Its event ID, <code>evt_created_late_copy_7003</code>, differs from the first event’s ID. The event-ID check alone cannot classify it as that same redelivery. The revision check shows its state is stale: revision 1 cannot replace stored revision 2.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="reconcile">
+      <div class="prose">
+        <p class="section-no">08 / When sending stops</p>
+        <h2 id="reconcile" tabindex="-1">Exhausting the budget does not settle the booking</h2>
+        <p class="rule-ref">Source rules <a href="#r14">R14</a>–<a href="#r15">R15</a></p>
+        <p>If attempt 4 ends with an unknown result, the intention remains <code>UNKNOWN</code>. The app must not relabel it <code>FAILED</code> simply because it has no retries left. “No more automatic requests” describes the client’s policy; it does not describe the server’s reservation record.</p>
+        <h3>Reconciliation means checking the authoritative record</h3>
+        <ol class="flow-stack">
+          <li><span class="step-number" aria-hidden="true">1</span><div><h3>Keep the original identity</h3><p>Preserve the intention, exact body, key, timestamps, attempt count, and received evidence. Do not generate a fresh key as a way out of uncertainty.</p></div></li>
+          <li><span class="step-number" aria-hidden="true">2</span><div><h3>Read authoritative status</h3><p>Use the contract’s read-only status reconciliation with the original intention and key. This asks what happened; it does not dispatch another booking.</p></div></li>
+          <li><span class="step-number" aria-hidden="true">3</span><div><h3>If the answer is still unknown, involve a person</h3><p>Keep the unresolved state and investigate. Do not claim a reservation definitely exists, release a local promise of seats as though failure were proven, or start an explicit new intention before resolving the old one.</p></div></li>
+        </ol>
+        <p class="supporting">The hypothetical contract supplies an authoritative status mechanism but no real endpoint. This guide does not invent a URL, polling schedule, guaranteed response time, or working service for it.</p>
+        <div class="notice good">
+          <p><strong>Example reader-facing status:</strong> “We could not confirm whether your seats were reserved. Automatic attempts have stopped. We are checking the original request before starting another booking.”</p>
+          <p class="micro">This is illustrative wording. It keeps the uncertainty visible and does not claim confirmation or failure.</p>
+        </div>
+        <h3>Closing the waiting screen does not cancel the reservation</h3>
+      </div>
+      <div class="case-pair">
+        <div><h3>Local cancellation</h3><p>The user cancels the waiting screen. The client stops its local retries.</p><p class="result">The server’s possible reservation is still unresolved.</p></div>
+        <div><h3>Confirmed server-side cancellation</h3><p>A distinct server operation confirms the reservation is cancelled.</p><p class="result">That operation is outside this retry policy.</p></div>
+      </div>
+      <div class="prose">
+        <p>The cancellation in the callback log is a reported reservation fact. It is not evidence that closing a screen performs that operation. Likewise, waiting for a key to expire does not cancel anything.</p>
+        <details class="question">
+          <summary>Check your reasoning: the fourth attempt timed out and the user closed the screen. Can the app mark the reservation failed?</summary>
+          <div class="detail-body"><p>No. Both events stop further local activity, but neither proves the server failed to reserve the seats. Preserve <code>UNKNOWN</code>, reconcile using the original intention and key, and involve a person if the result remains unknown.</p></div>
+        </details>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="boundaries">
+      <div class="prose">
+        <p class="section-no">09 / The useful guarantee</p>
+        <h2 id="boundaries" tabindex="-1">The protection is precise—and limited</h2>
+        <p class="rule-ref">Source rule <a href="#r16">R16</a>, supported by <a href="#r03">R03</a>–<a href="#r04">R04</a></p>
+        <div class="central-answer" style="margin-top:0">
+          <p><strong>One accepted key, within retention, protects one exact body from duplicate reservation creation.</strong></p>
+        </div>
+        <p style="margin-top:1.5rem">Each part matters. “One key” limits the identity covered. “Exact body” limits the request covered. “Within retention” limits the duration. And protecting against duplicates still does not promise that a reservation will succeed.</p>
+        <dl class="boundary-list">
+          <div><dt>No global exactly-once delivery</dt><dd>Responses and callbacks can repeat. One reservation can generate several deliveries of evidence.</dd></div>
+          <div><dt>No universal protection across fresh keys</dt><dd>New keys do not share this one-key guarantee. An unresolved intention is not permission to create another identity.</dd></div>
+          <div><dt>No guarantee of available seats</dt><dd>Duplicate-creation protection does not promise that C07 and C08 can be allocated.</dd></div>
+          <div><dt>No deadline for human resolution</dt><dd>The retry schedule is bounded; how quickly a person can settle an unknown outcome is not bounded by these rules.</dd></div>
+        </dl>
+        <h3>Use three questions to keep the reasoning straight</h3>
+        <ol class="reasoning-steps">
+          <li><strong>Which identity does this evidence belong to?</strong>Match the intention, exact request, key, reservation, and—where relevant—event ID.</li>
+          <li><strong>What does it actually establish?</strong>Distinguish committed state, acknowledged processing, attempt-specific rejection, and an unknown effect.</li>
+          <li><strong>What action is still allowed?</strong>Apply the response rule, persisted attempt budget, conservative time cutoff, and revision or reconciliation requirements together.</li>
+        </ol>
+        <p>The safest useful result can be an honest unresolved status with the original records preserved. Good retry handling tracks identity and evidence as carefully as it counts seconds.</p>
+      </div>
+    </section>
+
+    <section class="chapter" aria-labelledby="source-notes">
+      <div class="prose">
+        <p class="section-no">Source / Exact examples</p>
+        <h2 id="source-notes" tabindex="-1">What this guide is based on</h2>
+        <p>The factual source for this explanation is the supplied <cite>material.md — The Lantern ticket desk: responses, effects, and uncertain bookings</cite>, rules R01–R16. It is a hypothetical contract. No external sources, real provider behavior, or live service results are claimed.</p>
+        <p>The nine-second baseline and four-event delivery sequence come from that material. The 13-second rate-limit variant, equal/zero-delay comparisons, next-day expiry calculation, and near-expiry examples are teaching derivations from its stated rules. The exact JSON examples below retain the supplied records.</p>
+        <p>Terms such as “ticket desk” and “claim ticket” help explain the system’s roles. They do not add any guarantee beyond the supplied contract. The ledger is part of the scenario, not a request to build storage or a service.</p>
+        <h3>Find any source rule</h3>
+        <ol class="source-map">
+          <li id="r01"><strong>R01</strong> · <a href="#identity">Intention, attempt, reservation</a></li>
+          <li id="r02"><strong>R02</strong> · <a href="#identity">Ledger before dispatch and restart</a></li>
+          <li id="r03"><strong>R03</strong> · <a href="#identity">Exact bytes and identity conflicts</a></li>
+          <li id="r04"><strong>R04</strong> · <a href="#expiry">Retention, concurrency, pending work</a></li>
+          <li id="r05"><strong>R05</strong> · <a href="#uncertainty">Timeout leaves an unknown result</a></li>
+          <li id="r06"><strong>R06</strong> · <a href="#uncertainty">Durable effect and repeat evidence</a></li>
+          <li id="r07"><strong>R07</strong> · <a href="#responses">Defined negative responses</a></li>
+          <li id="r08"><strong>R08</strong> · <a href="#retry-clock">Four attempts, durable counting</a></li>
+          <li id="r09"><strong>R09</strong> · <a href="#retry-clock">Rate limits and the longer wait</a></li>
+          <li id="r10"><strong>R10</strong> · <a href="#retry-clock">Exact schedule and assumptions</a></li>
+          <li id="r11"><strong>R11</strong> · <a href="#callbacks">Events, saving, acknowledgment</a></li>
+          <li id="r12"><strong>R12</strong> · <a href="#revisions">Revisions and delivery order</a></li>
+          <li id="r13"><strong>R13</strong> · <a href="#callbacks">Authenticity and identity binding</a></li>
+          <li id="r14"><strong>R14</strong> · <a href="#reconcile">Exhaustion and reconciliation</a></li>
+          <li id="r15"><strong>R15</strong> · <a href="#expiry">Expiry</a> and <a href="#reconcile">local cancellation</a></li>
+          <li id="r16"><strong>R16</strong> · <a href="#boundaries">Narrow guarantee and its limits</a></li>
+        </ol>
+        <details id="ledger-example">
+          <summary>Complete example: the saved intention ledger</summary>
+          <div class="detail-body">
+            <p>The <code>bodyUtf8</code> field contains the exact request text. Backslashes below are JSON’s way of representing quote characters inside a string. Retry the saved body bytes; do not reconstruct a visually similar object with a different property order.</p>
+            <pre><code>{
+  &quot;intentionId&quot;: &quot;intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042&quot;,
+  &quot;idempotencyKey&quot;: &quot;idem_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042&quot;,
+  &quot;bodyUtf8&quot;: &quot;{\&quot;performanceId\&quot;:\&quot;lantern-autumn-matinee-2026-10-17\&quot;,\&quot;seatIds\&quot;:[\&quot;C07\&quot;,\&quot;C08\&quot;],\&quot;attendeeName\&quot;:\&quot;Mina Patel\&quot;}&quot;,
+  &quot;keyCreatedAt&quot;: &quot;2026-10-01T10:00:00Z&quot;
+}</code></pre>
+          </div>
+        </details>
+        <details id="event-example">
+          <summary>Complete example: all four callback deliveries</summary>
+          <div class="detail-body">
+            <p>All four refer to the same intention and reservation. Deliveries 1 and 2 share an event ID. Delivery 4 has a different ID but an older revision than delivery 3.</p>
+            <pre><code>[
+  {&quot;delivery&quot;:1,&quot;eventId&quot;:&quot;evt_created_7001&quot;,&quot;reservationId&quot;:&quot;res_lantern_C07_C08_7001&quot;,&quot;intentionId&quot;:&quot;intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042&quot;,&quot;revision&quot;:1,&quot;type&quot;:&quot;reservation.created&quot;},
+  {&quot;delivery&quot;:2,&quot;eventId&quot;:&quot;evt_created_7001&quot;,&quot;reservationId&quot;:&quot;res_lantern_C07_C08_7001&quot;,&quot;intentionId&quot;:&quot;intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042&quot;,&quot;revision&quot;:1,&quot;type&quot;:&quot;reservation.created&quot;},
+  {&quot;delivery&quot;:3,&quot;eventId&quot;:&quot;evt_cancelled_7002&quot;,&quot;reservationId&quot;:&quot;res_lantern_C07_C08_7001&quot;,&quot;intentionId&quot;:&quot;intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042&quot;,&quot;revision&quot;:2,&quot;type&quot;:&quot;reservation.cancelled&quot;},
+  {&quot;delivery&quot;:4,&quot;eventId&quot;:&quot;evt_created_late_copy_7003&quot;,&quot;reservationId&quot;:&quot;res_lantern_C07_C08_7001&quot;,&quot;intentionId&quot;:&quot;intent_lantern_autumn_matinee_20261017_balcony_row_C_seats_07_08_family_group_000042&quot;,&quot;revision&quot;:1,&quot;type&quot;:&quot;reservation.created&quot;}
+]</code></pre>
+          </div>
+        </details>
+      </div>
+    </section>
+  </article>
+</main>
+<footer class="page-footer">
+  <div class="footer-inner">
+    <p>The Lantern guide · AhaFold<br>A complete offline reading page. All explanations, diagrams, tables, and expandable examples are text and HTML; no images or JavaScript are required.</p>
+    <a class="return-link" href="#contents">Return to the contents</a>
+  </div>
+</footer>
+</body>
+</html>

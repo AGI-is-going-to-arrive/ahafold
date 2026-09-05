@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>任务都不慢，队伍怎么越排越长？ — AhaFold 长篇模板</title>
+  <meta name="description" content="通过一台共享打印机的六份任务，逐步解释到达、等待与处理时间，核对数字，并比较不同改法的边界。AhaFold 原创、可编辑的离线长篇模板。">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --apricot-ink: #725010;
+      --teal: #2a8c82;
+      --teal-ink: #17665e;
+      --teal-wash: #eff7f5;
+      --line: #d9dfdd;
+      --soft: #f6f8f7;
+      --page-width: 79rem;
+      --reading-width: 42rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: 100%;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-block-start: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    a { color: var(--teal-ink); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    [id] { scroll-margin-block-start: 1.5rem; }
+    p, li, dd, th, td, figcaption, h1, h2, h3 { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.25rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { color: var(--ink); line-height: 1.35; text-wrap: balance; }
+    h1 { max-width: 18ch; margin: 0; font-size: 3.25rem; font-weight: 750; letter-spacing: -0.03em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.875rem; font-weight: 700; letter-spacing: -0.02em; }
+    h3 { margin: 2rem 0 0.75rem; font-size: 1.25rem; font-weight: 650; }
+    strong { font-weight: 650; }
+    ul, ol { margin-block: 1rem 1.5rem; padding-inline-start: 1.5rem; }
+    li + li { margin-top: 0.75rem; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: 1rem; color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    svg { display: block; }
+    svg text { fill: var(--ink); font-family: inherit; font-size: 18px; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 1em; }
+    a, summary { -webkit-tap-highlight-color: #f4c96b66; }
+    details { border-block: 1px solid var(--line); }
+    summary { min-height: 2.75rem; padding-block: 1rem; color: var(--teal-ink); font-weight: 650; cursor: pointer; }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+    summary::marker { color: var(--teal-ink); }
+    .detail-body { padding-block: 0.25rem 1.5rem; }
+    .detail-body > :first-child { margin-top: 0; }
+
+    .skip-link { position: absolute; inset: 0.75rem auto auto 1rem; z-index: 3; padding: 0.5rem 1rem; background: var(--paper); transform: translateY(-200%); }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, .page-layout, .page-footer { width: min(calc(100% - 5rem), var(--page-width)); margin-inline: auto; }
+    .page-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; padding-block: 1.75rem 1.25rem; border-bottom: 1px solid var(--line); }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 1rem; }
+    .page-layout { display: grid; grid-template-columns: 12rem minmax(0, 1fr); column-gap: 4rem; align-items: start; }
+    .page-layout > * { min-width: 0; }
+    .introduction { grid-column: 2; padding-block: 4rem 3.5rem; }
+    .lead { max-width: var(--reading-width); margin-top: 1.75rem; font-size: 1.25rem; line-height: 1.8; }
+    .template-note { max-width: var(--reading-width); margin-top: 1.25rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    .central-answer { max-width: var(--reading-width); margin-top: 2rem; padding: 1.25rem 1.5rem; background: var(--apricot-wash); border: 1px solid var(--apricot); border-radius: 12px; }
+    .contents { position: sticky; top: 1.5rem; grid-column: 1; grid-row: 1 / span 2; max-height: calc(100dvh - 3rem); margin-top: 4rem; overflow-y: auto; scrollbar-color: var(--teal) var(--soft); scrollbar-width: thin; }
+    .contents details { border-bottom: 0; }
+    .contents summary { padding-block: 1rem; color: var(--ink); font-size: 1.125rem; }
+    .contents ul { margin: 0; padding: 0 0 0.75rem; list-style: none; }
+    .contents li + li { margin-top: 0; }
+    .contents a { display: block; min-height: 2.75rem; padding: 0.5rem 0.375rem; color: var(--muted); font-size: 1rem; line-height: 1.6; text-decoration: none; }
+    .contents a:hover, .contents a:focus-visible { color: var(--teal-ink); text-decoration: underline; background: var(--teal-wash); }
+    .reading-body { grid-column: 2; min-width: 0; }
+    .chapter { padding-block: 3rem; border-top: 1px solid var(--line); }
+    .prose { max-width: var(--reading-width); }
+    .section-lead { color: var(--muted); }
+    .supporting { color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    .terms { margin: 1.75rem 0; }
+    .term { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1.25rem; border-bottom: 1px solid var(--line); }
+    .term:first-child { border-top: 1px solid var(--line); }
+    .term dt { font-weight: 650; }
+    .term dd { margin: 0; }
+    .process-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; margin: 0; padding-inline-start: 1.5rem; }
+    .process-flow li { min-width: 0; margin: 0; padding-inline-start: 0.25rem; }
+    .process-flow li::marker { color: var(--teal-ink); font-weight: 650; }
+    .process-flow h3 { margin: 0 0 0.5rem; font-size: 1.125rem; }
+    .process-flow p { font-size: 1rem; line-height: 1.75; }
+    .assumptions { padding: 1.25rem 1.5rem; background: var(--soft); }
+    .assumptions p { margin: 0; }
+    .assumptions ul { margin-bottom: 0; }
+    .legend { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin-block: 0 0.75rem; font-size: 1rem; }
+    .legend span { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .legend-mark { display: inline-block; width: 1.5rem; height: 0.75rem; flex: 0 0 auto; }
+    .legend-mark.wait { background: var(--apricot-wash); border: 2px dashed var(--apricot-ink); }
+    .legend-mark.work { background: var(--teal-ink); border: 2px solid var(--teal-ink); }
+    .scroll-region { max-width: 100%; overflow: auto; overscroll-behavior-inline: contain; scrollbar-color: var(--teal) var(--soft); scrollbar-width: auto; }
+    .timeline { width: 100%; min-width: 46rem; height: auto; }
+    .timeline .grid-line { stroke: var(--line); stroke-width: 1; }
+    .timeline .wait { fill: var(--apricot-wash); stroke: var(--apricot-ink); stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .timeline .work { fill: var(--teal-ink); }
+    .timeline .arrival { fill: var(--ink); }
+    .timeline .axis-label { fill: var(--muted); }
+    table { width: 100%; border-collapse: collapse; font-size: 1.125rem; font-variant-numeric: tabular-nums; line-height: 1.65; }
+    caption { padding-block: 0 0.75rem; text-align: left; font-weight: 650; }
+    th, td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    thead { background: var(--soft); }
+    th { font-weight: 650; }
+    .numbers-table { min-width: 35rem; }
+    .numbers-table td:not(:first-child), .numbers-table th:not(:first-child) { text-align: right; }
+    .numbers-table tbody tr:last-child { background: var(--apricot-wash); }
+    .comparison-table { min-width: 44rem; }
+    .comparison-table th:first-child { width: 24%; }
+    .comparison-table td:last-child { min-width: 17rem; }
+    .comparison-table td:nth-child(2), .comparison-table td:nth-child(3) { white-space: nowrap; }
+    .calculation { margin-block: 1.75rem; padding: 1.25rem 1.5rem; background: var(--teal-wash); }
+    .calculation p + p { margin-top: 0.75rem; }
+    .equation { font-variant-numeric: tabular-nums; }
+    .reasoning-steps { padding-inline-start: 1.75rem; }
+    .reasoning-steps li { padding-inline-start: 0.375rem; }
+    .reasoning-steps li::marker { color: var(--teal-ink); font-weight: 650; }
+    .reasoning-steps strong { display: block; margin-bottom: 0.25rem; }
+    .case-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-block: 2rem; }
+    .case-pair > div { min-width: 0; padding-block: 1.25rem; border-block: 1px solid var(--line); }
+    .case-pair h3 { margin-top: 0; }
+    .case-pair .result { color: var(--teal-ink); font-weight: 650; }
+    .exceptions { margin-block: 1.75rem 0; }
+    .exception { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1.5rem; border-top: 1px solid var(--line); }
+    .exception dt { font-weight: 650; }
+    .exception dd { margin: 0; }
+    .exceptions .exception:last-child { padding-bottom: 0; }
+    .source-notes { padding-inline-start: 1.5rem; }
+    .source-notes li::marker { color: var(--teal-ink); }
+    .page-footer { padding-block: 1.75rem 3rem; border-top: 1px solid var(--line); }
+    .footer-inner { margin-inline-start: 16rem; max-width: var(--reading-width); }
+    .page-footer p { color: var(--muted); font-size: 1rem; }
+    .return-link { display: inline-block; min-height: 2.75rem; padding-block: 0.375rem; }
+
+    @media (max-width: 67rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 3rem); }
+      .page-layout { grid-template-columns: 10.5rem minmax(0, 1fr); column-gap: 2.5rem; }
+      .process-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; }
+      .footer-inner { margin-inline-start: 13rem; }
+    }
+    @media (max-width: 55rem) {
+      .page-layout { display: block; }
+      .introduction { padding-block: 3rem 2.5rem; }
+      h1 { font-size: 2.75rem; }
+      .contents { position: static; max-height: none; max-width: var(--reading-width); margin: 0 0 2.5rem; overflow: visible; }
+      .contents ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; }
+      .contents details { border-bottom: 1px solid var(--line); }
+      .contents summary { padding-block: 0.875rem; }
+      .contents a { padding-block: 0.625rem; }
+      .footer-inner { margin-inline-start: 0; }
+    }
+    @media (max-width: 36rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 2.5rem); }
+      .page-header { padding-top: 1.25rem; }
+      .introduction { padding-block: 2.5rem 2rem; }
+      h1 { font-size: 2.125rem; letter-spacing: -0.025em; }
+      h2 { font-size: 1.5rem; }
+      .lead { font-size: 1.125rem; }
+      .central-answer, .assumptions, .calculation { padding: 1rem 1.125rem; }
+      .contents ul, .case-pair { grid-template-columns: minmax(0, 1fr); }
+      .case-pair { gap: 0; }
+      .case-pair > div + div { border-top: 0; }
+      .chapter { padding-block: 2.5rem; }
+      .term, .exception { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+      .process-flow { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+      .process-flow p { font-size: 1.125rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    @media print {
+      @page { margin: 16mm; }
+      :root { font-size: 11pt; }
+      body { font-size: 1rem; line-height: 1.65; }
+      .page-header, .page-layout, .page-footer { width: 100%; }
+      .page-layout { display: block; }
+      .skip-link, .contents, .return-link { display: none; }
+      .introduction { padding-block: 1.5rem 2rem; }
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 1.6rem; }
+      h2, h3 { break-after: avoid; }
+      .chapter { padding-block: 1.5rem; }
+      .prose, .lead, .central-answer, .template-note { max-width: none; }
+      .scroll-region { overflow: visible; }
+      .timeline, .numbers-table, .comparison-table { min-width: 0; }
+      .timeline { break-inside: avoid; }
+      .timeline text { font-size: 20px; }
+      table { font-size: 0.875rem; }
+      th, td { padding: 0.5rem; }
+      .comparison-table td:last-child { min-width: 0; }
+      .comparison-table td:nth-child(2), .comparison-table td:nth-child(3) { white-space: normal; }
+      thead { display: table-header-group; }
+      tr, .term, .exception, .calculation { break-inside: avoid; }
+      details > * { display: block; }
+      details::details-content { display: block; content-visibility: visible; }
+      summary { list-style: none; }
+      summary::-webkit-details-marker { display: none; }
+      .footer-inner { margin-inline-start: 0; }
+      a { color: inherit; }
+      .supporting, figcaption { font-size: 0.875rem; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Original long-form starter, with filled, explicitly hypothetical content.
+       EDIT: Replace the question, argument, calculations and sources together.
+       Keep only representations that explain the new topic. An image, character,
+       table or interaction is never mandatory. This page generates no artwork.
+       Native anchors and disclosures work offline without JavaScript. -->
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。</p>
+  </header>
+
+  <main id="main" class="page-layout" tabindex="-1" aria-labelledby="page-title">
+    <header class="introduction">
+      <h1 id="page-title">任务都不慢，<br>队伍怎么越排越长？</h1>
+      <p class="lead">一份文件只打印 3 分钟，为什么第六个人要等 5 分钟才能开始？沿着一台共享打印机的六份任务，分开到达、等待与处理，看看哪些改法真的省时间。</p>
+      <div class="central-answer">
+        <p><strong>等待会累积，因为新任务到来的间隔，比机器完成一份任务的时间更短。</strong>单份任务没有变慢，后来的任务仍会排得更久。</p>
+      </div>
+      <p class="template-note">这是 AhaFold 的原创长篇 HTML 模板，以假设场景展示完整推理。它不是实测报告，也没有生成插画。所有数字和限制都在正文中展开。</p>
+    </header>
+
+    <nav id="contents" class="contents" aria-label="本页目录" tabindex="-1">
+      <details open>
+        <summary>本页目录</summary>
+        <ul>
+          <li><a href="#three-times">分清三种时间</a></li>
+          <li><a href="#six-jobs">沿着六份任务走一遍</a></li>
+          <li><a href="#check-numbers">逐项核对数字</a></li>
+          <li><a href="#why-it-grows">为什么会越等越久</a></li>
+          <li><a href="#compare-changes">比较四种安排</a></li>
+          <li><a href="#exceptions">例外怎样改变结论</a></li>
+          <li><a href="#take-it-with-you">把判断方法带走</a></li>
+          <li><a href="#sources">假设、来源与边界</a></li>
+        </ul>
+      </details>
+    </nav>
+
+    <article class="reading-body" aria-label="排队问题的完整解释">
+      <section class="chapter" aria-labelledby="three-times">
+        <div class="prose">
+          <h2 id="three-times" tabindex="-1">先分清：等了多久，和做了多久</h2>
+          <p>“这份任务用了 8 分钟”可以指两件很不一样的事：机器持续工作了 8 分钟，或者任务从提交到完成总共经历了 8 分钟。只有后者包含排队。</p>
+          <dl class="terms">
+            <div class="term"><dt>等待时间</dt><dd>从提交到开始打印。机器还在处理前面的任务时，这个计时器已经在走。</dd></div>
+            <div class="term"><dt>处理时间</dt><dd>从开始打印到打印完成。本例固定为 3 分钟，不包括排队。</dd></div>
+            <div class="term"><dt>总历时</dt><dd>从提交到打印完成。在本例只有等待和打印两个阶段，因此总历时等于两者之和。</dd></div>
+          </dl>
+          <p>先确定计时的起点和终点，才能比较“更快”。把提交推迟到机器空闲，可能让系统显示零等待；如果人在提交前已经准备好了，这段等待只是发生在系统外面。</p>
+        </div>
+        <figure aria-labelledby="process-caption">
+          <ol class="process-flow">
+            <li><h3>提交</h3><p>任务进入系统，记下到达时刻。</p></li>
+            <li><h3>等待</h3><p>按先来先服务排队；机器空闲时，这一步可为 0。</p></li>
+            <li><h3>打印</h3><p>轮到本任务后，独占机器 3 分钟。</p></li>
+            <li><h3>完成</h3><p>机器释放，下一份已到达的任务才能开始。</p></li>
+          </ol>
+          <figcaption id="process-caption">这是任务的先后关系。不同任务可以同时处于“等待”和“打印”阶段；一台机器同一时刻只打印一份。</figcaption>
+        </figure>
+      </section>
+
+      <section class="chapter" aria-labelledby="six-jobs">
+        <div class="prose">
+          <h2 id="six-jobs" tabindex="-1">沿着六份任务，走完同一条时间线</h2>
+          <p class="section-lead">以下是人为设定的可复算例子，不是某款打印机的性能数据。时刻以第一份提交为第 0 分钟。</p>
+          <div class="assumptions">
+            <p><strong>先把条件固定。</strong></p>
+            <ul>
+              <li>只有一台机器，开始时空闲，按先来先服务处理。</li>
+              <li>A 至 F 每隔 2 分钟提交一份；每份打印恰好需要 3 分钟。</li>
+              <li>没有故障、取消、抢占或切换耗时，也没有准备、传输和取件耗时。</li>
+            </ul>
+          </div>
+          <p style="margin-top: 1.5rem">A 到达时可以立即开始。B 在第 2 分钟到达，但 A 要到第 3 分钟才完成，所以 B 等 1 分钟。C 到达时，B 还没开始多久，它要等到第 6 分钟。</p>
+        </div>
+
+        <figure>
+          <div class="legend" aria-label="时间线图例">
+            <span><i class="legend-mark wait" aria-hidden="true"></i>虚线框：等待</span>
+            <span><i class="legend-mark work" aria-hidden="true"></i>实心块：打印</span>
+          </div>
+          <div class="scroll-region" role="region" tabindex="0" aria-label="六份任务的时间线，可横向滚动" aria-describedby="timeline-help timeline-caption">
+            <svg class="timeline" viewBox="0 0 780 354" role="img" aria-labelledby="timeline-title timeline-description">
+              <title id="timeline-title">从第 0 到第 18 分钟，六份任务依次完成</title>
+              <desc id="timeline-description">A 至 F 每隔 2 分钟到达，分别等待 0、1、2、3、4、5 分钟。虚线框表示等待，实心块表示每份固定 3 分钟的打印。下表列出全部时间。</desc>
+              <g aria-hidden="true">
+                <path class="grid-line" d="M140 22V302 M236 22V302 M332 22V302 M428 22V302 M524 22V302 M620 22V302 M716 22V302"></path>
+                <text x="28" y="56">任务 A</text><text x="28" y="100">任务 B</text><text x="28" y="144">任务 C</text><text x="28" y="188">任务 D</text><text x="28" y="232">任务 E</text><text x="28" y="276">任务 F</text>
+                <rect class="work" x="140" y="40" width="96" height="20" rx="2"></rect>
+                <rect class="wait" x="204" y="84" width="32" height="20" rx="2"></rect><rect class="work" x="236" y="84" width="96" height="20" rx="2"></rect>
+                <rect class="wait" x="268" y="128" width="64" height="20" rx="2"></rect><rect class="work" x="332" y="128" width="96" height="20" rx="2"></rect>
+                <rect class="wait" x="332" y="172" width="96" height="20" rx="2"></rect><rect class="work" x="428" y="172" width="96" height="20" rx="2"></rect>
+                <rect class="wait" x="396" y="216" width="128" height="20" rx="2"></rect><rect class="work" x="524" y="216" width="96" height="20" rx="2"></rect>
+                <rect class="wait" x="460" y="260" width="160" height="20" rx="2"></rect><rect class="work" x="620" y="260" width="96" height="20" rx="2"></rect>
+                <circle class="arrival" cx="140" cy="50" r="4"></circle><circle class="arrival" cx="204" cy="94" r="4"></circle><circle class="arrival" cx="268" cy="138" r="4"></circle><circle class="arrival" cx="332" cy="182" r="4"></circle><circle class="arrival" cx="396" cy="226" r="4"></circle><circle class="arrival" cx="460" cy="270" r="4"></circle>
+                <text class="axis-label" x="140" y="328" text-anchor="middle">0</text><text class="axis-label" x="236" y="328" text-anchor="middle">3</text><text class="axis-label" x="332" y="328" text-anchor="middle">6</text><text class="axis-label" x="428" y="328" text-anchor="middle">9</text><text class="axis-label" x="524" y="328" text-anchor="middle">12</text><text class="axis-label" x="620" y="328" text-anchor="middle">15</text><text class="axis-label" x="716" y="328" text-anchor="middle">18</text><text class="axis-label" x="28" y="328">分钟</text>
+              </g>
+            </svg>
+          </div>
+          <figcaption id="timeline-caption">打印块始终一样长，也从不重叠。变长的是前面的等待：A 不用等，F 已经需要等 5 分钟。</figcaption>
+          <p id="timeline-help" class="supporting">窄屏可横向滚动时间线；键盘聚焦图表后可用左右方向键。下面的表格提供相同数字。</p>
+        </figure>
+
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="jobs-caption" aria-describedby="jobs-help">
+          <table class="numbers-table">
+            <caption id="jobs-caption">六份任务的时间记录（单位：分钟）</caption>
+            <thead><tr><th scope="col">任务</th><th scope="col">提交时刻</th><th scope="col">开始时刻</th><th scope="col">完成时刻</th><th scope="col">等待时长</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">A</th><td>0</td><td>0</td><td>3</td><td>0</td></tr>
+              <tr><th scope="row">B</th><td>2</td><td>3</td><td>6</td><td>1</td></tr>
+              <tr><th scope="row">C</th><td>4</td><td>6</td><td>9</td><td>2</td></tr>
+              <tr><th scope="row">D</th><td>6</td><td>9</td><td>12</td><td>3</td></tr>
+              <tr><th scope="row">E</th><td>8</td><td>12</td><td>15</td><td>4</td></tr>
+              <tr><th scope="row">F</th><td>10</td><td>15</td><td>18</td><td>5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="jobs-help" class="supporting" style="margin-top: 0.75rem">“时刻”是时间线上的位置，“时长”是两次时刻之差。窄屏可横向滚动表格，列的对应关系保持不变。</p>
+      </section>
+
+      <section class="chapter" aria-labelledby="check-numbers">
+        <div class="prose">
+          <h2 id="check-numbers" tabindex="-1">用一条规则，核对每一个数字</h2>
+          <p>开始打印需要同时满足两件事：任务已经到了，前一份也已经结束。因此，取两个时刻中更晚的那个。</p>
+          <div class="calculation" aria-label="一台机器、先来先服务时的计算规则">
+            <p class="equation"><strong>开始时刻</strong> = max（到达时刻，前一份完成时刻）</p>
+            <p class="equation"><strong>完成时刻</strong> = 开始时刻 + 处理时长</p>
+            <p class="equation"><strong>等待时长</strong> = 开始时刻 − 到达时刻</p>
+          </div>
+          <p><code>max</code> 只表示“取较大值”。机器最初空闲，可把第一份任务前的完成时刻记作 0。这个计算顺序适用于本例的单机、不中断、先来先服务条件；换一种排队规则时，需要先改条件。</p>
+          <h3>以 D 为例</h3>
+          <ol class="reasoning-steps">
+            <li>D 在第 6 分钟到达；前一份 C 到第 9 分钟才完成。</li>
+            <li>因此 D 在第 9 分钟开始，第 12 分钟完成。</li>
+            <li>等待为 9 − 6 = <strong style="display: inline">3 分钟</strong>；总历时为 12 − 6 = <strong style="display: inline">6 分钟</strong>。</li>
+          </ol>
+          <p>同样，F 的总历时是 18 − 10 = <strong>8 分钟</strong>，其中 5 分钟等待、3 分钟打印。说“F 打印了 8 分钟”就把两个阶段混在了一起。</p>
+          <details>
+            <summary>展开核算：平均等待为什么是 2.5 分钟？</summary>
+            <div class="detail-body">
+              <p class="equation">总等待时长 = 0 + 1 + 2 + 3 + 4 + 5 = 15 分钟。</p>
+              <p class="equation">平均等待时长 = 15 ÷ 6 = 2.5 分钟。</p>
+              <p>平均总历时是 2.5 + 3 = 5.5 分钟。六份任务合计占用机器 6 × 3 = 18 分钟；本例机器从第 0 到第 18 分钟连续工作，所以最后完成时刻也是 18。</p>
+              <p class="supporting">“所有人的等待时长相加”与“墙上时钟经过多久”不是同一个量。几个人同时等待时，他们的等待会分别计入总和。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="why-it-grows">
+        <div class="prose">
+          <h2 id="why-it-grows" tabindex="-1">队伍增长，要同时看节奏与工作量</h2>
+          <p>本例每隔 2 分钟来一份，机器却需要 3 分钟才完成一份。前一份留下的缺口还没消化，下一份已经到了，因此相邻任务的等待从 0、1、2 一直增加到 5 分钟。</p>
+          <p>如果这个节奏持续下去，输入约为每分钟 0.5 份，单机最多完成每分钟 1/3 份，积压就会继续增加。<strong>但本例只有六份任务</strong>：第 10 分钟后不再有新任务，第 18 分钟便能全部清空，不能据此宣称队伍会无限增长。</p>
+          <h3>同样的工作量，集中到达会怎样？</h3>
+          <p>保持六份任务、每份 3 分钟不变，只改提交时刻。为了比较清楚，以下都从第 0 分钟开始处理。</p>
+        </div>
+        <div class="case-pair">
+          <div>
+            <h3>每隔 2 分钟来一份</h3>
+            <p>提交时刻：0、2、4、6、8、10。</p>
+            <p>等待时长：0、1、2、3、4、5。</p>
+            <p class="result">平均等待 2.5 分钟。</p>
+          </div>
+          <div>
+            <h3>六份同时在第 0 分钟到达</h3>
+            <p>仍按 A 到 F 处理，开始时刻不变。</p>
+            <p>等待时长：0、3、6、9、12、15。</p>
+            <p class="result">平均等待 7.5 分钟。</p>
+          </div>
+        </div>
+        <div class="prose">
+          <p>两种安排都在第 18 分钟处理完，平均等待却相差 5 分钟。原因是第二种安排让后面的任务更早进入系统等待。<strong>总工作量和最后完成时刻相同，并不意味着每个人的体验相同。</strong></p>
+          <p class="supporting">这个对比改变了到达时间，因此只能解释系统内等待的变化。它没有证明谁更早完成了准备工作，也没有自动算入提交前的等待。</p>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="compare-changes">
+        <div class="prose">
+          <h2 id="compare-changes" tabindex="-1">比较改法时，把计时起点放在同一处</h2>
+          <p>现在回到原来每隔 2 分钟到达的六份任务。假设可以加机器、缩短处理时间，或推迟提交。它们看上去都能缩短队列，但作用并不相同。</p>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="changes-caption" aria-describedby="changes-help changes-boundary">
+          <table class="comparison-table">
+            <caption id="changes-caption">四种安排的结果（时间单位：分钟）</caption>
+            <thead><tr><th scope="col">安排</th><th scope="col">平均排队</th><th scope="col">最后完成</th><th scope="col">成立条件与代价</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">原安排：一台，每份 3 分钟</th><td>2.5</td><td>18</td><td>对照基准。提交时刻为 0、2、4、6、8、10。</td></tr>
+              <tr><th scope="row">一台，每份缩短到 2 分钟</th><td>0</td><td>12</td><td>假设相同任务确实能用 2 分钟完成，且质量不变；本页不证明现实中能否做到。</td></tr>
+              <tr><th scope="row">两台并行，每份仍为 3 分钟</th><td>0</td><td>13</td><td>两台一开始都空闲，每份交给空闲机器，任务之间没有依赖；需要额外设备。</td></tr>
+              <tr><th scope="row">一台，每隔 3 分钟才提交</th><td>0</td><td>18</td><td>提交改为 0、3、6、9、12、15。打印机前不排队，但任务平均要在提交前等 2.5 分钟。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="changes-help" class="supporting" style="margin-top: 0.75rem">“平均排队”只计提交后的等待；“最后完成”是从第 0 分钟起算的时刻。窄屏可横向滚动比较表。</p>
+        <div class="prose">
+          <h3>零排队，可能只是换了等待的位置</h3>
+          <p id="changes-boundary">最后一行假设任务仍在原来的 0、2、4、6、8、10 分钟就绪，只是延后提交。就绪到提交分别要等 0、1、2、3、4、5 分钟；各份的完成时刻与原安排完全相同。<strong>从“任务就绪”开始计时，没有一份因此提前完成。</strong></p>
+          <p>预约或分批提交可能让现场更有秩序，但若要声称省时，还得把提交前的时间一并比较。对同一个人，用同一个起点和终点，结论才可核对。</p>
+          <details>
+            <summary>两台机器的最后一份，为什么在第 13 分钟完成？</summary>
+            <div class="detail-body">
+              <p>可以把 A、C、E 分给第一台，在第 0、4、8 分钟开始；把 B、D、F 分给第二台，在第 2、6、10 分钟开始。同一台相邻任务相隔 4 分钟，比 3 分钟的处理时长更长，所以都不需要等。</p>
+              <p>F 于第 10 分钟开始，再打印 3 分钟，第 13 分钟完成。这个数字来自具体到达时刻，不能仅用“总工作量 18 ÷ 2”得到。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="exceptions">
+        <div class="prose">
+          <h2 id="exceptions" tabindex="-1">例外出现时，先改条件，再沿用结论</h2>
+          <p>简单模型的作用是把关系看清。现实中的额外条件不会自动消失；它们决定了前面的数字能不能继续使用。</p>
+          <dl class="exceptions">
+            <div class="exception"><dt>任务长短不一样</dt><dd>把固定的 3 分钟替换为每份的实际处理时长，再逐项计算。“等待每次多 1 分钟”随之失效，不能保留原图只改标题。</dd></div>
+            <div class="exception"><dt>机器暂停或出故障</dt><dd>增加停机时段，并说明中断的任务是继续、重做还是取消。只取“到达”和“前一份完成”的较晚时刻，已经不足以判断何时可用。</dd></div>
+            <div class="exception"><dt>有优先级或插队</dt><dd>先确定谁先处理，再重新算每个人的开始和完成时间。优先顺序会重新分配等待；在任务不变、没有切换代价且机器连续工作的条件下，它不会减少 18 分钟的总打印工作量。</dd></div>
+            <div class="exception"><dt>打印只是流程的一段</dt><dd>准备、上传、审核、打印和取件可能分别排队。缩短打印不一定缩短整个流程；先把每一段的起止条件列出来，避免把等待移到另一个阶段后就宣布成功。</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="take-it-with-you">
+        <div class="prose">
+          <h2 id="take-it-with-you" tabindex="-1">把这套判断方法带到下一个问题</h2>
+          <p>打印机只是一个容易逐分钟检查的场景。遇到别的排队问题，可以沿着下面的顺序拆开；是否适用，要逐条核对它的条件。</p>
+          <ol class="reasoning-steps">
+            <li><strong>固定计时边界。</strong>从何时开始算等待，到何时算完成？比较前后有没有偷偷换起点？</li>
+            <li><strong>记下一小段真实时间线。</strong>至少分开到达、开始、完成。先看到具体的等待发生在哪一段，再看平均值。</li>
+            <li><strong>区分工作量、到达节奏和可用资源。</strong>缩短处理、增加并行和推迟提交，改变的是不同条件，不能只盯着队列长度。</li>
+            <li><strong>复算一个具体的人或任务。</strong>方案后的完成时间是否提前？代价在哪里？哪条假设一旦不成立，结论就要重算？</li>
+          </ol>
+          <details>
+            <summary>检查理解：第七份在第 12 分钟到达，要等多久？</summary>
+            <div class="detail-body">
+              <p>沿用原来的一台机器、每份 3 分钟且先来先服务的条件：F 在第 18 分钟完成，所以第七份在第 18 分钟开始，第 21 分钟完成。</p>
+              <p>等待为 18 − 12 = <strong>6 分钟</strong>，总历时为 21 − 12 = <strong>9 分钟</strong>。若回答是 3 分钟，就只算了打印时间。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="sources">
+        <div class="prose">
+          <h2 id="sources" tabindex="-1">假设、来源与能说到哪里</h2>
+          <p>本页的场景、文字、时间线和表格为 AhaFold 原创模板内容。没有使用外部调查或性能数据；数字由正文明确列出的假设和四则运算得到，可按<a href="#check-numbers">计算规则</a>逐项核对。</p>
+          <ul class="source-notes">
+            <li><strong>可以支持的结论：</strong>在这组确定的到达与处理条件下，等待如何出现，不同安排怎样改变时间线。</li>
+            <li><strong>不能支持的结论：</strong>真实打印机的速度、增加设备的成本收益、某种排队方式对所有系统都更好，或对实际读者理解效果的实验判断。</li>
+            <li><strong>需要补充的证据：</strong>若用于真实决策，应记录实际到达、耗时、故障、优先级和成本，并说明记录区间及缺失项。</li>
+          </ul>
+          <!-- EDIT: In a finished explanation, replace this template's scope note with
+               actual supplied material and checked sources. Never invent citations.
+               Preserve necessary conditions in visible prose, not only in disclosures.
+               The source template itself is not evidence of native host acceptance. -->
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="page-footer">
+    <div class="footer-inner">
+      <p>这份长篇模板可离线阅读、搜索和打印。文字、表格与时间线均可编辑；展开补充说明不调用模型。它演示阅读结构，不代表一次真实宿主生图验收。</p>
+      <a class="return-link" href="#contents">返回本页目录</a>
+    </div>
+  </footer>
+</body>
+</html>

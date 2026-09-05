@@ -10,6 +10,11 @@ scripts are original project work distributed under [MIT](LICENSE).
 - [visual-explainer](https://github.com/nicobailon/visual-explainer),
   MIT, Copyright (c) 2025 Nico Bailon: deliver readable explanations as local HTML.
 
+The long-form extension also studies representation routing, overview/detail
+separation, responsive contents navigation and source-claim verification from its
+local source snapshot `7163c3e`. The long-form HTML and instructions here are
+original implementations within AhaFold's offline, single-skill constraints.
+
 No upstream implementation or illustration is included. Fold is a separately
 specified paper-page character; it is not a recolored Xiaohei. Upstream trademarks
 and project names belong to their respective owners. Linked educational sources

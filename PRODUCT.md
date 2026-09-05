@@ -12,7 +12,7 @@ A single installable agent skill. Output is local HTML with embedded CSS, option
 
 ## Users and purpose
 
-An author asks their existing agent harness to explain a concept or supplied short material. A reader opens the resulting page to understand the central relationship and inspect precise details, sources, and analogy limits.
+An author asks their existing agent harness to explain a concept or supplied material, including substantial multi-section documents. A reader can take the short answer, navigate a relationship overview, and inspect the reasoning, precise details, exceptions and sources at their own depth.
 
 ## Capabilities and constraints
 
@@ -27,3 +27,9 @@ The product is AhaFold; the skill ID is `ahafold`. The character is Fold / Â∞èÊä
 ## Accessibility and evidence
 
 Pages must remain readable at desktop 1440 px and mobile 390 px, with keyboard operation, visible focus, useful image alternatives and captions. The starter template is an editable resource, not a generated-image example or evidence of host compatibility. Development records and examples carry their own verified status.
+
+Long guides additionally cover 320/768px, native contents/deep links, print,
+no-JavaScript reading and actual 200% browser zoom. AhaFold's internal 12px minimum
+for rendered diagram labels complements accessibility checks; it is not described
+as a WCAG minimum-font requirement. Long-form scope was explicitly added during
+development; it remains the same skill and does not add a repository-analysis product.

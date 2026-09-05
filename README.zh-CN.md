@@ -4,8 +4,9 @@
 
 [English](README.md)
 
-一个轻量视觉解释 skill，把原创插画与清楚的 HTML 说明组织在一起。
-纸页角色**小折（Fold）**通过动作演示概念；有帮助时加入交互，图片由当前宿主的原生工具生成。
+一个轻量的单 skill，把一个概念或一份长文组织成清楚的 HTML 图解。
+纸页角色**小折（Fold）**可以通过动作演示概念；插画和交互按需使用，
+情境有助于解释材料时，再调用当前宿主的原生生图工具。
 
 **v0.1 私有开发中。** 安装需要仓库访问权限。目前没有公开发布，也未宣称所有目标平台全面通过。
 [Codex/Grok专项多维审计](tests/focus-validation.md) 已覆盖中文、英文和混排使用，
@@ -13,18 +14,25 @@
 
 ## 先看成品
 
-[![AhaFold 沉没成本图解预览](examples/sunk-cost/preview.png)](examples/sunk-cost/index.html)
+[![AhaFold 中文工具借用长篇图解预览](examples/longform/library/preview.png)](examples/longform/library/index.html)
 
-| 图解 | 打开完整 HTML | 输入、来源与图片记录 |
-| --- | --- | --- |
-| 沉没成本 · Sunk cost | [阅读](examples/sunk-cost/index.html) | [说明](examples/sunk-cost/README.md) |
-| 识别与回忆 · Recognition versus recall | [阅读](examples/recognition-recall/index.html) | [说明](examples/recognition-recall/README.md) |
-| 复利 · Compounding | [阅读](examples/compounding/index.html) | [说明](examples/compounding/README.md) |
+| 图解 | 篇幅与语言 | 完整 HTML | 输入与来源记录 |
+| --- | --- | --- | --- |
+| 借到工具，究竟从哪一步算起？ | 中文 · 11 节 | [阅读](examples/longform/library/index.html) | [说明](examples/longform/library/README.md) |
+| Did my seats get booked? | 英文 · 11 节 | [阅读](examples/longform/retries/index.html) | [说明](examples/longform/retries/README.md) |
+| TypeScript → JSON 的边界 | 中文解释 + English 术语／代码 · 10 节 | [阅读](examples/longform/type-boundaries/index.html) | [说明](examples/longform/type-boundaries/README.md) |
+| 沉没成本 · Sunk cost | 简短图解 | [阅读](examples/sunk-cost/index.html) | [说明](examples/sunk-cost/README.md) |
+| 识别与回忆 · Recognition versus recall | 简短图解 | [阅读](examples/recognition-recall/index.html) | [说明](examples/recognition-recall/README.md) |
+| 复利 · Compounding | 简短图解 | [阅读](examples/compounding/index.html) | [说明](examples/compounding/README.md) |
+
+三份[长篇成品](examples/longform/README.md)均来自全新本地安装后的 Codex 会话，
+保留宿主原始输出，图片调用为 0。各自说明还链接到单独标注、经维护者复核修改的 Grok 版本，
+并保留原始测试记录。完整页面可直接阅读，预览只展示开头。
 
 [识别／回忆中文版](examples/recognition-recall/index.zh-CN.html) 展示了保留原图的语言改写。
 
 下载或克隆仓库后，用浏览器打开示例的 `index.html`；GitHub 文件页显示的是源码。
-页面内嵌图片、CSS 和必要的小段脚本，原图另存于旁边的 `assets/`。
+页面内嵌 CSS 和必要的小段脚本；带插图的页面还内嵌图片，原图另存于旁边的 `assets/`。
 读者无需 AI 账户、Node.js 或服务端，阅读不产生额外模型调用。
 
 ## 可以用来做什么
@@ -32,6 +40,11 @@
 - 为陌生概念建立直觉。
 - 讲清两个容易混淆的概念。
 - 用简短步骤或简单交互解释一个关系。
+- 将长材料整理为总览、可跳转章节、局部图解和完整算例，并保留结论成立的条件与例外。
+
+简单需求使用[简短模板](skills/ahafold/assets/explainer.html)。材料较长或明确要求长篇时，
+使用[长篇说明](skills/ahafold/references/longform.md)和[原创多章节模板](skills/ahafold/assets/longform.html)。
+技能在同一套本地 HTML 工作流中，按材料选择适合的表达方式；长篇不要求额外生成图片。
 
 图片负责角色、情境、动作与少量必要短标签。长正文、代码、公式和复杂图表放在可编辑的 HTML/SVG。
 图片、小折和交互均按需要使用，也可以明确要求只输出插图。
@@ -97,8 +110,21 @@ Codex 中提及 `$ahafold`；Grok Build 和 Antigravity CLI 中使用 `/ahafold`
 ```
 
 ```text
-使用 AhaFold，把这份文档解释给初学者。
-技术术语保持准确，长文字和图表放在 HTML 中，不全部画进图片。
+Use AhaFold to turn material.md into a complete long guide for a general reader.
+Write in English. Keep important conditions, exceptions, numbers, and original code.
+No images.
+```
+
+请明确写出成品语言。中文或中英混排的长篇可以这样请求：
+
+```text
+使用 AhaFold 把 material.md 做成完整长篇图解，面向普通读者。
+用简体中文写作，保留重要条件、例外和数值；不要图片。
+```
+
+```text
+使用 AhaFold 把 material.md 做成长篇图解。
+解释用简体中文，保留 English 术语与原代码，讲清关键边界；不要图片。
 ```
 
 不需要图片时：
@@ -160,6 +186,12 @@ npx skills@1.5.23 remove ahafold -y
 带日期的版本、确定性 CI、图片调用次数和剩余发布门槛记录于 [tests/validation.md](tests/validation.md)。
 确定性 CI 不能证明另一个操作系统上的 OAuth 生图。
 
+2026-09-05 的独立[长篇评估](tests/longform/results.md)使用六次全新安装后的 Codex/Grok 会话，
+不生成图片，六次均正常结束。独立复核中，三份原始 Codex 输出的 60 项必要事实全部保持一致；
+Grok 提到了全部 60 项，但只有 56 项保持一致，三处矛盾影响四项检查。
+另有一次 Grok 使用英文材料和英文提示词却生成中文；该提示词没有明确的“Write in English”要求。
+展示的修订版保留修改记录，原始结果与此前失败仍属于测试证据。浏览器结果和未完成项见该报告。
+
 短标签、角色身份、参考图输入和图片编辑分别验收。已登录不代表有额度，费用未知且用量并非无限。
 每张图都需要检查：某条原生路线可能无法满足严格“无可见水印”要求。
 保留供应商标记与原始字节；“未观察到可见水印”不代表图片没有来源标记。
@@ -175,6 +207,10 @@ Claude Code、OpenCode、DeepSeek 及其他宿主的 fallback 属于后续计划
 [Ian Xiaohei Illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations) 与
 [visual-explainer](https://github.com/nicobailon/visual-explainer) 的方法启发。
 
+原创长篇模板参考了本地 visual-explainer 快照 `7163c3e` 的表达选择、总览与细节组织、
+目录导航及事实复核方法，详见[源码比较](tests/longform/README.md)。没有复制上游实现；
+这次比较不能证明在相同任务实测中，生成质量已达到或超过对方。
+
 欢迎可复现示例、语言改进和带日期的兼容性结果；不要提交 token、私人材料或原始会话日志。
 维护者检查命令：
 
@@ -186,6 +222,7 @@ pnpm run test:checks
 pnpm run test:install
 pnpm run check:package
 pnpm run test:examples
+pnpm run test:longform
 ```
 
 这些开发依赖不在技能安装单元内。E01–E06 与原生验收要求见[行为案例](tests/cases.md)。

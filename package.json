@@ -15,7 +15,8 @@
     "test:checks": "tsx --test tools/check-package.test.ts",
     "test:install": "tsx tools/test-install.ts",
     "test:examples": "tsx tools/test-examples.ts",
-    "check": "pnpm run typecheck && pnpm run test:checks && pnpm run check:package && pnpm run test:install && pnpm run test:examples"
+    "test:longform": "tsx tools/test-longform.ts",
+    "check": "pnpm run typecheck && pnpm run test:checks && pnpm run check:package && pnpm run test:install && pnpm run test:examples && pnpm run test:longform"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

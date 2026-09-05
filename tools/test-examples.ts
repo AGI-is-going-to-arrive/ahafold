@@ -56,6 +56,11 @@ function approximately(actual: number, expected: number, reason: string): void {
   assert.ok(Number.isFinite(actual) && Math.abs(actual - expected) < 0.011, `${reason}: expected ${expected}, received ${actual}`);
 }
 
+async function expectCurrency(locator: Locator, expected: number, reason: string): Promise<void> {
+  const shown = (await locator.innerText()).trim().replaceAll(',', '').replaceAll('−', '-');
+  assert.equal(shown, expected.toFixed(2), `${reason}: displayed currency must match the independently rounded amount exactly`);
+}
+
 async function expectFocusRing(locator: Locator): Promise<void> {
   const focus = await locator.evaluate((element) => {
     const style = getComputedStyle(element);
@@ -234,15 +239,13 @@ async function checkCompounding(page: Page): Promise<void> {
   assert.equal(await rate.getAttribute('max'), '20');
   const expectValue = async (expected: number): Promise<void> => {
     const numeric = Number(await result.getAttribute('data-value'));
-    approximately(numeric, expected, 'Calculation result');
-    const shown = Number((await result.innerText()).replace(/[^\d.+-]/g, ''));
-    approximately(shown, expected, 'Visible result agrees with the underlying value');
+    assert.ok(Number.isFinite(numeric) && Math.abs(numeric - expected) <= Math.max(1e-10, Math.abs(expected) * 1e-12), 'Unrounded calculation agrees with the independent oracle');
+    await expectCurrency(result, expected, 'Visible result');
     const duration = Number(await years.inputValue());
     const percent = Number(await rate.inputValue());
-    const textNumber = async (selector: string): Promise<number> => Number((await page.locator(selector).innerText()).replace(/[^\d.+-]/g, ''));
-    approximately(await textNumber('#selected-value'), expected, 'Comparison amount agrees with the selected value');
-    approximately(await textNumber('#early-value'), 100 * (1 + percent / 100) ** 30, 'Earlier start uses the same rate and common endpoint');
-    approximately(await textNumber('#interest'), expected - 100, 'Displayed interest excludes principal');
+    await expectCurrency(page.locator('#selected-value'), expected, 'Comparison amount agrees with the selected value');
+    await expectCurrency(page.locator('#early-value'), 100 * (1 + percent / 100) ** 30, 'Earlier start uses the same rate and common endpoint');
+    await expectCurrency(page.locator('#interest'), expected - 100, 'Displayed interest excludes principal');
     const ticks = await page.locator('#timeline text').evaluateAll((elements) => elements
       .filter((element) => /^\d+$/.test(element.textContent?.trim() ?? ''))
       .map((element) => ({ year: Number(element.textContent), x: Number(element.getAttribute('x')) })));
@@ -261,13 +264,13 @@ async function checkCompounding(page: Page): Promise<void> {
     approximately(Number(await page.locator('#early-duration').getAttribute('x1')), first, 'Early duration starts at year zero');
     approximately(Number(await page.locator('#early-duration').getAttribute('x2')), last, 'Both scenarios share an endpoint');
   };
-  await expectValue(162.89);
+  await expectValue(100 * 1.05 ** 10);
   await setRange(years, 0);
   await expectValue(100);
   await setRange(years, 1);
   await expectValue(105);
   await setRange(years, 10);
-  await expectValue(162.89);
+  await expectValue(100 * 1.05 ** 10);
   await setRange(rate, 0);
   await setRange(years, 30);
   await expectValue(100);
@@ -281,7 +284,7 @@ async function checkCompounding(page: Page): Promise<void> {
   await reset.press('Enter');
   assert.equal(await years.inputValue(), '10', 'Reset restores years');
   assert.equal(await rate.inputValue(), '5', 'Reset restores rate');
-  await expectValue(162.89);
+  await expectValue(100 * 1.05 ** 10);
   await expectFocusRing(reset);
 }
 

@@ -1,0 +1,50 @@
+[
+  {
+    "host": "codex",
+    "case": "library",
+    "file": "artifacts/codex-library/index.html",
+    "sha256": "346d108b12af14167db7c4ed722559b7aaaef1eff5505afe727ff448b99e236a",
+    "bytes": 54567,
+    "unchanged_host_output": true
+  },
+  {
+    "host": "codex",
+    "case": "retries",
+    "file": "artifacts/codex-retries/index.html",
+    "sha256": "43d99754083eb0f44bf8019fdc451bc974ce8b07ab2b6c0e33b227adc49b9365",
+    "bytes": 70079,
+    "unchanged_host_output": true
+  },
+  {
+    "host": "codex",
+    "case": "types",
+    "file": "artifacts/codex-types/index.html",
+    "sha256": "cc02d980fbd15b28d79567da648bff368d731486c89f4fad935276597824489d",
+    "bytes": 59263,
+    "unchanged_host_output": true
+  },
+  {
+    "host": "grok",
+    "case": "library",
+    "file": "artifacts/grok-library/index.html",
+    "sha256": "d3f7761951ccf165faaac223b9b220c7872ed42952108fce690015408e97dc07",
+    "bytes": 70163,
+    "unchanged_host_output": true
+  },
+  {
+    "host": "grok",
+    "case": "retries",
+    "file": "artifacts/grok-retries/index.html",
+    "sha256": "1641f599cc994b5a430ca31d5f7a965853f2c435334e72c4af19e08d0ca43a12",
+    "bytes": 65500,
+    "unchanged_host_output": true
+  },
+  {
+    "host": "grok",
+    "case": "types",
+    "file": "artifacts/grok-types/index.html",
+    "sha256": "b703ecfcd07d0c748140455625f03e87ed43af928efd7e96070c296482f501d0",
+    "bytes": 49771,
+    "unchanged_host_output": true
+  }
+]

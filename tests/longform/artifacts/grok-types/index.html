@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>从 TypeScript 注解到不可信 JSON：一次请求的边界</title>
+  <meta name="description" content="用题目提供的 loadUser 与可选 parseUser，分开 compile time 注解、HTTP 成功和 JSON 结构检查。中文解释，保留 English 术语与原代码。无插画，可离线阅读。">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --apricot-ink: #725010;
+      --teal: #2a8c82;
+      --teal-ink: #17665e;
+      --teal-wash: #eff7f5;
+      --line: #d9dfdd;
+      --soft: #f6f8f7;
+      --page-width: 79rem;
+      --reading-width: 42rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: 100%;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-block-start: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    a { color: var(--teal-ink); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    [id] { scroll-margin-block-start: 1.5rem; }
+    p, li, dd, th, td, figcaption, h1, h2, h3, pre { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.25rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { color: var(--ink); line-height: 1.35; text-wrap: balance; }
+    h1 { max-width: 16em; margin: 0; font-size: 2.75rem; font-weight: 750; letter-spacing: -0.03em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.875rem; font-weight: 700; letter-spacing: -0.02em; }
+    h3 { margin: 2rem 0 0.75rem; font-size: 1.25rem; font-weight: 650; }
+    strong { font-weight: 650; }
+    ul, ol { margin-block: 1rem 1.5rem; padding-inline-start: 1.5rem; }
+    li + li { margin-top: 0.75rem; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: 1rem; color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    svg { display: block; }
+    svg text { fill: var(--ink); font-family: inherit; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; font-size: 0.92em; }
+    a, summary { -webkit-tap-highlight-color: #f4c96b66; }
+    details { border-block: 1px solid var(--line); }
+    summary { min-height: 2.75rem; padding-block: 1rem; color: var(--teal-ink); font-weight: 650; cursor: pointer; }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+    summary::marker { color: var(--teal-ink); }
+    .detail-body { padding-block: 0.25rem 1.5rem; }
+    .detail-body > :first-child { margin-top: 0; }
+
+    .skip-link { position: absolute; inset: 0.75rem auto auto 1rem; z-index: 3; padding: 0.5rem 1rem; background: var(--paper); transform: translateY(-200%); }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, .page-layout, .page-footer { width: min(calc(100% - 5rem), var(--page-width)); margin-inline: auto; }
+    .page-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; padding-block: 1.75rem 1.25rem; border-bottom: 1px solid var(--line); }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 1rem; }
+    .page-layout { display: grid; grid-template-columns: 12rem minmax(0, 1fr); column-gap: 4rem; align-items: start; }
+    .page-layout > * { min-width: 0; }
+    .introduction { grid-column: 2; padding-block: 4rem 3.5rem; }
+    .lead { max-width: var(--reading-width); margin-top: 1.75rem; font-size: 1.25rem; line-height: 1.8; }
+    .template-note { max-width: var(--reading-width); margin-top: 1.25rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    .central-answer { max-width: var(--reading-width); margin-top: 2rem; padding: 1.25rem 1.5rem; background: var(--apricot-wash); border: 1px solid var(--apricot); border-radius: 12px; }
+    .contents { position: sticky; top: 1.5rem; grid-column: 1; grid-row: 1 / span 2; max-height: calc(100dvh - 3rem); margin-top: 4rem; overflow-y: auto; scrollbar-color: var(--teal) var(--soft); scrollbar-width: thin; }
+    .contents details { border-bottom: 0; }
+    .contents summary { padding-block: 1rem; color: var(--ink); font-size: 1.125rem; }
+    .contents ul { margin: 0; padding: 0 0 0.75rem; list-style: none; }
+    .contents li + li { margin-top: 0; }
+    .contents a { display: block; min-height: 2.75rem; padding: 0.5rem 0.375rem; color: var(--muted); font-size: 1rem; line-height: 1.6; text-decoration: none; }
+    .contents a:hover, .contents a:focus-visible { color: var(--teal-ink); text-decoration: underline; background: var(--teal-wash); }
+    .reading-body { grid-column: 2; min-width: 0; }
+    .chapter { padding-block: 3rem; border-top: 1px solid var(--line); }
+    .prose { max-width: var(--reading-width); }
+    .section-lead { color: var(--muted); }
+    .supporting { color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    .terms { margin: 1.75rem 0; }
+    .term { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1.25rem; border-bottom: 1px solid var(--line); }
+    .term:first-child { border-top: 1px solid var(--line); }
+    .term dt { font-weight: 650; }
+    .term dd { margin: 0; }
+    .process-flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem; margin: 0; padding-inline-start: 1.5rem; }
+    .process-flow li { min-width: 0; margin: 0; padding-inline-start: 0.25rem; }
+    .process-flow li::marker { color: var(--teal-ink); font-weight: 650; }
+    .process-flow h3 { margin: 0 0 0.5rem; font-size: 1.125rem; }
+    .process-flow p { font-size: 1rem; line-height: 1.75; }
+    .assumptions { padding: 1.25rem 1.5rem; background: var(--soft); }
+    .assumptions p { margin: 0; }
+    .assumptions ul { margin-bottom: 0; }
+    .scroll-region { max-width: 100%; overflow: auto; overscroll-behavior-inline: contain; scrollbar-color: var(--teal) var(--soft); scrollbar-width: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 1.125rem; font-variant-numeric: tabular-nums; line-height: 1.65; }
+    caption { padding-block: 0 0.75rem; text-align: left; font-weight: 650; }
+    th, td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    thead { background: var(--soft); }
+    th { font-weight: 650; }
+    .boundary-table { min-width: 46rem; }
+    .boundary-table th:first-child { width: 22%; }
+    .case-table { min-width: 52rem; }
+    .case-table th:first-child { width: 12%; }
+    .comparison-table { min-width: 44rem; }
+    .calculation { margin-block: 1.75rem; padding: 1.25rem 1.5rem; background: var(--teal-wash); }
+    .calculation p + p { margin-top: 0.75rem; }
+    .reasoning-steps { padding-inline-start: 1.75rem; }
+    .reasoning-steps li { padding-inline-start: 0.375rem; }
+    .reasoning-steps li::marker { color: var(--teal-ink); font-weight: 650; }
+    .reasoning-steps strong { display: block; margin-bottom: 0.25rem; }
+    .case-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-block: 2rem; }
+    .case-pair > div { min-width: 0; padding-block: 1.25rem; border-block: 1px solid var(--line); }
+    .case-pair h3 { margin-top: 0; }
+    .case-pair .result { color: var(--teal-ink); font-weight: 650; }
+    .exceptions { margin-block: 1.75rem 0; }
+    .exception { display: grid; grid-template-columns: 11rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1.5rem; border-top: 1px solid var(--line); }
+    .exception dt { font-weight: 650; }
+    .exception dd { margin: 0; }
+    .exceptions .exception:last-child { padding-bottom: 0; }
+    .source-notes { padding-inline-start: 1.5rem; }
+    .source-notes li::marker { color: var(--teal-ink); }
+    .page-footer { padding-block: 1.75rem 3rem; border-top: 1px solid var(--line); }
+    .footer-inner { margin-inline-start: 16rem; max-width: var(--reading-width); }
+    .page-footer p { color: var(--muted); font-size: 1rem; }
+    .return-link { display: inline-block; min-height: 2.75rem; padding-block: 0.375rem; }
+
+    .kicker { margin: 0 0 0.75rem; color: var(--teal-ink); font-size: 0.95rem; font-weight: 650; letter-spacing: 0.02em; }
+    .code-block { margin: 1.5rem 0; padding: 1.15rem 1.35rem; background: var(--soft); border: 1px solid var(--line); border-radius: 12px; font-size: 0.92rem; line-height: 1.6; white-space: pre; }
+    .code-block code { font-size: 0.92rem; }
+    .wide-figure { max-width: none; }
+    .lane-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+    .lane { min-width: 0; padding: 1.25rem 1.5rem; border: 1px solid var(--line); border-radius: 12px; }
+    .lane h3 { margin-top: 0; font-size: 1.125rem; }
+    .lane.compile { background: var(--apricot-wash); border-color: var(--apricot); }
+    .lane.runtime { background: var(--teal-wash); }
+    .lane ul { margin: 0.75rem 0 0; }
+    .path { display: grid; gap: 0; margin: 1.75rem 0 0; padding: 0; list-style: none; }
+    .path > li { margin: 0; padding: 1.15rem 1.35rem; border: 1px solid var(--line); border-bottom-width: 0; }
+    .path > li:first-child { border-radius: 12px 12px 0 0; }
+    .path > li:last-child { border-bottom-width: 1px; border-radius: 0 0 12px 12px; }
+    .path h3 { margin: 0 0 0.4rem; font-size: 1.125rem; }
+    .path .proved, .path .missing, .path .exit { margin: 0.4rem 0 0; font-size: 1rem; line-height: 1.7; }
+    .path .proved { color: var(--teal-ink); }
+    .path .missing { color: var(--muted); }
+    .path .exit { color: var(--apricot-ink); }
+    .mark { display: inline-block; margin-right: 0.35rem; font-weight: 650; }
+    .long-id { overflow-wrap: anywhere; word-break: break-word; }
+    .case-stack { margin: 1.75rem 0 0; }
+    .case-stack details { border-block: 0; border-bottom: 1px solid var(--line); }
+    .case-stack details:first-child { border-top: 1px solid var(--line); }
+    .case-meta { color: var(--muted); font-size: 1rem; }
+    .legend { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin-block: 0 0.75rem; font-size: 1rem; }
+    .legend span { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .legend-mark { display: inline-block; width: 1.5rem; height: 0.75rem; flex: 0 0 auto; }
+    .legend-mark.compile { background: var(--apricot-wash); border: 2px solid var(--apricot); }
+    .legend-mark.runtime { background: var(--teal-wash); border: 2px solid var(--teal); }
+
+    @media (max-width: 67rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 3rem); }
+      .page-layout { grid-template-columns: 10.5rem minmax(0, 1fr); column-gap: 2.5rem; }
+      .process-flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem 2rem; }
+      .footer-inner { margin-inline-start: 13rem; }
+    }
+    @media (max-width: 55rem) {
+      .page-layout { display: block; }
+      .introduction { padding-block: 3rem 2.5rem; }
+      h1 { font-size: 2.25rem; }
+      .contents { position: static; max-height: none; max-width: var(--reading-width); margin: 0 0 2.5rem; overflow: visible; }
+      .contents ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; }
+      .contents details { border-bottom: 1px solid var(--line); }
+      .contents summary { padding-block: 0.875rem; }
+      .contents a { padding-block: 0.625rem; }
+      .footer-inner { margin-inline-start: 0; }
+      .lane-pair { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 36rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 2.5rem); }
+      .page-header { padding-top: 1.25rem; }
+      .introduction { padding-block: 2.5rem 2rem; }
+      h1 { font-size: 1.85rem; letter-spacing: -0.025em; }
+      h2 { font-size: 1.5rem; }
+      .lead { font-size: 1.125rem; }
+      .central-answer, .assumptions, .calculation, .lane { padding: 1rem 1.125rem; }
+      .contents ul, .case-pair { grid-template-columns: minmax(0, 1fr); }
+      .case-pair { gap: 0; }
+      .case-pair > div + div { border-top: 0; }
+      .chapter { padding-block: 2.5rem; }
+      .term, .exception { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+      .process-flow { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+      .process-flow p { font-size: 1.125rem; }
+      .code-block { padding: 1rem; font-size: 0.84rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+    @media print {
+      @page { margin: 16mm; }
+      :root { font-size: 11pt; }
+      body { font-size: 1rem; line-height: 1.65; }
+      .page-header, .page-layout, .page-footer { width: 100%; }
+      .page-layout { display: block; }
+      .skip-link, .contents, .return-link { display: none; }
+      .introduction { padding-block: 1.5rem 2rem; }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.5rem; }
+      h2, h3 { break-after: avoid; }
+      .chapter { padding-block: 1.5rem; }
+      .prose, .lead, .central-answer, .template-note { max-width: none; }
+      .scroll-region { overflow: visible; }
+      .boundary-table, .case-table, .comparison-table { min-width: 0; }
+      table { font-size: 0.8rem; }
+      th, td { padding: 0.45rem 0.5rem; }
+      thead { display: table-header-group; }
+      tr, .term, .exception, .calculation, .lane, .path > li { break-inside: avoid; }
+      details > * { display: block; }
+      details::details-content { display: block; content-visibility: visible; }
+      summary { list-style: none; }
+      summary::-webkit-details-marker { display: none; }
+      .footer-inner { margin-inline-start: 0; }
+      a { color: inherit; }
+      .supporting, figcaption { font-size: 0.875rem; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。</p>
+  </header>
+
+  <main id="main" class="page-layout" tabindex="-1" aria-labelledby="page-title">
+    <header class="introduction">
+      <p class="kicker">compile time 与 runtime 观察不同的东西</p>
+      <h1 id="page-title">从 TypeScript 注解到不可信 JSON：一次请求的边界</h1>
+      <p class="lead">IDE 里的绿色提示、HTTP 2xx 和 <code>response.json()</code> 成功，常常被看成同一件事：数据已经是 <code>User</code>。题目提供的 <code>loadUser</code> 把这几件事叠在一个函数里，但它们证明的证据并不相同。</p>
+      <div class="central-answer">
+        <p><strong>类型注解和 <code>as User</code> 改变的是静态检查器对源代码的理解，在通常的 TypeScript 转译中会被擦除；它们不是运行时防护墙。</strong>一次请求要分别跨过地址编码、网络 <code>Response</code>、HTTP 状态、JSON 语法，以及（若另加解析器）值结构。每一步成功只新增一种证据，还缺另一种证据。不能把所有绿色状态都叫作“验证成功”。</p>
+      </div>
+      <p class="template-note"><code>/api/users/</code> 只是示例中的相对路径。用户资料、日志和域名均为虚构；讨论不需要访问任何接口。本页只用题目提供的材料作事实来源，没有插画，也没有调用外部接口。</p>
+    </header>
+
+    <nav id="contents" class="contents" aria-label="本页目录" tabindex="-1">
+      <details open>
+        <summary>本页目录</summary>
+        <ul>
+          <li><a href="#two-lanes">两条并行的理解线</a></li>
+          <li><a href="#original">原函数承诺了什么</a></li>
+          <li><a href="#runtime-path">运行时每一步的边界</a></li>
+          <li><a href="#parse-user">可选的最小解析器</a></li>
+          <li><a href="#cases">八条受控响应记录</a></li>
+          <li><a href="#attribution">归因、错误与捕获范围</a></li>
+          <li><a href="#takeaway">静态修改与行为修改</a></li>
+          <li><a href="#sources">来源、假设与解释边界</a></li>
+        </ul>
+      </details>
+    </nav>
+
+    <article class="reading-body" aria-label="从 TypeScript 注解到不可信 JSON 的完整解释">
+      <section class="chapter" aria-labelledby="two-lanes">
+        <div class="prose">
+          <h2 id="two-lanes" tabindex="-1">先分开两条线，再看同一次请求</h2>
+          <p class="section-lead">目标读者能读简单代码，但容易把 IDE 中的绿色提示、HTTP 成功和数据可信混在一起。<code>compile time</code> 指工具检查源代码的阶段，<code>runtime</code> 指编译后的 JavaScript 实际执行时。二者协作，却观察不同的东西。</p>
+          <dl class="terms">
+            <div class="term">
+              <dt>compile time</dt>
+              <dd>静态工具根据类型注解、声明的假设和 <code>as User</code> 这类 type assertion，判断源代码是否满足当前规则。它看不见这次请求真正返回的 JSON。</dd>
+            </div>
+            <div class="term">
+              <dt>runtime</dt>
+              <dd>已经转译后的 JavaScript 按语句执行：编码地址、发起 <code>fetch</code>、看 <code>response.ok</code>、解析正文。异常会让 <code>async</code> 函数返回的 Promise 拒绝。</dd>
+            </div>
+            <div class="term">
+              <dt>type assertion</dt>
+              <dd><code>as User</code> 影响静态检查器对表达式的理解。它不会在响应解析之后再执行第四个“断言成功”步骤，不会调用验证器，也不会增加或改写 JSON 字段。</dd>
+            </div>
+          </dl>
+          <p>把注解画进执行箭头里，会看起来像“类型检查也是一次运行时关卡”。本页把静态说明放在旁边，把真正可能抛错或兑现的步骤放在执行路径上。</p>
+        </div>
+
+        <figure class="wide-figure" aria-labelledby="overview-caption">
+          <div class="legend" aria-label="概览图例">
+            <span><i class="legend-mark compile" aria-hidden="true"></i>杏底：compile time 注解，不是运行时步骤</span>
+            <span><i class="legend-mark runtime" aria-hidden="true"></i>青底：runtime 实际发生的事</span>
+          </div>
+          <div class="lane-pair">
+            <div class="lane compile">
+              <h3>compile time：工具检查源代码</h3>
+              <ul>
+                <li><code>id: string</code>：调用者应传入字符串。</li>
+                <li><code>Promise&lt;User&gt;</code>：正常完成的 Promise 被当作提供 <code>User</code>。</li>
+                <li><code>as User</code> 与 <code>type User</code>：改变对表达式的理解，在通常转译中被擦除。</li>
+              </ul>
+            </div>
+            <div class="lane runtime">
+              <h3>runtime：编译后的 JavaScript 实际执行</h3>
+              <ul>
+                <li>编码地址、等待 <code>Response</code>、看 <code>ok</code>、解析 JSON，才是会兑现或拒绝的步骤。</li>
+                <li>可选的 <code>parseUser</code> 是另一段代码，不是第四个“断言成功”步骤。</li>
+              </ul>
+            </div>
+          </div>
+          <ol class="process-flow">
+            <li>
+              <h3>编码</h3>
+              <p><code>encodeURIComponent</code> 处理单个路径片段；失败则不发起请求。</p>
+            </li>
+            <li>
+              <h3><code>fetch</code></h3>
+              <p>兑现只说明有了 <code>Response</code>。网络错误或取消时可能还没有它。</p>
+            </li>
+            <li>
+              <h3><code>ok</code></h3>
+              <p>200–299 才继续。非 2xx 抛出后不会再 <code>json()</code>。</p>
+            </li>
+            <li>
+              <h3>JSON</h3>
+              <p>语法合法只得到一个 JavaScript 值，不保证两个字符串字段。</p>
+            </li>
+          </ol>
+          <figcaption id="overview-caption">静态线回答“源代码被怎样理解”；运行时线回答“这次执行跨过了哪条边界”。四个步骤是可能继续的顺序，不表示每一步必然到达，也不表示类型注解会在 JSON 解析后再跑一遍。</figcaption>
+        </figure>
+
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="boundary-caption" aria-describedby="boundary-help">
+          <table class="boundary-table">
+            <caption id="boundary-caption">一次请求里，每条边界新增的证据</caption>
+            <thead>
+              <tr>
+                <th scope="col">边界</th>
+                <th scope="col">成功说明了什么</th>
+                <th scope="col">尚未说明什么</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">TypeScript 检查通过</th>
+                <td>代码满足当前静态规则和已声明假设</td>
+                <td>外部 JSON 在运行时真实长相</td>
+              </tr>
+              <tr>
+                <th scope="row">地址编码完成</th>
+                <td>这个字符串已按 URI component 规则编码</td>
+                <td>身份、权限、用户一定存在</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>fetch</code> 兑现</th>
+                <td>拿到了一个 <code>Response</code></td>
+                <td>HTTP 是 2xx、正文可解析、数据符合 <code>User</code></td>
+              </tr>
+              <tr>
+                <th scope="row"><code>response.ok</code> 为真</th>
+                <td>HTTP 状态是 200–299</td>
+                <td>正文是合法 JSON 或字段正确</td>
+              </tr>
+              <tr>
+                <th scope="row"><code>response.json()</code> 兑现</th>
+                <td>正文被解析为合法 JSON 值</td>
+                <td>它一定是具备两个字符串字段的对象</td>
+              </tr>
+              <tr>
+                <th scope="row">下述 <code>parseUser</code> 返回</th>
+                <td>两个指定字段通过最小运行时结构检查</td>
+                <td>真实身份、授权、长度、非空和所有业务规则</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="boundary-help" class="supporting" style="margin-top: 0.75rem">这张表是整页的索引：后面每一节只把其中一行展开，不把下一行的证据提前算进这一行。</p>
+      </section>
+
+      <section class="chapter" aria-labelledby="original">
+        <div class="prose">
+          <h2 id="original" tabindex="-1">原函数是分析对象，不是已经加过校验的成品</h2>
+          <p>下面这段是题目提供的原函数。它不包含输入格式修正或 JSON schema 校验。缩进与换行只是为了阅读。</p>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-label="原函数 loadUser 的源代码">
+          <pre class="code-block"><code>type User = {
+  id: string;
+  name: string
+};
+
+async function loadUser(id: string): Promise&lt;User&gt; {
+  const response = await fetch(`/api/users/${encodeURIComponent(id)}`);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return (await response.json()) as User;
+}</code></pre>
+        </div>
+        <div class="prose">
+          <h3>类型承诺来自哪里</h3>
+          <p><code>id: string</code> 告诉 TypeScript 调用者应传入字符串。<code>Promise&lt;User&gt;</code> 告诉 TypeScript：正常完成的 Promise 被当作提供 <code>User</code>。这不是运行时的防护墙。普通 JavaScript 调用者、被绕过的检查或断言都可能带来不同值。</p>
+          <p>本材料随后分析的是<strong>字符串输入的正常前提</strong>。不要因此把原函数改称具备完整输入验证。</p>
+          <h3>断言在什么位置、做什么</h3>
+          <p>最后一行的 <code>as User</code> 是 TypeScript 的 type assertion。它只改静态检查器对这个表达式的理解。在通常的 TypeScript 转译中，它被擦除。</p>
+          <ul>
+            <li>它不会在 <code>response.json()</code> 之后再执行第四个“断言成功”步骤。</li>
+            <li>它不会调用验证器。</li>
+            <li>它不会增加或改写 JSON 字段。</li>
+          </ul>
+          <p><code>type User</code> 和函数的类型注解同样不会变成相应的运行时对象检查。</p>
+          <h3>Promise 有两条结局</h3>
+          <p><code>async</code> 函数总返回 Promise。函数体中的异常会使它拒绝。<code>Promise&lt;User&gt;</code> 只描述正常兑现值的静态类型，不表示请求、解析或业务逻辑必然成功。</p>
+          <p><code>await</code> 等待一个 Promise 的结果，并可能重新抛出拒绝原因。它不会替调用者捕获异常。调用者仍需决定怎么显示失败、记录问题或重试。</p>
+          <div class="assumptions">
+            <p><strong>读到这里可以先记住的限度：</strong>给原函数配一句“收到合法用户数据才返回”，会把原本不存在的验证写进去。原函数在 JSON 解析成功后，把得到的值当作 <code>User</code> 交出去；值是否真有两个字符串字段，要到运行时用到字段、或另加解析器时才会暴露。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="runtime-path">
+        <div class="prose">
+          <h2 id="runtime-path" tabindex="-1">按运行时实际发生的事划分边界</h2>
+          <p class="section-lead">下面按原函数语句的顺序走。每一步都可能成功并继续，也可能在这里离开。离开之后，后面的检查根本不会发生。</p>
+        </div>
+        <figure aria-labelledby="path-caption">
+          <ol class="path">
+            <li>
+              <h3>1. 构造请求地址</h3>
+              <p><code>encodeURIComponent(id)</code> 把字符串编码为适合放在单个 URL 路径片段中的形式。例如输入 <code>A/B ?</code> 得到 <code>A%2FB%20%3F</code>，不会把其中斜线直接拼成另一个路径层级。</p>
+              <p class="proved"><span class="mark">成功</span>这个字符串已按 URI component 规则编码。</p>
+              <p class="missing"><span class="mark">尚未</span>编码不是身份认证，不会证明调用者拥有查看这个用户的权限，也不清除响应 JSON 中的恶意内容。授权仍须由服务端及相应应用逻辑负责。</p>
+              <p class="exit"><span class="mark">可能离开</span>某些含孤立 UTF-16 代理码元的字符串会让 <code>encodeURIComponent</code> 抛出 <code>URIError</code>，这个 <code>async</code> 函数的 Promise 拒绝，且不会发起请求。因此“所有错误都发生在服务器返回后”也不成立。这不改变原函数没有显式运行时输入校验的事实。</p>
+            </li>
+            <li>
+              <h3>2. 等待 <code>Response</code></h3>
+              <p><code>fetch</code> 在网络错误或主动取消等情况下可能拒绝，届时还没有供下一行检查的 <code>Response</code>。</p>
+              <p class="proved"><span class="mark">成功</span>拿到了一个 <code>Response</code>。</p>
+              <p class="missing"><span class="mark">尚未</span>HTTP 是 2xx、正文可解析、数据符合 <code>User</code>。</p>
+              <p class="exit"><span class="mark">可能离开</span>HTTP 404、429 或 500 本身通常不会让 <code>fetch</code> 因状态码而拒绝，它们会产生一个 <code>Response</code>，再由原函数的 <code>response.ok</code> 分支处理。材料不宣称所有平台异常都能只归结为 HTTP；浏览器安全策略等也可能影响请求。</p>
+            </li>
+            <li>
+              <h3>3. 检查 HTTP 状态</h3>
+              <p><code>response.ok</code> 对 200 至 299 的状态码为真。原函数对非 2xx 抛出带状态码的错误，因此本次运行不会再调用 <code>response.json()</code>，即使错误响应体恰好是格式正确的 JSON。</p>
+              <p class="proved"><span class="mark">成功</span>HTTP 状态是 200–299。</p>
+              <p class="missing"><span class="mark">尚未</span><code>ok</code> 检查不查看正文内容，也不能确认 <code>id</code> 和 <code>name</code> 的存在或类型。</p>
+            </li>
+            <li>
+              <h3>4. 解析 JSON</h3>
+              <p><code>response.json()</code> 读取正文并按 JSON 语法解析，返回一个 Promise。它不是“只要 Content-Type 写了 JSON 就成功”。</p>
+              <p class="proved"><span class="mark">成功</span>正文被解析为合法 JSON 对应的 JavaScript 值。</p>
+              <p class="missing"><span class="mark">尚未</span>这个值满足 <code>User</code> 的结构或业务要求。</p>
+              <p class="exit"><span class="mark">可能离开</span>200 状态的 HTML、损坏的 JSON 和 204 的空正文都可能在这里拒绝。</p>
+            </li>
+            <li>
+              <h3>5. 原函数在这里返回</h3>
+              <p>合法 JSON 可以是对象、数组、字符串、数值、布尔值或 <code>null</code>。对于 200 响应中的 <code>null</code>，原函数会兑现 <code>null</code>；对于 <code>{"id":17,"name":false}</code>，原函数会兑现这份对象。<code>as User</code> 不会把 17 变成字符串或把 false 变成人名。</p>
+              <p class="proved"><span class="mark">成功</span>得到一个 JavaScript 值，静态类型被当作 <code>User</code>。</p>
+              <p class="missing"><span class="mark">尚未</span>字段类型、非空、权限或业务规则。稍后执行 <code>user.name.toUpperCase()</code> 才可能因实际值不适合而失败。</p>
+            </li>
+          </ol>
+          <figcaption id="path-caption">这是原函数的运行时路径。编码成功才会继续调用 <code>fetch</code>；非 2xx 不会走到 <code>json()</code>；JSON 解析成功仍可能交出完全不合用的值。</figcaption>
+        </figure>
+        <div class="prose">
+          <p>主路径上，传入普通字符串且编码成功，才会继续调用 <code>fetch</code>。编码表达式自己的失败发生在请求发出之前，所以排错时不能默认“先有服务器响应，再有前端错误”。</p>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="parse-user">
+        <div class="prose">
+          <h2 id="parse-user" tabindex="-1">可选解析器是另一段代码，不冒充原行为</h2>
+          <p>如果产品要在入口处拒绝不符合结构的 JSON，可以另加下面的解析器，并把原函数最后一行替换为：</p>
+          <div class="calculation">
+            <p><code>return parseUser(await response.json());</code></p>
+            <p>这是建议的改动版本，不是 <code>as User</code> 原本偷偷完成的工作。类型收窄让 TypeScript 能理解通过检查后的字段，真正执行检查的仍是普通 JavaScript 条件。</p>
+          </div>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-label="可选函数 parseUser 的源代码">
+          <pre class="code-block"><code>function parseUser(value: unknown): User {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    throw new Error("Expected a user object");
+  }
+
+  if (
+    !("id" in value) ||
+    !("name" in value) ||
+    typeof value.id !== "string" ||
+    typeof value.name !== "string"
+  ) {
+    throw new Error("Expected string id and name");
+  }
+
+  return { id: value.id, name: value.name };
+}</code></pre>
+        </div>
+        <div class="prose">
+          <h3>检查对象时为什么要写这么多条件</h3>
+          <p>JavaScript 的 <code>typeof null</code> 是 <code>"object"</code>，数组的 <code>typeof</code> 也为 <code>"object"</code>，所以上面的非空及 <code>Array.isArray</code> 检查都有独立意义。两个字段必须存在且实际值都是字符串。数值 17 即使可以转成文本，也会被这个解析器拒绝，因为它没有进行隐式或显式强制转换。</p>
+          <div class="case-pair">
+            <div>
+              <h3>原函数最后一行</h3>
+              <p><code>return (await response.json()) as User;</code></p>
+              <p>解析成功就兑现该值。200 的 <code>null</code>、错误类型字段都会过去。</p>
+              <p class="result">改变的是静态理解，不是值。</p>
+            </div>
+            <div>
+              <h3>建议的替换</h3>
+              <p><code>return parseUser(await response.json());</code></p>
+              <p>结构不符就抛错。通过后返回只有 <code>id</code> 和 <code>name</code> 的新对象。</p>
+              <p class="result">改变的是遇到具体值时做什么。</p>
+            </div>
+          </div>
+          <h3>故意有限的契约</h3>
+          <dl class="exceptions">
+            <div class="exception">
+              <dt>允许的</dt>
+              <dd>空字符串；输入里包含额外字段。解析器返回一个只有 <code>id</code> 和 <code>name</code> 的新对象，不保留那些额外字段。</dd>
+            </div>
+            <div class="exception">
+              <dt>没有检查的</dt>
+              <dd>ID 格式、显示名长度、姓名真实性、数据是否过期、当前用户权限或服务端签名。</dd>
+            </div>
+            <div class="exception">
+              <dt>通过之后</dt>
+              <dd>仍可能需要业务验证。不能称为“所有数据已经安全可信”。给这段解析器配一句“解决了一切网络错误”，会超出它只检查值结构的职责。</dd>
+            </div>
+          </dl>
+          <h3>它预期的输入是 JSON 解析结果</h3>
+          <p>这里解析器的预期输入是 <code>response.json()</code> 的结果，即从 JSON 文本产生的值。若把它作为接受任意 JavaScript 对象的通用安全库，<code>in</code> 会考虑继承属性，属性访问也可能触发 getter，因而需要另行定义更严格的契约。</p>
+          <p>本文不提供这种通用库保证，也没有使用这个局限来否认它对给定 JSON 场景的结构检查价值。</p>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="cases">
+        <div class="prose">
+          <h2 id="cases" tabindex="-1">同一状态码，正文不同，结局也可以不同</h2>
+          <p class="section-lead">以下是虚构离线记录，不是已访问接口的日志。<code>body</code> 是服务端发送的正文文本；网络失败那行没有响应。若显示同一个状态码两次，它们也可能因为正文不同走向不同结果。</p>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-label="八条虚构响应记录原文">
+          <pre class="code-block"><code>case alpha: status=200; body={"id":"u-17","name":"林 Ada"}
+case beta:  status=404; body={"id":"u-17","name":"林 Ada"}
+case gamma: status=200; body=&lt;html&gt;&lt;body&gt;Sign in required&lt;/body&gt;&lt;/html&gt;
+case delta: status=204; body=&lt;empty bytes, not the literal text shown here&gt;
+case epsilon: status=200; body=null
+case zeta: status=200; body={"id":17,"name":false}
+case eta: network disconnect before any Response exists
+case theta: status=200; body={"id":"","name":"","role":"maintainer"}</code></pre>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="case-caption" aria-describedby="case-help">
+          <table class="case-table">
+            <caption id="case-caption">这些区别来自给定代码，不依赖真实服务器是否上线</caption>
+            <thead>
+              <tr>
+                <th scope="col">记录</th>
+                <th scope="col">到达哪条边界</th>
+                <th scope="col">原函数</th>
+                <th scope="col">若使用可选 <code>parseUser</code></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">alpha</th>
+                <td>200，正文是两个字符串字段的对象</td>
+                <td>兑现两个字符串字段的对象</td>
+                <td>同样能返回这两个字段</td>
+              </tr>
+              <tr>
+                <th scope="row">beta</th>
+                <td>404；正文碰巧也是合法 JSON</td>
+                <td>抛出 <code>HTTP 404</code>，且不解析正文</td>
+                <td>走不到解析器</td>
+              </tr>
+              <tr>
+                <th scope="row">gamma</th>
+                <td>200，正文是 HTML</td>
+                <td>在 JSON 解析时拒绝</td>
+                <td>走不到结构检查</td>
+              </tr>
+              <tr>
+                <th scope="row">delta</th>
+                <td>204，空正文</td>
+                <td>在 JSON 解析时拒绝</td>
+                <td>走不到结构检查</td>
+              </tr>
+              <tr>
+                <th scope="row">epsilon</th>
+                <td>200，正文为 <code>null</code></td>
+                <td>兑现 <code>null</code></td>
+                <td>拒绝：不是用户对象</td>
+              </tr>
+              <tr>
+                <th scope="row">zeta</th>
+                <td>200，<code>id</code> 是 17，<code>name</code> 是 <code>false</code></td>
+                <td>兑现这份对象；<code>as User</code> 不改类型</td>
+                <td>拒绝：两个字段都不是 string</td>
+              </tr>
+              <tr>
+                <th scope="row">eta</th>
+                <td>在拿到 <code>Response</code> 之前断开</td>
+                <td>拒绝，还没有 <code>response.ok</code></td>
+                <td>走不到解析器</td>
+              </tr>
+              <tr>
+                <th scope="row">theta</th>
+                <td>200，两个字段是空字符串，另有 <code>role</code></td>
+                <td>合法 JSON 对象会被兑现；<code>as User</code> 不删除 <code>role</code></td>
+                <td>通过；返回的新对象不含 <code>role</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p id="case-help" class="supporting" style="margin-top: 0.75rem">beta 与 alpha 的正文可以相同，却在 <code>response.ok</code> 分开。gamma、delta、epsilon、zeta、theta 都可以是 200，却分别死在 JSON 语法、空正文、形状错误或额外字段。窄屏可横向滚动表格。</p>
+
+        <div class="prose">
+          <p>把“HTTP 成功”和“得到 User”绑在一起，解释不了 beta 以外的多数行。把“JSON 解析成功”和“字段正确”绑在一起，解释不了 epsilon 与 zeta。</p>
+        </div>
+        <div class="case-stack">
+          <details>
+            <summary>alpha / beta：正文可以一样，HTTP 边界先说话</summary>
+            <div class="detail-body">
+              <p>alpha 状态 200，原函数兑现 <code>id</code> 为 <code>"u-17"</code>、<code>name</code> 为 <code>"林 Ada"</code> 的对象。beta 的正文可以完全相同，但状态是 404，原函数抛出 <code>HTTP 404</code>，并且不解析正文。错误响应体即使是格式正确的 JSON，也不会在这次运行里进入 <code>response.json()</code>。</p>
+            </div>
+          </details>
+          <details>
+            <summary>gamma / delta：2xx 仍可能在 JSON 语法处拒绝</summary>
+            <div class="detail-body">
+              <p>gamma 是 200，正文却是 <code>&lt;html&gt;&lt;body&gt;Sign in required&lt;/body&gt;&lt;/html&gt;</code>。delta 是 204，正文是空字节，不是字面上的那段说明文字。二者都可能在 <code>response.json()</code> 拒绝。Content-Type 写了 JSON，并不能代替实际按 JSON 语法解析。</p>
+            </div>
+          </details>
+          <details>
+            <summary>epsilon / zeta：原函数会兑现，可选解析器会拒绝</summary>
+            <div class="detail-body">
+              <p>epsilon 的 200 正文是 <code>null</code>，原函数兑现 <code>null</code>。zeta 兑现 <code>{"id":17,"name":false}</code>。<code>as User</code> 不会把 17 变成字符串，也不会把 <code>false</code> 变成人名。可选解析器对 <code>null</code>、数组和非对象走第一条错误；对存在但不是字符串的字段走第二条错误。</p>
+            </div>
+          </details>
+          <details>
+            <summary>eta / theta：请求前失败，与结构通过但契约有限</summary>
+            <div class="detail-body">
+              <p>eta 在任何 <code>Response</code> 存在之前就因网络断开拒绝，不能把它显示成 HTTP 错误或类型断言失败。theta 的两个字段类型正确，即使都是空字符串，也会通过可选解析器；返回的新对象不含 <code>role</code>。原函数的 <code>as User</code> 不会改写 JSON 字段，因此解析得到的对象仍可带着 <code>role</code> 被交出去。空字符串通过，只说明最小结构检查允许它，不说明这是合法业务用户。</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="attribution">
+        <div class="prose">
+          <h2 id="attribution" tabindex="-1">标识要精确，错误提示也要对上抛出位置</h2>
+          <p>长标识不一定敏感，也不代表合法授权。例如下面这个字符串可以作为示例：</p>
+          <p class="long-id"><code>user_import_2026_autumn_public_workshop_team_north_building_room_204_record_000000000017</code></p>
+          <p>下面这一整段是使用保留无效域名的阅读样例，不是调用地址，不应拿它代替原函数的相对 URL <code>/api/users/${encodeURIComponent(id)}</code>：</p>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-label="虚构的 example.invalid 阅读样例 URL">
+          <p class="long-id" style="margin: 1rem 0 0"><code>https://example.invalid/api/users/user_import_2026_autumn_public_workshop_team_north_building_room_204_record_000000000017?include=profile%2Cpreferences%2Cmembership&amp;requestPurpose=offline_type_boundary_explanation</code></p>
+        </div>
+        <div class="prose">
+          <h3>原代码和新方案需要分别归因</h3>
+          <dl class="exceptions">
+            <div class="exception">
+              <dt>不要加给原函数</dt>
+              <dd>“收到合法用户数据才返回”。这会把原本不存在的验证写进去。</dd>
+            </div>
+            <div class="exception">
+              <dt>不要加给解析器</dt>
+              <dd>“解决了一切网络错误”。它只检查值结构，不负责 <code>fetch</code> 拒绝、HTTP 非 2xx 或 JSON 语法失败。</dd>
+            </div>
+            <div class="exception">
+              <dt>错误提示应分开</dt>
+              <dd>说清楚是请求未完成、HTTP 不成功、JSON 不可解析，还是结构不符。不能把它们全部显示成“类型断言失败”。</dd>
+            </div>
+          </dl>
+          <h3>错误在哪个范围被捕获</h3>
+          <p>若调用者把 <code>await loadUser(id)</code> 和后面的 <code>user.name.toUpperCase()</code> 放在同一个 <code>try</code> 内，<code>catch</code> 既可能接到加载过程的拒绝，也可能接到加载兑现后访问字段产生的异常。捕获到错误不自动证明问题来自网络。</p>
+          <p>若只对 <code>loadUser(id)</code> 返回的 Promise 附加拒绝处理，后续独立语句的异常也不会因此被那个处理函数捕获。错误的类别需要结合实际抛出位置判断，不能仅按最终提示文字反推。</p>
+          <div class="calculation" aria-label="同一次 catch 可能接到两类错误">
+            <p><strong>同一段 <code>try</code> 里可能出现的两类失败：</strong></p>
+            <p>加载过程拒绝：编码 <code>URIError</code>、<code>fetch</code> 在无 <code>Response</code> 时拒绝、非 2xx 的 <code>HTTP ${response.status}</code>、JSON 解析拒绝，或可选 <code>parseUser</code> 的结构错误。</p>
+            <p>加载兑现之后：例如对 <code>null</code> 或 <code>false</code> 调用 <code>toUpperCase()</code>。这时请求路径已经走完，失败发生在使用字段的语句。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="takeaway">
+        <div class="prose">
+          <h2 id="takeaway" tabindex="-1">改类型声明，不会凭空改掉服务端正文</h2>
+          <p>只把某个表达式的静态类型改成更宽或更窄的声明，不会凭空改变服务端正文。相反，增加 <code>parseUser</code> 的实际条件分支，会让原本能兑现的错误结构在运行时拒绝。</p>
+          <div class="case-pair">
+            <div>
+              <h3>静态修改</h3>
+              <p>改注解、改 <code>as</code>、让编辑器不再报错。</p>
+              <p>改变的是工具接受哪些写法。</p>
+              <p class="result">epsilon 的 <code>null</code> 仍会被原函数兑现。</p>
+            </div>
+            <div>
+              <h3>行为修改</h3>
+              <p>增加普通 JavaScript 条件，例如 <code>parseUser</code>。</p>
+              <p>改变的是程序遇到某个具体值时做什么。</p>
+              <p class="result">同样的 <code>null</code> 会在运行时被拒绝。</p>
+            </div>
+          </div>
+          <p>这也解释了为什么修复编辑器报错与修复外部数据问题可以有关联，却不一定是同一次修复。</p>
+          <ol class="reasoning-steps">
+            <li><strong>先问这一步新增了哪种证据。</strong>TypeScript 通过、地址编码完成、<code>fetch</code> 兑现、<code>ok</code> 为真、JSON 解析成功、结构检查返回，六行不要互相顶替。</li>
+            <li><strong>再问还缺哪种证据。</strong>缺的往往是正文形状、字段类型、授权或业务规则，而不是再加一个更绿的类型。</li>
+            <li><strong>给失败命名时对准抛出点。</strong>请求未发出、没有 <code>Response</code>、HTTP 非 2xx、JSON 不可解析、结构不符、使用字段时崩溃，不是同一种“断言失败”。</li>
+            <li><strong>需要入口处拒掉坏 JSON 时，写运行时条件。</strong>把最后一行换成 <code>parseUser(...)</code> 是另一段代码；写清它仍然不检查权限、长度和非空。</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="sources">
+        <div class="prose">
+          <h2 id="sources" tabindex="-1">假设、来源，以及比喻不能写成排他清单</h2>
+          <p>本页事实来自题目提供的材料：原函数、<code>parseUser</code>、边界表和八条虚构记录。没有访问 <code>/api/users/</code>，也没有把阅读样例域名当作可调用地址。</p>
+          <p>JavaScript 可以在页面加载时创建内容，可以按定时器更新内容，也可以处理用户互动，并非只在点击之后执行。HTML 的原生 <code>details</code> 元素本身能够展开收起，不要求 JavaScript。它们与 TypeScript 静态类型的关系是互补职责。不能将简化的角色比喻写成排他的能力清单，例如把“静态类型负责形状”说成 JavaScript 运行时不能做结构检查，或把“页面交互”说成只能发生在点击之后。</p>
+          <ul class="source-notes">
+            <li><strong>可以支持的结论：</strong>在给定函数与可选解析器下，每一步成功证明什么、不证明什么；八条记录如何因状态、语法和形状相互独立而分叉。</li>
+            <li><strong>不能支持的结论：</strong>真实接口的行为、浏览器或运行时的全部异常分类、把 <code>parseUser</code> 当成任意对象的通用安全库、或“通过最小结构检查后数据已经安全可信”。</li>
+            <li><strong>教学假设：</strong>讨论默认走字符串输入且编码成功的主路径，同时保留 <code>URIError</code> 这一反例；不把原函数改写成已有完整输入验证。</li>
+            <li><strong>未核验：</strong>本页未在浏览器中做独立验收；插画预算为零，没有生成或引用图片。</li>
+          </ul>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="page-footer">
+    <div class="footer-inner">
+      <p>这份长篇图解可离线阅读、搜索和打印。核心论证不依赖 JavaScript；目录与 <code>details</code> 使用 HTML 原生能力。没有插画，没有远程字体或网络请求。</p>
+      <a class="return-link" href="#contents">返回本页目录</a>
+    </div>
+  </footer>
+</body>
+</html>

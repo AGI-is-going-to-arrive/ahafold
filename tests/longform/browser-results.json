@@ -1,0 +1,289 @@
+{
+  "timestamp": "2026-09-05T04:40:33.320Z",
+  "scope": "template, three required longform topics and their three reviewed Grok variants; installed hosts require separate evidence",
+  "cases": [
+    {
+      "name": "template",
+      "width": 320,
+      "tocLinks": 8,
+      "scrollRegions": 3,
+      "minimumSvgFontPx": 16.983845338983052,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "template",
+      "width": 390,
+      "tocLinks": 8,
+      "scrollRegions": 3,
+      "minimumSvgFontPx": 16.983845338983052,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "template",
+      "width": 768,
+      "tocLinks": 8,
+      "scrollRegions": 1,
+      "minimumSvgFontPx": 16.983845338983052,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "template",
+      "width": 1440,
+      "tocLinks": 8,
+      "scrollRegions": 0,
+      "minimumSvgFontPx": 23.26112288135593,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "library",
+      "width": 320,
+      "tocLinks": 11,
+      "scrollRegions": 4,
+      "minimumSvgFontPx": null,
+      "numericStates": 30,
+      "calculator": null
+    },
+    {
+      "name": "library",
+      "width": 390,
+      "tocLinks": 11,
+      "scrollRegions": 4,
+      "minimumSvgFontPx": null,
+      "numericStates": 30,
+      "calculator": null
+    },
+    {
+      "name": "library",
+      "width": 768,
+      "tocLinks": 11,
+      "scrollRegions": 0,
+      "minimumSvgFontPx": null,
+      "numericStates": 30,
+      "calculator": null
+    },
+    {
+      "name": "library",
+      "width": 1440,
+      "tocLinks": 11,
+      "scrollRegions": 0,
+      "minimumSvgFontPx": null,
+      "numericStates": 30,
+      "calculator": null
+    },
+    {
+      "name": "library-grok-reviewed",
+      "width": 320,
+      "tocLinks": 10,
+      "scrollRegions": 6,
+      "minimumSvgFontPx": 14.734124999999999,
+      "numericStates": null,
+      "calculator": {
+        "refundStates": 30,
+        "disputedStates": 15,
+        "invalidStates": 4
+      }
+    },
+    {
+      "name": "library-grok-reviewed",
+      "width": 390,
+      "tocLinks": 10,
+      "scrollRegions": 6,
+      "minimumSvgFontPx": 14.734124999999999,
+      "numericStates": null,
+      "calculator": {
+        "refundStates": 30,
+        "disputedStates": 15,
+        "invalidStates": 4
+      }
+    },
+    {
+      "name": "library-grok-reviewed",
+      "width": 768,
+      "tocLinks": 10,
+      "scrollRegions": 0,
+      "minimumSvgFontPx": 15.069374999999999,
+      "numericStates": null,
+      "calculator": {
+        "refundStates": 30,
+        "disputedStates": 15,
+        "invalidStates": 4
+      }
+    },
+    {
+      "name": "library-grok-reviewed",
+      "width": 1440,
+      "tocLinks": 10,
+      "scrollRegions": 0,
+      "minimumSvgFontPx": 21.097125,
+      "numericStates": null,
+      "calculator": {
+        "refundStates": 30,
+        "disputedStates": 15,
+        "invalidStates": 4
+      }
+    },
+    {
+      "name": "retries",
+      "width": 320,
+      "tocLinks": 11,
+      "scrollRegions": 3,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "retries",
+      "width": 390,
+      "tocLinks": 11,
+      "scrollRegions": 3,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "retries",
+      "width": 768,
+      "tocLinks": 11,
+      "scrollRegions": 0,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "retries",
+      "width": 1440,
+      "tocLinks": 11,
+      "scrollRegions": 0,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "retries-grok-reviewed",
+      "width": 320,
+      "tocLinks": 11,
+      "scrollRegions": 7,
+      "minimumSvgFontPx": 15.025886194029852,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "retries-grok-reviewed",
+      "width": 390,
+      "tocLinks": 11,
+      "scrollRegions": 7,
+      "minimumSvgFontPx": 15.025886194029852,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "retries-grok-reviewed",
+      "width": 768,
+      "tocLinks": 11,
+      "scrollRegions": 4,
+      "minimumSvgFontPx": 15.025886194029852,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "retries-grok-reviewed",
+      "width": 1440,
+      "tocLinks": 11,
+      "scrollRegions": 2,
+      "minimumSvgFontPx": 19.720822010869565,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "type-boundaries",
+      "width": 320,
+      "tocLinks": 11,
+      "scrollRegions": 8,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "type-boundaries",
+      "width": 390,
+      "tocLinks": 11,
+      "scrollRegions": 8,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "type-boundaries",
+      "width": 768,
+      "tocLinks": 11,
+      "scrollRegions": 3,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "type-boundaries",
+      "width": 1440,
+      "tocLinks": 11,
+      "scrollRegions": 0,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "type-boundaries-grok-reviewed",
+      "width": 320,
+      "tocLinks": 8,
+      "scrollRegions": 5,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "type-boundaries-grok-reviewed",
+      "width": 390,
+      "tocLinks": 8,
+      "scrollRegions": 5,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "type-boundaries-grok-reviewed",
+      "width": 768,
+      "tocLinks": 8,
+      "scrollRegions": 2,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    },
+    {
+      "name": "type-boundaries-grok-reviewed",
+      "width": 1440,
+      "tocLinks": 8,
+      "scrollRegions": 0,
+      "minimumSvgFontPx": null,
+      "numericStates": null,
+      "calculator": null
+    }
+  ],
+  "completed_checks_per_artifact": [
+    "Four viewport behaviors",
+    "No JavaScript reading",
+    "A4 print containment",
+    "Actual Chromium page zoom 200 percent"
+  ],
+  "artifact_sha256": {
+    "skills/ahafold/assets/longform.html": "ab9b23b5928f8d1593fa8708b715e7de202cc942108409603532e7f7a58bfe7c",
+    "examples/longform/library/index.html": "346d108b12af14167db7c4ed722559b7aaaef1eff5505afe727ff448b99e236a",
+    "examples/longform/retries/index.html": "43d99754083eb0f44bf8019fdc451bc974ce8b07ab2b6c0e33b227adc49b9365",
+    "examples/longform/type-boundaries/index.html": "cc02d980fbd15b28d79567da648bff368d731486c89f4fad935276597824489d",
+    "examples/longform/library/grok-reviewed.html": "f1ce2255a9d3acecf0861adece649f310440f6e9496dbb595884fed7c3d36b36",
+    "examples/longform/retries/grok-zh-reviewed.html": "e8e827e60b7ae55bc90932656f91b6cb00f8f01ff36be769ae86105a71d1d742",
+    "examples/longform/type-boundaries/grok-reviewed.html": "f06f15bb1c1ad212637147e9a83a3bfe9ac2b7b8e676e4e68de03917e5439bea"
+  }
+}

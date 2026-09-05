@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="拾光工具图书馆完整中文图解：分清库存、申请与借用，读懂资格、排队、留置、交接、续借、归还与押金结算的条件和例外。虚构教学案例。">
+  <meta name="color-scheme" content="light">
+  <title>借到工具，究竟从哪一步算起？｜拾光工具图书馆 · AhaFold</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #fffefa;
+      --ink: #242e2c;
+      --muted: #56625f;
+      --teal: #246c60;
+      --teal-wash: #eef5f1;
+      --apricot: #e6bd68;
+      --apricot-wash: #fff4dc;
+      --amber-ink: #77531c;
+      --line: #d8ded7;
+      --soft: #f3f4ef;
+      --red: #903f30;
+      --red-wash: #fbefeb;
+      --page-width: 82rem;
+      --reading-width: 44rem;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 100%;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-padding-block-start: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { background: var(--apricot); color: var(--ink); }
+    a { color: var(--teal); text-underline-offset: .22em; }
+    a:hover { text-decoration-thickness: .12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 4px; }
+    [id] { scroll-margin-block-start: 1.5rem; }
+    p, li, dd, dt, th, td, h1, h2, h3, figcaption, code, output { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.2rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { line-height: 1.4; text-wrap: balance; }
+    h1 { max-width: 16em; margin: 0; font-size: clamp(2.25rem, 4.2vw, 3.5rem); font-weight: 750; letter-spacing: -.035em; }
+    h2 { margin: 0 0 1.4rem; font-size: 2rem; letter-spacing: -.02em; }
+    h3 { margin: 2rem 0 .75rem; font-size: 1.3rem; }
+    strong { font-weight: 700; }
+    ul, ol { padding-inline-start: 1.5rem; margin-block: 1rem 1.5rem; }
+    li + li { margin-top: .65rem; }
+    figure { margin: 2rem 0; }
+    figcaption, .supporting { color: var(--muted); font-size: 1rem; line-height: 1.75; }
+    figcaption { margin-top: 1rem; }
+    code, .numeric { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-variant-numeric: tabular-nums; }
+    code { font-size: .95em; }
+    .skip-link { position: absolute; inset: .75rem auto auto 1rem; z-index: 2; padding: .5rem 1rem; background: var(--paper); transform: translateY(-200%); }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, .page-layout, .page-footer { width: min(calc(100% - 5rem), var(--page-width)); margin-inline: auto; }
+    .page-header { display: flex; justify-content: space-between; flex-wrap: wrap; align-items: baseline; gap: .5rem 1rem; padding-block: 1.5rem 1rem; border-bottom: 1px solid var(--line); }
+    .wordmark { font-size: 1.5rem; font-weight: 750; letter-spacing: -.03em; margin: 0; }
+    .tagline { color: var(--muted); font-size: .95rem; margin: 0; }
+    .page-layout { display: grid; grid-template-columns: 12rem minmax(0, 1fr); gap: 0 3.5rem; align-items: start; }
+    .page-layout > * { min-width: 0; }
+    .introduction { grid-column: 2; padding-block: 4rem 3rem; }
+    .eyebrow, .chapter-no { color: var(--teal); font-size: .875rem; letter-spacing: .08em; font-weight: 700; }
+    .eyebrow { margin-bottom: 1rem; }
+    .lead { max-width: var(--reading-width); margin-top: 1.5rem; font-size: 1.25rem; line-height: 1.9; }
+    .central-answer { max-width: var(--reading-width); border-left: 4px solid var(--teal); background: var(--teal-wash); padding: 1.25rem 1.5rem; margin-block: 1.75rem; }
+    .scope-note { max-width: var(--reading-width); font-size: 1rem; color: var(--muted); }
+    .contents { position: sticky; top: 1.5rem; grid-column: 1; grid-row: 1 / span 2; margin-top: 4rem; max-height: calc(100dvh - 3rem); overflow-y: auto; padding: .25rem; }
+    .contents-title { font-size: 1rem; margin: 0 0 .75rem; font-weight: 700; }
+    .contents ol { list-style: none; padding: 0; margin: 0; }
+    .contents li + li { margin: 0; }
+    .contents a { display: block; min-height: 2.75rem; padding: .55rem .3rem; font-size: .95rem; line-height: 1.55; color: var(--muted); text-decoration: none; }
+    .contents a:hover { color: var(--teal); background: var(--teal-wash); text-decoration: underline; }
+    .contents .nav-number { display: inline-block; width: 1.8rem; color: var(--teal); font-variant-numeric: tabular-nums; }
+    .reading-body { grid-column: 2; min-width: 0; }
+    .chapter { padding-block: 3.5rem; border-top: 1px solid var(--line); }
+    .chapter-no { margin-bottom: .65rem; }
+    .prose { max-width: var(--reading-width); }
+    .section-lead { color: var(--muted); }
+    .source-ref { font-size: .875rem; color: var(--muted); white-space: nowrap; letter-spacing: .015em; }
+    .note { margin-block: 1.5rem; padding: 1.1rem 1.35rem; background: var(--apricot-wash); border-left: 3px solid var(--apricot); }
+    .note.caution { background: var(--red-wash); border-color: var(--red); }
+    .note p + p { margin-top: .6rem; }
+    .overview-path { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem 1.75rem; padding: 0; list-style: none; margin: 0; counter-reset: journey; }
+    .overview-path li { border-top: 3px solid var(--line); margin: 0; padding-top: .85rem; counter-increment: journey; }
+    .overview-path li::before { content: "0" counter(journey); display: block; color: var(--teal); font-size: .875rem; font-weight: 700; }
+    .overview-path h3 { font-size: 1.15rem; margin: .35rem 0 .6rem; }
+    .overview-path p { font-size: 1rem; }
+    .branch { display: block; color: var(--amber-ink); margin-top: .6rem; font-size: .95rem; }
+    .record { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: 1.5rem; margin-block: 1.5rem; padding-block: 1.5rem; border-top: 1px solid var(--line); }
+    .record h3 { margin: 0; font-size: 1.2rem; }
+    .record .record-question { display: block; margin-top: .5rem; font-weight: 400; font-size: 1rem; color: var(--muted); }
+    .states { display: flex; flex-wrap: wrap; gap: .5rem; list-style: none; padding: 0; margin: .8rem 0 1rem; }
+    .states li { margin: 0; padding: .2rem .65rem; font-size: 1rem; background: var(--soft); border: 1px solid var(--line); }
+    .states .stock { background: var(--teal-wash); border-color: #a6c4b7; }
+    .states .application { background: var(--apricot-wash); border-color: #dec48c; }
+    .stock-count { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin-top: 1rem; }
+    .stock-count div { padding: 1rem; text-align: center; background: var(--soft); }
+    .stock-count strong { display: block; font-size: 1.75rem; line-height: 1.4; }
+    .stock-count span { font-size: 1rem; }
+    .scroll-region { max-width: 100%; overflow: auto; overscroll-behavior-inline: contain; margin-block: 1.5rem; padding: .2rem; }
+    table { width: 100%; border-collapse: collapse; line-height: 1.7; font-size: 1rem; font-variant-numeric: tabular-nums; }
+    caption { text-align: left; font-weight: 700; padding-bottom: .85rem; }
+    th, td { padding: .9rem 1rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { font-weight: 700; }
+    thead { background: var(--soft); }
+    tbody th { width: 23%; }
+    .wide-table { min-width: 39rem; }
+    .number-table { min-width: 35rem; }
+    .number-table th, .number-table td { text-align: right; }
+    .number-table th:first-child { text-align: left; }
+    .highlight-row { background: var(--apricot-wash); }
+    .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; margin-block: 1.75rem; }
+    .pair > div { min-width: 0; padding-top: 1.25rem; border-top: 2px solid var(--line); }
+    .pair h3 { margin-top: 0; }
+    .receipt { padding: 1.2rem; background: var(--soft); margin-top: .75rem; }
+    .receipt dl { margin: 0; }
+    .receipt dt { margin-top: .6rem; color: var(--muted); font-size: .9rem; }
+    .receipt dt:first-child { margin-top: 0; }
+    .receipt dd { margin: 0; }
+    .receipt.confirmed { background: var(--teal-wash); }
+    .decision { margin-block: 1.75rem; border-block: 1px solid var(--line); }
+    .decision-row { display: grid; grid-template-columns: minmax(0, 1fr) 2.5rem minmax(0, 1.1fr); gap: .5rem; align-items: center; padding: 1rem 0; }
+    .decision-row + .decision-row { border-top: 1px solid var(--line); }
+    .decision-row p { margin: 0; }
+    .arrow { color: var(--teal); text-align: center; font-weight: 700; }
+    .timeline { list-style: none; padding: 0 0 0 1.4rem; border-left: 2px solid var(--line); margin-block: 1.5rem; }
+    .timeline li { position: relative; padding-bottom: 1.3rem; margin: 0; }
+    .timeline li::before { content: ""; position: absolute; left: -1.78rem; top: .5rem; width: .65rem; height: .65rem; border-radius: 50%; background: var(--teal); border: 2px solid var(--paper); }
+    .timeline h3 { margin: 0 0 .4rem; font-size: 1.125rem; }
+    .timeline p { margin-bottom: .5rem; }
+    .equation { margin-block: 1.5rem; padding: 1.3rem 1.5rem; background: var(--teal-wash); font-variant-numeric: tabular-nums; }
+    .equation p + p { margin-top: .75rem; }
+    .formula { font-size: 1.1rem; overflow-wrap: anywhere; }
+    .money-comparison { padding-block: 1.5rem; border-block: 1px solid var(--line); }
+    .money-example + .money-example { margin-top: 1.75rem; }
+    .money-example h3 { margin: 0 0 .75rem; font-size: 1.125rem; }
+    .money-bar { display: flex; width: 100%; height: 1.6rem; border: 1px solid var(--ink); }
+    .money-bar > span { min-width: 0; }
+    .money-bar .refund { background: var(--teal); }
+    .money-bar .late { background: var(--apricot); border-left: 2px solid var(--paper); }
+    .money-bar .damage { background: var(--red); border-left: 2px solid var(--paper); }
+    .money-labels { display: flex; flex-wrap: wrap; gap: .45rem 1.5rem; margin-top: .75rem; font-size: 1rem; }
+    .money-labels span { border-bottom: 3px solid var(--line); }
+    .money-labels .refund { border-color: var(--teal); }
+    .money-labels .late { border-color: var(--apricot); }
+    .money-labels .damage { border-color: var(--red); }
+    .checklist li::marker { color: var(--teal); font-weight: 700; }
+    .checklist li { padding-left: .3rem; }
+    .event-list { list-style: none; padding: 0; margin: 2rem 0; counter-reset: event; }
+    .event-list > li { counter-increment: event; padding: 1.5rem 0 1.5rem 3.5rem; position: relative; border-top: 1px solid var(--line); margin: 0; }
+    .event-list > li::before { content: counter(event); position: absolute; left: 0; top: 1.5rem; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border: 1px solid var(--teal); color: var(--teal); font-weight: 700; }
+    .event-list h3 { margin: 0 0 .6rem; }
+    .record-snapshot { display: flex; flex-wrap: wrap; gap: .5rem 1.2rem; margin: .75rem 0; font-size: 1rem; }
+    .record-snapshot span { padding-block: .15rem; border-bottom: 2px solid var(--line); }
+    .record-snapshot .stock { border-color: var(--teal); }
+    .record-snapshot .application { border-color: var(--apricot); }
+    .exception { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 1.25rem; padding-block: 1.25rem; border-top: 1px solid var(--line); }
+    .exception dt { font-weight: 700; }
+    .exception dd { margin: 0; }
+    .quick-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .25rem 2rem; list-style: none; padding: 0; }
+    .quick-links a { display: block; padding-block: .55rem; }
+    .page-footer { border-top: 1px solid var(--line); padding-block: 1.5rem 3rem; }
+    .footer-inner { margin-left: 15.5rem; max-width: var(--reading-width); }
+    .page-footer p { font-size: 1rem; color: var(--muted); }
+    .return-link { display: inline-block; min-height: 2.75rem; padding-block: .5rem; }
+    @media (max-width: 70rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 3rem); }
+      .page-layout { grid-template-columns: 10.5rem minmax(0, 1fr); column-gap: 2rem; }
+      .footer-inner { margin-left: 12.5rem; }
+      .overview-path { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 55rem) {
+      .page-layout { display: block; }
+      .introduction { padding-block: 3rem 2rem; }
+      .contents { position: static; max-height: none; overflow: visible; margin: 0 0 2.5rem; padding: 1.1rem 0; border-block: 1px solid var(--line); }
+      .contents ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1.5rem; }
+      .footer-inner { margin-left: 0; }
+    }
+    @media (max-width: 38rem) {
+      .page-header, .page-layout, .page-footer { width: calc(100% - 2.25rem); }
+      body { font-size: 1.0625rem; }
+      h1 { font-size: 2.25rem; }
+      h2 { font-size: 1.6rem; }
+      h3 { font-size: 1.2rem; }
+      .lead { font-size: 1.125rem; }
+      .chapter { padding-block: 2.75rem; }
+      .contents ol, .overview-path, .pair, .quick-links { grid-template-columns: minmax(0, 1fr); }
+      .contents a { padding-block: .65rem; }
+      .overview-path { gap: 1.2rem; }
+      .pair { gap: 1.5rem; }
+      .record, .exception { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+      .record .record-question { display: inline; margin-left: .5rem; }
+      .note, .central-answer, .equation { padding: 1rem 1.1rem; }
+      .stock-count { gap: .4rem; }
+      .stock-count div { padding: .75rem .35rem; }
+      .decision-row { grid-template-columns: minmax(0, 1fr); gap: .4rem; }
+      .arrow { text-align: left; }
+      .arrow::before { content: "结果 "; font-size: .9rem; }
+      .event-list > li { padding-left: 2.8rem; }
+      .event-list > li::before { width: 2rem; height: 2rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+    @media print {
+      @page { margin: 16mm; }
+      :root { font-size: 11pt; }
+      body { font-size: 1rem; line-height: 1.7; }
+      .page-header, .page-layout, .page-footer { width: 100%; }
+      .page-layout { display: block; }
+      .skip-link, .contents, .return-link, .interactive-only { display: none !important; }
+      .introduction { padding-block: 1.5rem 2rem; }
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 1.6rem; }
+      h2, h3, caption { break-after: avoid; }
+      .chapter { padding-block: 1.5rem; }
+      .prose, .lead, .central-answer, .scope-note { max-width: none; }
+      .scroll-region { overflow: visible; padding: 0; }
+      table { font-size: .85rem; }
+      .wide-table, .number-table { min-width: 0; }
+      th, td { padding: .45rem; }
+      thead { display: table-header-group; }
+      tr, .note, .equation, .record, .event-list > li, .exception { break-inside: avoid; }
+      .overview-path { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .overview-path li { break-inside: avoid; }
+      .footer-inner { margin-left: 0; }
+      .supporting, figcaption, .page-footer p { font-size: .85rem; }
+      a { color: inherit; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Adapted from the installed AhaFold longform.html. All diagrams are selectable HTML/CSS. -->
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。 / 社区借用规则图解</p>
+  </header>
+  <main id="main" class="page-layout" tabindex="-1" aria-labelledby="page-title">
+    <header class="introduction">
+      <p class="eyebrow">拾光工具图书馆 · 完整阅读指南</p>
+      <h1 id="page-title">借到工具，<br>究竟从哪一步算起？</h1>
+      <p class="lead">申请收到了，还不等于留好了一台。工具交回了，也不等于押金已经结清。沿着一次借用，分清每一步改变了什么、还需要满足什么条件。</p>
+      <div class="central-answer">
+        <p><strong>留置确认锁定一台实物，实际交接才开始借用；服务台登记归还停止逾期计时，检查和押金结清仍是后续动作。</strong>理解这四个节点，就能把“成功”消息读到它真正保证的那一步。</p>
+      </div>
+      <p class="scope-note">这是 <strong>material.md 提供的原创虚构教学案例</strong>。机构、人员、资产编号、日期与计价单位均不对应实际机构、收费承诺或现实法律规则。全文固定使用 <strong>UTC+08:00</strong>；“小时”指连续经过的小时，不随设备时区改变。服务时间为每天 <strong>09:00–18:00</strong>。</p>
+    </header>
+
+    <nav id="contents" class="contents" aria-label="本页目录" tabindex="-1">
+      <p class="contents-title">按困惑找答案</p>
+      <ol>
+        <li><a href="#overview"><span class="nav-number">00</span>先看完整路线</a></li>
+        <li><a href="#records"><span class="nav-number">01</span>三条记录，三种进度</a></li>
+        <li><a href="#eligibility"><span class="nav-number">02</span>谁能借，怎样才算留好</a></li>
+        <li><a href="#reservation"><span class="nav-number">03</span>留置与排队的边界</a></li>
+        <li><a href="#handover"><span class="nav-number">04</span>领取、借期与续借</a></li>
+        <li><a href="#return"><span class="nav-number">05</span>何时算还，怎样算逾期</a></li>
+        <li><a href="#settlement"><span class="nav-number">06</span>押金能退多少</a></li>
+        <li><a href="#exceptions"><span class="nav-number">07</span>损伤异议与安全故障</a></li>
+        <li><a href="#whole-story"><span class="nav-number">08</span>跟着同一台电钻走一遍</a></li>
+        <li><a href="#recoverable"><span class="nav-number">09</span>费用封顶后，归还有何意义</a></li>
+        <li><a href="#sources"><span class="nav-number">附</span>规则索引与适用范围</a></li>
+      </ol>
+    </nav>
+
+    <article class="reading-body" aria-label="从申请到归还的完整中文图解">
+      <section class="chapter" aria-labelledby="overview">
+        <p class="chapter-no">00 / 一张路线图</p>
+        <h2 id="overview" tabindex="-1">每前进一步，得到的保证都不同</h2>
+        <p class="prose section-lead">先看可能成功走完的路线，再看各步会在哪里停下。下面的顺序不承诺每份申请都能走到最后。</p>
+        <figure aria-labelledby="overview-caption">
+          <ol class="overview-path">
+            <li><h3>提交申请</h3><p>系统收件并给出申请编号。资格和可借库存都可能尚未确认。</p><span class="branch">下一步：检查资格和实物</span></li>
+            <li><h3>分配或排队</h3><p>符合条件且有待借实物，才可留置。没有实物的合格申请进入队列。</p><span class="branch">分支：被拒，或继续等待</span></li>
+            <li><h3>收到留置确认</h3><p>有资产号、地点和截止时间；这台工具暂不分给别人。</p><span class="branch">分支：取消、过期，或领取时被拒</span></li>
+            <li><h3>本人领取交接</h3><p>再次验资格、数量、培训，确认状况。借用记录与七天借期从交接开始。</p><span class="branch">借用期间：符合条件可续借一次</span></li>
+            <li><h3>服务台登记归还</h3><p>停止逾期计时；借用变为已记归还，实物进入待检查。</p><span class="branch">下一步：检查，必要时维修或复核</span></li>
+            <li><h3>检查与结清</h3><p>按已定义规则核算费用和可退押金；损伤存在异议时暂缓结清。</p><span class="branch">实物能否再借，要另看库存状态</span></li>
+          </ol>
+          <figcaption id="overview-caption">路线中的连接表示办理先后。排队、留置和借用不是同一阶段；“归还”与“重新可借”之间还隔着检查。</figcaption>
+        </figure>
+      </section>
+
+      <section class="chapter" aria-labelledby="records">
+        <p class="chapter-no">01 / 分清对象</p>
+        <h2 id="records" tabindex="-1">同一件事，要看三条记录</h2>
+        <p class="prose">把“工具现在在哪”“我的申请到哪一步”“我还承担什么借用责任”分别问清，就不会把一个状态套到所有地方。</p>
+        <div class="record" id="L01">
+          <h3>库存记录<span class="record-question">看一台实物</span></h3>
+          <div><p>每台工具有独立资产号，例如 <code>SHIGUANG-DRILL-CORDLESS-2026-COMMUNITY-NORTH-000184</code>。库存记录说明它在哪里、能否交给下一个人。 <span class="source-ref">L01</span></p>
+            <ul class="states" aria-label="库存的六种状态"><li class="stock">待借</li><li>已留置</li><li>借出</li><li>待检查</li><li>维修</li><li>退役</li></ul>
+            <p><strong>只有“待借”可以立即分配。</strong>同型号的维修工具不能算进可借数量。“总库存三台、可借零台”完全可能：</p>
+            <div class="stock-count" aria-label="库存示例：两台借出，一台维修，零台可借"><div><strong>2 台</strong><span>已经借出</span></div><div><strong>1 台</strong><span>正在维修</span></div><div><strong>0 台</strong><span>立即可借</span></div></div>
+          </div>
+        </div>
+        <div class="record" id="L02">
+          <h3>申请记录<span class="record-question">看一个请求</span></h3>
+          <div><p>它描述某个人的请求进度。留置必须关联具体资产号和领取截止时间；排队没有专属资产，轮到前也没有领取期限。 <span class="source-ref">L02</span></p>
+            <ul class="states" aria-label="申请的七种状态"><li>已收件</li><li>排队</li><li class="application">已留置</li><li>被拒</li><li>已取消</li><li>已过期</li><li>已完成</li></ul>
+            <p><strong>申请“已完成”表示已经用于交接工具，不能据此认定工具归还了。</strong></p>
+          </div>
+        </div>
+        <div class="record" id="L03">
+          <h3>借用记录<span class="record-question">看一次借用</span></h3>
+          <div><p>它从实际交接开始，可能依次出现以下状态；按时归还会跳过“已逾期”。 <span class="source-ref">L03</span></p>
+            <ul class="states" aria-label="借用的四种可能状态"><li>借用中</li><li>已逾期</li><li class="stock">已记归还</li><li>已结清</li></ul>
+            <p>“已记归还”会停止逾期时间增长，但仍可能等待外观检查和押金结算。此时库存为“待检查”，不能立即写成“待借”。</p>
+          </div>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="records-caption">
+          <table class="wide-table"><caption id="records-caption">把同一次借用横着看：三条记录不会同步成一个词</caption>
+            <thead><tr><th scope="col">发生的事</th><th scope="col">库存记录</th><th scope="col">申请记录</th><th scope="col">借用记录</th></tr></thead>
+            <tbody><tr><th scope="row">收到留置确认，尚未领取</th><td>已留置</td><td>已留置</td><td>尚未建立</td></tr>
+              <tr><th scope="row">实际交接完成</th><td>借出</td><td>已完成</td><td>借用中</td></tr>
+              <tr class="highlight-row"><th scope="row">服务台已登记归还，尚未检查</th><td>待检查</td><td>仍为已完成</td><td>已记归还</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="supporting">表格可在窄屏内横向滚动。三条记录互相引用；表中的“已完成”只属于申请。</p>
+      </section>
+
+      <section class="chapter" aria-labelledby="eligibility">
+        <p class="chapter-no">02 / 从有资格到有实物</p>
+        <h2 id="eligibility" tabindex="-1">先确认能不能借，再确认有没有一台给你</h2>
+        <div class="prose">
+          <h3 id="L04">资格会变，领取当下还要有效 <span class="source-ref">L04</span></h3>
+          <ul class="checklist"><li><strong>年满十八岁。</strong></li><li><strong>会员有效。</strong></li><li><strong>没有尚未记归还的逾期借用。</strong></li><li><strong>需要安全培训的电钻，领取时培训记录也必须有效。</strong>普通测量尺不要求电钻培训。</li></ul>
+          <p>申请时通过检查，不代表领取时仍然合格。会员到期、出现逾期记录，或需要的培训失效，都可能改变结果。</p>
+          <h3 id="L05">两种数量限制，数的是不同东西 <span class="source-ref">L05</span></h3>
+        </div>
+        <div class="pair">
+          <div><h3>最多 2 条：未记归还的借用</h3><p>数的是每人同时持有的借用记录。一旦已经记归还，这条记录就不再属于“未记归还”，即使押金仍在等待结清。</p></div>
+          <div><h3>最多 1 份：同类别未结束申请</h3><p>同一个人对同一工具类别，最多保留一份未结束申请。被拒、已取消、已过期、已完成，都属于申请结束。</p></div>
+        </div>
+        <div class="prose note"><p><strong>留置不占两条借用名额，也不会替你保住一个名额。</strong>例如，你先留置电钻，再借满两台其他工具，领取电钻时就会因数量限制无法交接。</p></div>
+        <h3 id="L06">读消息时，找的是具体承诺 <span class="source-ref">L06</span></h3>
+        <div class="pair">
+          <div><h3>“申请已收到”</h3><div class="receipt"><p>申请已收到，编号 <code>REQ-0412</code></p></div><p class="supporting">这只说明请求进入系统。工作人员可能尚未完成资格检查，也可能没有可借工具。自动回执不是已借到或保证能借到的凭证。</p></div>
+          <div><h3>“留置确认”</h3><div class="receipt confirmed"><dl><dt>具体资产号</dt><dd><code>SHIGUANG-DRILL-CORDLESS-2026-COMMUNITY-NORTH-000184</code></dd><dt>领取地点</dt><dd>确认中列明的具体地点</dd><dt>领取截止时间</dt><dd>确认中列明的具体时刻</dd></dl></div><p class="supporting">这些信息同时列在另发的留置确认中，才说明这台实物暂时不再分配给别人。上方为字段示意，不是有效领取凭证。</p></div>
+        </div>
+        <div class="prose">
+          <h3 id="L07">最后一台，只能分给一份申请 <span class="source-ref">L07</span></h3>
+          <p>两个居民可能同时看到页面显示“还有一台”。真正分配时，系统把<strong>实物改为已留置</strong>和<strong>申请改为已留置</strong>作为一次不可拆开的操作完成，这叫“原子分配”。</p>
+          <div class="decision" aria-label="最后一台工具的分配结果"><div class="decision-row"><p>其中一份合格申请<br>成功分配最后一台</p><span class="arrow" aria-hidden="true">→</span><p>库存：已留置<br>该申请：已留置，关联这台资产</p></div><div class="decision-row"><p>另一份合格申请<br>已没有待借实物</p><span class="arrow" aria-hidden="true">→</span><p>申请进入排队<br>不能再拿到同一台工具</p></div></div>
+          <p>页面早些时候显示的库存数字，不是两个人同时取得同一台实物的依据。</p>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="reservation">
+        <p class="chapter-no">03 / 等待也有边界</p>
+        <h2 id="reservation" tabindex="-1">留置有倒计时，排队没有到货保证</h2>
+        <div class="prose">
+          <h3 id="L08">二十四小时从“留置确认”起算 <span class="source-ref">L08</span></h3>
+          <p>留置确认只在每天 <strong>09:00–18:00</strong> 的服务时间内产生。正常领取期限为确认时刻之后的连续 <strong>24 小时</strong>，不是从申请提交开始，也不是等到下一天打烊。</p>
+          <figure aria-labelledby="hold-caption"><ol class="timeline"><li><h3>十月一日 15:20 · 留置确认产生</h3><p>该实物开始留给你，领取窗口开始计时。</p></li><li><h3>十月二日 15:20 之前 · 必须完成交接</h3><p>“已经到门口”不能代替实际交接；还需符合领取条件。</p></li><li><h3>十月二日 15:20 · 到点即过期</h3><p>恰在这个时刻交接已经太晚。</p></li></ol><figcaption id="hold-caption">时间线来自原文示例，统一为 UTC+08:00。二十四小时是连续经过的时间；实际领取还须在服务时间内。</figcaption></figure>
+          <h3 id="L09">临时闭馆，不能自行把截止时间往后推 <span class="source-ref">L09</span></h3>
+          <p>无法提供领取服务时，工作人员必须<strong>发出带新截止时间的更正确认</strong>，或者<strong>取消留置并通知申请人</strong>。没有更正确认，就没有自动延期。</p>
+          <p>迟到后要重新申请，不能跳过队伍恢复原留置。留置的“截止前”也不要与归还混淆：<a href="#deadline-boundaries">归还允许在到期时刻完成登记</a>。</p>
+          <h3 id="L10">想取消，要在交接之前办理 <span class="source-ref">L10</span></h3>
+          <p>取消排队或留置都不收取消费，这时也没有已收取的借用押金。取消留置后，若工具<strong>仍处于可交接状况</strong>，就立即释放给下一份符合条件的申请。</p>
+          <p>交接已经发生，就要办理归还。“取消申请”不能抹去正在进行的借用及责任。</p>
+          <h3 id="L11">队伍按系统记录排，不按谁催得多排 <span class="source-ref">L11</span></h3>
+          <p>先比较<strong>服务器收件时间</strong>；同一时刻再比较<strong>服务器生成的递增序号</strong>。住得近、反复刷新或提前发消息都不会改变顺序。</p>
+          <div class="note"><p><strong>排队不收押金，也不承诺具体可借日期。</strong>前一位可能续借失败；即使准时归还，检查也可能发现工具需要维修。排在前面，不等于能推算哪天拿到。</p></div>
+          <h3 id="L12">轮到你时，会重新检查资格 <span class="source-ref">L12</span></h3>
+          <p>工具释放后，系统按队列次序检查候选人。会员失效、仍有未记归还的逾期借用，或已经借满两台，都可能让这次排队结束。</p>
+          <div class="decision" aria-label="递补检查的两条分支"><div class="decision-row"><p>当前候选人不符合条件</p><span class="arrow" aria-hidden="true">→</span><p><strong>申请变为被拒，通知原因</strong><br>系统继续检查下一人</p></div><div class="decision-row"><p>当前候选人符合条件</p><span class="arrow" aria-hidden="true">→</span><p><strong>发出新的留置确认</strong><br>新的 24 小时从此次确认起算</p></div></div>
+          <p><strong>被拒不是暂停原来的排队位置。</strong>资格恢复后可以重新申请，但采用新的收件时间，不继承旧序号。</p>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="handover">
+        <p class="chapter-no">04 / 真正开始借用</p>
+        <h2 id="handover" tabindex="-1">本人交接以后，七天借期才开始</h2>
+        <div class="prose">
+          <h3 id="L13">一条确认消息，不能转成代领资格 <span class="source-ref">L13</span></h3>
+          <p>领取人必须与申请人一致，并出示身份凭证。把确认转发给朋友，不允许朋友代领。</p>
+          <ol class="checklist"><li>工作人员再次确认资格、数量，以及所需培训是否有效。</li><li>双方确认工具状况。</li><li>条件满足后，记录实际交接时间，建立借用记录。</li></ol>
+          <p>领取时不合格，留置申请转为<strong>被拒</strong>并释放实物。先付押金也不能绕过这些条件。</p>
+          <h3 id="L14">每次成功借用，押金 100，基础借期七天 <span class="source-ref">L14</span></h3>
+          <p>每条成功建立的借用记录收取 <strong>100 个虚构计价单位</strong>的押金。它可以按规则部分或全部退回，不是不可退的会费，也不是工具买断价。</p>
+        </div>
+        <figure aria-labelledby="two-clocks-caption">
+          <div class="pair"><div><h3>领取窗口的钟</h3><p>起点：留置确认</p><p class="numeric">确认时刻 + 24 小时</p><p>控制这台实物暂时为你保留到什么时候。</p></div><div><h3>借用期限的钟</h3><p>起点：实际交接</p><p class="numeric">交接时刻 + 7 × 24 小时</p><p>控制工具借用到什么时候；留置过去的一天不扣进来。</p></div></div>
+          <figcaption id="two-clocks-caption">两只钟起点不同。留置不提前开始借用，也不提前占用借用名额。</figcaption>
+        </figure>
+        <div class="prose">
+          <div class="equation"><p><strong>十月三日 16:00 交接</strong></p><p>基础到期：十月十日 16:00</p><p>若唯一一次续借获批：新到期为十月十七日 16:00</p></div>
+          <h3 id="L15">续借只能成功一次，而且不能等到到期那一刻 <span class="source-ref">L15</span></h3>
+          <p>续借申请必须在到期时刻<strong>之前</strong>提出，系统处理时也必须<strong>尚未到期</strong>。处理时还要同时满足：</p>
+          <ul class="checklist"><li>尚未使用这一次续借机会。</li><li>该工具类别没有排队申请。</li><li>会员及所需培训仍有效。</li><li>没有其他尚未记归还的逾期借用。</li></ul>
+          <p>获批后，在<strong>原到期时刻</strong>上增加 <strong>7 × 24 小时</strong>，总借期最多十四天。不是从提出续借或批准那一刻重新数七天。</p>
+          <p><strong>只有带新到期时刻的续借确认才改变期限。</strong>提出申请、收到收件回执都不算续借成功。即使提前提交，若处理时已经到期，也不符合条件。</p>
+          <h3 id="L16">有人排队，就不能先批准续借 <span class="source-ref">L16</span></h3>
+          <p>处理续借时，只要该类别存在排队申请，本次续借即被拒。不能以“排队者之后可能不合格”为理由跳过他们。</p>
+          <div class="note"><p><strong>两个判断，发生在两个不同事件。</strong>续借时看“有没有排队申请”；实际递补时才按顺序检查候选人资格。续借被拒不取消当前借用，只保留原到期时刻。</p></div>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="return">
+        <p class="chapter-no">05 / 时间边界</p>
+        <h2 id="return" tabindex="-1">服务台登记了，才算真的归还</h2>
+        <div class="prose">
+          <h3 id="L17">计时终点是实际接收并登记 <span class="source-ref">L17</span></h3>
+          <p>归还时间以<strong>服务台实际接收并登记工具</strong>的时间为准。本案例没有无人投递箱。发“我已归还”消息、到达门口、预约检查，都不会停止计时。</p>
+          <p>服务时间仍为每天 <strong>09:00–18:00</strong>，要安排在开放时间交回。服务台恰在到期时刻完成登记，属于按时归还，不收逾期费。</p>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="deadline-boundaries">
+          <table class="wide-table"><caption id="deadline-boundaries">同样是“恰好到点”，三种操作的结果不同</caption><thead><tr><th scope="col">操作</th><th scope="col">允许的时间边界</th><th scope="col">恰在截止或到期时刻</th></tr></thead><tbody><tr><th scope="row">领取交接</th><td>交接时刻 &lt; 留置截止时刻</td><td>留置已过期，不能交接</td></tr><tr><th scope="row">提出和处理续借</th><td>申请、处理时刻都 &lt; 到期时刻</td><td>不满足续借条件</td></tr><tr class="highlight-row"><th scope="row">按时登记归还</th><td>登记时刻 ≤ 借用到期时刻</td><td>按时归还，逾期为 0</td></tr></tbody></table>
+        </div>
+        <div class="prose">
+          <p>所以，十月十日 16:00 到期的工具，在 16:00 登记归还是准时；在同一时刻提交续借，却已经太晚。</p>
+          <h3 id="L18">超过一秒，也算一个逾期日 <span class="source-ref">L18</span></h3>
+          <p>逾期日数取决于<strong>超过到期时刻的连续时间</strong>，向上取整。它不是跨过几次午夜，也不是实际使用了几天。</p>
+          <div class="equation"><p><strong>没有超过到期时刻：</strong>逾期日数 = 0</p><p><strong>已经超过：</strong>逾期日数 = 向上取整（连续超时小时 ÷ 24）</p><p class="supporting">“向上取整”就是有剩余也再算一个整日。先算精确超时，再取整，不能先把不足一小时的部分舍去。</p></div>
+        </div>
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="overdue-caption">
+          <table class="wide-table"><caption id="overdue-caption">以十月十日 16:00 到期为例：边界逐一对照（UTC+08:00）</caption><thead><tr><th scope="col">服务台登记时刻</th><th scope="col">连续超时</th><th scope="col">逾期日数</th></tr></thead><tbody><tr><th scope="row">十月十日 16:00:00</th><td>0 秒</td><td>0</td></tr><tr><th scope="row">十月十日 16:00:01</th><td>1 秒</td><td>1</td></tr><tr><th scope="row">十月十一日 16:00:00</th><td>恰好 24 小时</td><td>1</td></tr><tr class="highlight-row"><th scope="row">十月十一日 16:00:01</th><td>24 小时又 1 秒</td><td>2</td></tr><tr><th scope="row">十月十二日 16:00:00</th><td>恰好 48 小时</td><td>2</td></tr><tr><th scope="row">十月二十四日 16:00:00</th><td>恰好 14 × 24 小时</td><td>14</td></tr><tr><th scope="row">十月二十四日 16:00:01</th><td>14 × 24 小时又 1 秒</td><td>15，超出本文结算范围</td></tr></tbody></table>
+        </div>
+        <div class="prose note caution"><p><strong>本文只定义 0–14 个逾期日的结算。</strong>超过十四日的处置须由工作人员另行处理，不能继续套公式，也不能自行推演为工具丢失、自动买断或其他条款。</p></div>
+        <p class="supporting">表中的秒级时刻是按原文规则展开的教学计算，均处于服务时间内；它们不新增办理规则。</p>
+      </section>
+
+      <section class="chapter" aria-labelledby="settlement">
+        <p class="chapter-no">06 / 把金额算清</p>
+        <h2 id="settlement" tabindex="-1">先算逾期费，再区分损伤有没有确认</h2>
+        <div class="prose">
+          <h3 id="L19">22.50 封顶的是逾期费这一项 <span class="source-ref">L19</span></h3>
+          <p>以下金额都使用虚构计价单位。押金是 <strong>100</strong>；逾期费每天 <strong>3.75</strong>，逾期费本身最高 <strong>22.50</strong>。经检查确认有新损伤，额外固定收取 <strong>20</strong>；没有新损伤或尚未确认时，损伤费为 <strong>0</strong>。</p>
+          <p>“尚未确认就不先收损伤费”不等于“这笔押金现在可以直接结清”。如果发生损伤异议，必须暂缓结清，详见<a href="#L21">损伤复核</a>。</p>
+          <div class="equation" aria-label="零至十四个逾期日内的押金计算公式"><p class="formula"><strong>逾期费</strong> = min（3.75 × 逾期日数，22.50）</p><p class="formula"><strong>押金退还额</strong> = max（0，100 − 逾期费 − 损伤费）</p><p class="supporting"><code>min</code> 取较小值，<code>max</code> 取较大值。因此逾期费被限定在 22.50 以内，退款不会小于 0。只适用本文定义的 0–14 个逾期日；损伤异议中的退款需等待复核。</p></div>
+          <p><strong>确认的新损伤另算 20，不包含在 22.50 上限里。</strong>在已定义区间内，两项合计最高为 42.50，不能把所有扣费理解成最多 22.50。</p>
+          <h3 id="L20">用整数分计算，最后显示两位小数 <span class="source-ref">L20</span></h3>
+          <p>系统把 100 记作 <strong>10000 分</strong>，3.75 记作 <strong>375 分</strong>，22.50 记作 <strong>2250 分</strong>，损伤费 20 记作 <strong>2000 分</strong>。计算全程使用整数分，最后再显示两位小数。</p>
+          <h3>把“两日逾期”逐项拆开</h3>
+          <ol class="checklist"><li>逾期费：min（375 × 2，2250）= 750 分，即 <strong>7.50</strong>。</li><li>无新损伤：10000 − 750 = 9250 分，退 <strong>92.50</strong>。</li><li>已确认新损伤：10000 − 750 − 2000 = 7250 分，退 <strong>72.50</strong>。</li></ol>
+        </div>
+        <figure class="money-comparison" aria-labelledby="money-caption">
+          <div class="money-example"><h3>逾期两日，无新损伤</h3><div class="money-bar" aria-hidden="true"><span class="refund" style="width:92.5%"></span><span class="late" style="width:7.5%"></span></div><div class="money-labels"><span class="refund">退还 92.50</span><span class="late">逾期费 7.50</span></div></div>
+          <div class="money-example"><h3>逾期两日，已确认新损伤</h3><div class="money-bar" aria-hidden="true"><span class="refund" style="width:72.5%"></span><span class="late" style="width:7.5%"></span><span class="damage" style="width:20%"></span></div><div class="money-labels"><span class="refund">退还 72.50</span><span class="late">逾期费 7.50</span><span class="damage">损伤费 20.00</span></div></div>
+          <figcaption id="money-caption">每条长条总额都是 100.00，从左到右按金额比例展示退还额、逾期费和损伤费。两种情况的逾期费相同，20.00 的差额来自确认的新损伤；损伤异议仍待复核时不据此结清。</figcaption>
+        </figure>
+        <!-- The complete static calculation table remains readable without JavaScript. -->
+        <div class="scroll-region" role="region" tabindex="0" aria-labelledby="fees-caption">
+          <table class="number-table" id="fee-table"><caption id="fees-caption">全部已定义逾期日数的结算对照（单位：虚构计价单位）</caption><thead><tr><th scope="col">逾期日数</th><th scope="col">逾期费</th><th scope="col">无新损伤：退还</th><th scope="col">确认新损伤：退还</th></tr></thead><tbody>
+            <tr data-days="0"><th scope="row">0</th><td>0.00</td><td>100.00</td><td>80.00</td></tr>
+            <tr data-days="1"><th scope="row">1</th><td>3.75</td><td>96.25</td><td>76.25</td></tr>
+            <tr data-days="2" class="highlight-row"><th scope="row">2</th><td>7.50</td><td>92.50</td><td>72.50</td></tr>
+            <tr data-days="3"><th scope="row">3</th><td>11.25</td><td>88.75</td><td>68.75</td></tr>
+            <tr data-days="4"><th scope="row">4</th><td>15.00</td><td>85.00</td><td>65.00</td></tr>
+            <tr data-days="5"><th scope="row">5</th><td>18.75</td><td>81.25</td><td>61.25</td></tr>
+            <tr data-days="6" class="highlight-row"><th scope="row">6（达到上限）</th><td>22.50</td><td>77.50</td><td>57.50</td></tr>
+            <tr data-days="7"><th scope="row">7</th><td>22.50</td><td>77.50</td><td>57.50</td></tr>
+            <tr data-days="8"><th scope="row">8</th><td>22.50</td><td>77.50</td><td>57.50</td></tr>
+            <tr data-days="9"><th scope="row">9</th><td>22.50</td><td>77.50</td><td>57.50</td></tr>
+            <tr data-days="10"><th scope="row">10</th><td>22.50</td><td>77.50</td><td>57.50</td></tr>
+            <tr data-days="11"><th scope="row">11</th><td>22.50</td><td>77.50</td><td>57.50</td></tr>
+            <tr data-days="12"><th scope="row">12</th><td>22.50</td><td>77.50</td><td>57.50</td></tr>
+            <tr data-days="13"><th scope="row">13</th><td>22.50</td><td>77.50</td><td>57.50</td></tr>
+            <tr data-days="14" class="highlight-row"><th scope="row">14（范围上界）</th><td>22.50</td><td>77.50</td><td>57.50</td></tr>
+          </tbody></table>
+        </div>
+        <p class="supporting">连续超时刚超过 120 小时，就向上计为第六个逾期日，达到逾期费上限；无需等满 144 小时。第十四日无新损伤退 77.50，确认新损伤退 57.50。表格不用于损伤异议尚未解决时的实际结清。窄屏可横向滚动。</p>
+      </section>
+
+      <section class="chapter" aria-labelledby="exceptions">
+        <p class="chapter-no">07 / 例外要单独判断</p>
+        <h2 id="exceptions" tabindex="-1">归还事实、损伤责任，不是同一个判断</h2>
+        <div class="prose">
+          <h3 id="L21">不同意损伤认定，暂缓的是结清 <span class="source-ref">L21</span></h3>
+          <p>工作人员应比较<strong>交接记录</strong>与<strong>归还检查</strong>，判断是否出现新损伤。申请人不同意损伤认定时，保留证据并人工复核，暂缓这条借用的押金结清。</p>
+        </div>
+        <div class="pair"><div><h3>已经成立的归还事实</h3><p>已记录的归还时间不撤销，逾期费不继续增长，借用仍是已记归还。</p></div><div><h3>仍待核实的损伤责任</h3><p>不能把“待核实”先当成固定 20 扣掉。复核结果与实际到账时间，本文都不作保证。</p></div></div>
+        <div class="prose">
+          <h3 id="L22">安全故障：先停用，再联系工作人员 <span class="source-ref">L22</span></h3>
+          <p>借用后发现影响安全的故障，应<strong>停止使用并联系工作人员</strong>。仅报告故障，不等于工具已经实际交还，也不自动免除全部费用。</p>
+          <dl><div class="exception"><dt>是否原有问题</dt><dd>需要比较交接记录，不能仅凭故障报告认定。</dd></div><div class="exception"><dt>是否减免费用</dt><dd>另行人工决定，不能从“已经报告”推断减免结果。</dd></div><div class="exception"><dt>库存显示维修</dt><dd>说明实物的状态，不是对借用者责任的自动判定。</dd></div></dl>
+          <div class="note"><p>这两类例外都要求把事实分开记录：工具是否已交回、是否出现新损伤、责任如何认定，以及何时可以结清，各有自己的判断依据。</p></div>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="whole-story">
+        <p class="chapter-no">08 / 连起来看</p>
+        <h2 id="whole-story" tabindex="-1">同一台电钻，经过甲、乙、丙</h2>
+        <p class="prose section-lead">把原文最后的例子展开，就能看到三条记录如何在同一天停在不同位置。这里只描述先后，不替维修或等待承诺具体耗时。</p>
+        <ol class="event-list">
+          <li><h3>早上，甲归还电钻</h3><p>服务台接收并登记后，甲的逾期计时停止。乙正在排队，但还不能直接获得留置。</p><div class="record-snapshot"><span class="stock">库存：待检查</span><span class="application">乙的申请：排队</span><span>甲的借用：已记归还</span></div></li>
+          <li><h3>检查发现需要维修</h3><p>电钻进入维修。总库存里仍有这台电钻，可分配库存却没有增加；维修也不自动裁定甲的损伤责任或结清结果。</p><div class="record-snapshot"><span class="stock">库存：维修</span><span class="application">乙的申请：仍在排队</span><span>甲的借用：归还事实不变</span></div></li>
+          <li><h3>下午，维修通过，出现可分配实物</h3><p>工具恢复可分配状况，系统才开始按队列检查候选人。乙此时会员已失效，旧申请被拒，并收到原因。</p><div class="record-snapshot"><span class="stock">库存：待借，可进行分配</span><span class="application">乙的申请：被拒</span><span>下一步：检查丙</span></div></li>
+          <li><h3>丙符合条件，收到留置确认</h3><p>实物与丙的申请一起变为已留置。二十四小时从本次确认起算；此刻丙还没有领取。</p><div class="record-snapshot"><span class="stock">库存：已留置</span><span class="application">丙的申请：已留置</span><span>丙的借用：尚未建立</span></div></li>
+        </ol>
+        <div class="prose note"><p><strong>现在，别人不能再分到这台电钻，但丙的七天借期还没有开始。</strong>乙若恢复会员并重申，使用新的收件时间。甲的押金何时结清，仍取决于甲自己的检查与结算进度。</p></div>
+        <p class="prose">如果丙随后在截止前本人领取、再次通过检查并完成交接，库存才变为借出，丙的申请变为已完成，丙的借用记录才开始。这里是按规则延伸的条件分支，不是说原文已经记载丙实际领走了工具。</p>
+      </section>
+
+      <section class="chapter" aria-labelledby="recoverable">
+        <p class="chapter-no">09 / 费用之外的后果</p>
+        <h2 id="recoverable" tabindex="-1">“钱交过了”，还不足以判断接下来怎么做</h2>
+        <div class="prose">
+          <h3 id="L23">一百押金不能全部叫作沉没成本 <span class="source-ref">L23</span></h3>
+          <p>“沉没成本”说的是已经无法改变、无法追回的过去支出。但这里的押金会因归还情况部分或全部退回，所以已经交出去，不等于已经全部失去。</p>
+        </div>
+        <div class="pair"><div><h3>已经不能改变的支出</h3><p>讨论它时，看它是否确实已经不可追回。不能仅凭付款发生在过去，就把整个押金归到这一边。</p></div><div><h3>接下来仍可追回的钱</h3><p>例如，逾期两日、无新损伤时，按已定义规则可退 92.50。归还、检查与结清会影响这笔钱如何处理。</p></div></div>
+        <div class="prose">
+          <p>同时还要考虑归还所需的时间、交通，以及继续占用工具的责任。金额是判断的一部分，不能替代这些条件。</p>
+          <h3 id="L24">第六个逾期日起费用封顶，归还仍会改变状态 <span class="source-ref">L24</span></h3>
+          <p>在本文定义的零至十四个逾期日内，第六日已达到逾期费上限。此后继续拖延不再增加<strong>逾期费</strong>，但不表示工具已经买断，也不表示归还没有意义。</p>
+          <ol class="checklist"><li><strong>结束占用。</strong>服务台登记归还后，这条借用不再是未记归还。</li><li><strong>启动检查和可退押金的结清。</strong>发生损伤异议时，结清仍需等待人工复核。</li><li><strong>让社区有机会再次使用。</strong>能否重新分配取决于检查后的实物状态；维修、退役工具不会因为归还就立即变成待借。</li></ol>
+          <p>这些是案例中的状态后果。它们不承诺现实投资回报，也不构成给读者的具体财务决定建议。超过十四个逾期日的处置，仍然属于本文未定义的范围。</p>
+          <h3>下次看到“成功”，对照这四件事</h3>
+          <dl><div class="exception"><dt>申请人</dt><dd>是否收到列明资产号、地点、截止时间的留置确认？单有收件编号不够。</dd></div><div class="exception"><dt>排队者</dt><dd>看服务器顺序与当前资格；排队没有专属实物，也没有具体到货承诺。</dd></div><div class="exception"><dt>借用者</dt><dd>看交接后的准确到期时刻；只有带新到期时刻的续借确认能改变它。</dd></div><div class="exception"><dt>办理归还的人</dt><dd>看服务台是否已经登记归还，再分别看检查、损伤责任和押金结清。</dd></div></dl>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="sources">
+        <p class="chapter-no">附 / 回到原始规则</p>
+        <h2 id="sources" tabindex="-1">来源、规则索引与说明边界</h2>
+        <div class="prose"><p>本页内容依据当前工作区的 <cite>material.md《拾光工具图书馆：从申请到归还的完整规则》</cite>，覆盖 L01–L24 以及末尾的甲、乙、丙案例。未使用外部资料。时间边界表、完整金额表和其他明确标注的示例，是按原文条件作出的展开，不增加新的服务承诺。</p><p>原文没有定义的内容保持未定义：超过十四个逾期日如何处置、人工复核结果、押金多久到账，以及故障是否减免，都不能从现有规则自行补出。</p></div>
+        <ul class="quick-links" aria-label="全部二十四条原文规则的本页定位">
+          <li><a href="#L01">L01 库存记录</a></li><li><a href="#L02">L02 申请记录</a></li><li><a href="#L03">L03 借用记录</a></li><li><a href="#L04">L04 基本资格</a></li><li><a href="#L05">L05 数量限制</a></li><li><a href="#L06">L06 收件不等于预留</a></li><li><a href="#L07">L07 原子分配</a></li><li><a href="#L08">L08 领取窗口</a></li><li><a href="#L09">L09 临时闭馆</a></li><li><a href="#L10">L10 主动取消</a></li><li><a href="#L11">L11 排队次序</a></li><li><a href="#L12">L12 递补再次验资格</a></li><li><a href="#L13">L13 本人领取</a></li><li><a href="#L14">L14 押金与期限</a></li><li><a href="#L15">L15 一次续借</a></li><li><a href="#L16">L16 等待者优先于续借</a></li><li><a href="#L17">L17 归还时间</a></li><li><a href="#L18">L18 逾期天数</a></li><li><a href="#L19">L19 计费参数</a></li><li><a href="#L20">L20 结算精度</a></li><li><a href="#L21">L21 损伤异议</a></li><li><a href="#L22">L22 安全例外</a></li><li><a href="#L23">L23 可追回与不可追回</a></li><li><a href="#L24">L24 费用封顶的边界</a></li>
+        </ul>
+      </section>
+    </article>
+  </main>
+  <footer class="page-footer"><div class="footer-inner"><p>拾光工具图书馆 · 虚构教学案例<br>文字、流程与表格均可选择、搜索和离线阅读；打印时保留完整规则与金额对照。</p><a class="return-link" href="#contents">返回本页目录</a></div></footer>
+</body>
+</html>

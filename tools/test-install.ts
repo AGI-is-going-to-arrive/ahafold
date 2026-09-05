@@ -7,7 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripVTControlCharacters } from 'node:util';
-import { checkSkill, walkFiles } from './package-contract.js';
+import { checkSkill, requiredSkillFiles, walkFiles } from './package-contract.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const require = createRequire(import.meta.url);
@@ -87,8 +87,7 @@ try {
   await cp(path.join(root, 'skills', 'ahafold'), sourceSkill, { recursive: true, errorOnExist: true, force: false });
   await mkdir(project);
   const expectedReport = await checkSkill(sourceSkill);
-  assert.equal(expectedReport.files.length, 9, 'The v0.1 install unit contains nine resources');
-  assert.ok(expectedReport.files.includes('LICENSE'), 'The copied install unit includes its license');
+  assert.deepEqual(expectedReport.files, [...requiredSkillFiles].sort(), 'The install unit matches the complete resource manifest');
   const expectedHashes = await fileHashes(sourceSkill);
   const skillParents = [path.join(project, '.agents', 'skills'), path.join(project, '.grok', 'skills')];
   const protectedDirectories = [
@@ -127,7 +126,7 @@ try {
       const info = await lstat(installed);
       assert.ok(info.isDirectory() && !info.isSymbolicLink(), '--copy must create a real directory');
       assert.deepEqual(await checkSkill(installed), expectedReport, 'Installed resources resolve and decode independently');
-      assert.deepEqual(await fileHashes(installed), expectedHashes, 'All nine installed resource hashes must match');
+      assert.deepEqual(await fileHashes(installed), expectedHashes, 'Every installed resource hash must match the manifest source');
     }
     assert.deepEqual(installedNames(project, `${phase} list`), ['ahafold', 'keep-me'], 'List deduplicates AhaFold');
     assert.deepEqual(await Promise.all(protectedDirectories.map(fileHashes)), protectedHashes,

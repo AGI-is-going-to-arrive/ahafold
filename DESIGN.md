@@ -10,6 +10,34 @@ The packaged explainer is a **Read** surface: one question, a clear answer, exac
 
 The starter visibly identifies itself as an editable template. Finished explanations replace its author guidance with their own content, sources, and limits. Fold scenes come from inspected native image output; the reference sheet is an identity asset, not a completed explanation.
 
+## Long and complex reading
+
+The long-form template expands the established Read surface: a concise answer,
+an early overview, stable chapter links, then reasoning, comparisons, worked
+examples and consequential exceptions. The prose remains at a comfortable measure;
+tables and timelines may use the wider main column. Sections have different jobs
+rather than repeating identical cards.
+
+Desktop contents stay beside the article; on smaller screens the same native
+links become an ordinary contents block. Fragment navigation works without JS,
+with focusable destinations and scroll margins. Passive reading never takes focus
+or forces scrolling. The supplied template needs no JavaScript at all.
+
+Dense diagrams use decomposition or labelled keyboard-scrollable local regions,
+with precise text values alongside. Essential SVG labels must be at least 12px
+after their actual screen transform. Narrow layouts, real browser zoom and print
+are checked instead of assuming a responsive viewBox guarantees readability.
+
+Long-form authoring maps source claims and exceptions to the output before
+styling, saves a complete readable draft, then adds precise visuals/interaction.
+The same facts govern opening summaries, captions, timelines and conclusions;
+compile-time annotations do not become runtime stages. Numeric differences use
+unrounded state and formatting happens only at display boundaries.
+
+This design draws structural lessons from the inspected visual-explainer source
+snapshot 7163c3e. AhaFold's implementation is original and offline: no external
+font/diagram loader or additional rendering service was imported.
+
 ## Execution and trust boundaries
 
 The installable unit is `skills/ahafold/`; no repository checkout or maintainer
@@ -33,3 +61,8 @@ and preserve existing changes before invoking the upstream installer.
 template. Keep packaged resources separate from developer checks so a reader or
 skill user needs no application runtime. Native and cross-system acceptance is
 recorded separately in `tests/validation.md`; unsupported routes remain explicit.
+
+2026-09-05: extend that scope to substantial material with an on-demand long-form
+reference and template. Preserve short explanations as a separate lightweight
+starting point. The long-form acceptance suite uses independent source/answer
+fixtures and real installed Codex/Grok runs; original failed outputs remain evidence.

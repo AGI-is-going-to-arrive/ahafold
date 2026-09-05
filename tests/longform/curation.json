@@ -1,0 +1,61 @@
+{
+  "date": "2026-09-05",
+  "raw_artifacts_unchanged": true,
+  "script_blocks_unchanged_in_all_curated_variants": true,
+  "examples": [
+    {
+      "host": "codex",
+      "topic": "library",
+      "raw_file": "tests/longform/artifacts/codex-library/index.html",
+      "delivered_file": "examples/longform/library/index.html",
+      "raw_sha256": "346d108b12af14167db7c4ed722559b7aaaef1eff5505afe727ff448b99e236a",
+      "delivered_sha256": "346d108b12af14167db7c4ed722559b7aaaef1eff5505afe727ff448b99e236a",
+      "curation": "None: byte-identical first completed host output."
+    },
+    {
+      "host": "codex",
+      "topic": "retries",
+      "raw_file": "tests/longform/artifacts/codex-retries/index.html",
+      "delivered_file": "examples/longform/retries/index.html",
+      "raw_sha256": "43d99754083eb0f44bf8019fdc451bc974ce8b07ab2b6c0e33b227adc49b9365",
+      "delivered_sha256": "43d99754083eb0f44bf8019fdc451bc974ce8b07ab2b6c0e33b227adc49b9365",
+      "curation": "None: byte-identical first completed host output."
+    },
+    {
+      "host": "codex",
+      "topic": "type-boundaries",
+      "raw_file": "tests/longform/artifacts/codex-types/index.html",
+      "delivered_file": "examples/longform/type-boundaries/index.html",
+      "raw_sha256": "cc02d980fbd15b28d79567da648bff368d731486c89f4fad935276597824489d",
+      "delivered_sha256": "cc02d980fbd15b28d79567da648bff368d731486c89f4fad935276597824489d",
+      "curation": "None: byte-identical first completed host output."
+    },
+    {
+      "host": "grok",
+      "topic": "library",
+      "raw_file": "tests/longform/artifacts/grok-library/index.html",
+      "delivered_file": "examples/longform/library/grok-reviewed.html",
+      "raw_sha256": "d3f7761951ccf165faaac223b9b220c7872ed42952108fce690015408e97dc07",
+      "delivered_sha256": "f1ce2255a9d3acecf0861adece649f310440f6e9496dbb595884fed7c3d36b36",
+      "curation": "One date figure: separate the hold-confirmation and loan-handoff examples, correct its labels/caption/accessible description; no script change."
+    },
+    {
+      "host": "grok",
+      "topic": "retries",
+      "raw_file": "tests/longform/artifacts/grok-retries/index.html",
+      "delivered_file": "examples/longform/retries/grok-zh-reviewed.html",
+      "raw_sha256": "1641f599cc994b5a430ca31d5f7a965853f2c435334e72c4af19e08d0ca43a12",
+      "delivered_sha256": "e8e827e60b7ae55bc90932656f91b6cb00f8f01ff36be769ae86105a71d1d742",
+      "curation": "CSS only: wrap print code, remove print negative inline margins, wrap long exception labels, show static default numeric output without JavaScript. Chinese language retained and labeled; not an English edition."
+    },
+    {
+      "host": "grok",
+      "topic": "type-boundaries",
+      "raw_file": "tests/longform/artifacts/grok-types/index.html",
+      "delivered_file": "examples/longform/type-boundaries/grok-reviewed.html",
+      "raw_sha256": "b703ecfcd07d0c748140455625f03e87ed43af928efd7e96070c296482f501d0",
+      "delivered_sha256": "f06f15bb1c1ad212637147e9a83a3bfe9ac2b7b8e676e4e68de03917e5439bea",
+      "curation": "Two prose corrections: theta accepts extra fields in both functions; eta fails before Response, not before the request. Original code and response records unchanged."
+    }
+  ]
+}

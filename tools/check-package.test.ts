@@ -72,6 +72,15 @@ test('incomplete package and nested second skill are rejected', async () => {
   });
 });
 
+for (const resource of ['LICENSE', 'references/longform.md', 'assets/longform.html']) {
+  test(`install contract rejects a package missing ${resource}`, async () => {
+    await withPackage(async (root) => {
+      await rm(path.join(root, resource));
+      await assert.rejects(checkSkill(root), { message: `Package is missing ${resource}` });
+    });
+  });
+}
+
 test('install unit cannot hide copied resources in ignored development directories', async () => {
   await withPackage(async (root) => {
     await mkdir(path.join(root, '.agents', 'hidden'), { recursive: true });
