@@ -1,0 +1,148 @@
+{
+  "scope": "Six illustrated/revision sessions; the other18 zero-image sessions are in the boundary reports. Prompts preserved; cwd and raw logs omitted.",
+  "sessions": [
+    {
+      "id": "grok-e02",
+      "host": "grok",
+      "phase": "baseline-focus",
+      "exit_code": 0,
+      "prompt": "Use AhaFold to explain recognition versus recall for a general reader. One original illustration with short labels.\n\nUse the supplied source material in sources.md; no web access is needed. Keep all outputs within this isolated workspace. Budget: at most one native image call; do not retry or use a fallback. Do not open a personal browser; independent offline browser QA is handled separately.\n",
+      "image_calls": 1,
+      "tool_counts": {
+        "read_file": 9,
+        "list_dir": 2,
+        "image_gen": 1,
+        "run_terminal_command": 4,
+        "grep": 1,
+        "search_replace": 3
+      },
+      "native_prompt": {
+        "prompt": "Fold, an original little paper-page character for AhaFold, stands in the middle of one clean white editorial scene and compares two memory tasks that use the same teacup. Fold’s whole body is one squat apricot-yellow page with a slightly irregular dark hand-drawn outline, one teal folded corner at the viewer’s upper-right, two short dark dash eyes with no mouth, short flat paper-strip arms, and small folded paper-tab feet, without fingers, clothing, or extra accessories. On the left, three simple white cards show a teacup, a book, and a key; Fold points at the teacup card, identifying the familiar item among options shown again, with one small neat printed label that reads exactly Recognition. On the right, Fold draws a simple teacup onto a mostly blank white card from memory, with one small neat printed label that reads exactly Recall. Flat color, sparse props, generous white space, minimal paper texture, hand-drawn look matching a paper character; only those two labels, no other text, no watermark, no signature.",
+        "aspect_ratio": "16:9"
+      },
+      "raw_log_sha256": "14ca975b5028f3327a5004cfe356add5a3b7c894b5f6f19ac76504328dd4e1eb",
+      "read_installed_refs": [
+        "SKILL.md",
+        "references/explanation.md",
+        "references/native-grok.md",
+        "assets/explainer.html",
+        "references/fold.md",
+        "assets/fold/reference-sheet.png"
+      ]
+    },
+    {
+      "id": "grok-e06",
+      "host": "grok",
+      "phase": "baseline-focus",
+      "exit_code": 0,
+      "prompt": "Use AhaFold to make a Simplified Chinese edition of ahafold-output/recognition-versus-recall/index.html, preserving the original illustration. Save the edition beside it as index.zh-CN.html.\n\nKeep all outputs within this isolated workspace. No image calls are allowed for this revision. Use the supplied material without web access. Do not open a personal browser; independent offline browser QA is handled separately.\n",
+      "image_calls": 0,
+      "tool_counts": {
+        "read_file": 3,
+        "list_dir": 2,
+        "run_terminal_command": 5,
+        "search_replace": 5
+      },
+      "native_prompt": null,
+      "raw_log_sha256": "37299fdd114783deb2fabdc52d946bf8ddd863284fad879fbc957c7b351fb031",
+      "read_installed_refs": [
+        "SKILL.md",
+        "references/explanation.md"
+      ]
+    },
+    {
+      "id": "grok-mixed",
+      "host": "grok",
+      "phase": "baseline-focus",
+      "exit_code": 0,
+      "prompt": "Use AhaFold to create a deliberately mixed-language edition of ahafold-output/recognition-versus-recall/index.html. Use Chinese explanatory prose with English technical terms or short headings, including Recognition, Recall, and Cue. Add a brief bilingual caption and preserve the original illustration unchanged. Save the new edition beside the original as index.mixed.html.\n\nKeep all outputs within this isolated workspace. No image calls are allowed for this revision. Use the supplied material without web access. Do not open a personal browser; independent offline browser QA is handled separately.\n",
+      "image_calls": 0,
+      "tool_counts": {
+        "read_file": 7,
+        "list_dir": 1,
+        "run_terminal_command": 5
+      },
+      "native_prompt": null,
+      "raw_log_sha256": "1f78611f48c3fba6ca5f16b3bd2c5384262cc81765b0825110b15eb9abfb3cee",
+      "read_installed_refs": [
+        "SKILL.md",
+        "references/explanation.md"
+      ]
+    },
+    {
+      "id": "grok-compounding",
+      "host": "grok",
+      "phase": "baseline-focus",
+      "exit": {
+        "exit_code": 0,
+        "started_utc": "2026-09-05T01:38:35.307818+00:00",
+        "finished_utc": "2026-09-05T01:47:44.241124+00:00"
+      },
+      "prompt": "使用AhaFold，用固定假设的复利例子解释开始时间。本金100、年率5%、每年复利、无追加和提取，不计税费通胀；允许一个简单控件。需要一张小折插图。\n\n本次图片调用预算：1次。\n\n提供材料：复利会让已获得并留存的利息在后续期间继续产生利息；此处只讨论固定条件下的教学例子。以下来源已由维护者核验，供本次解释使用：\n- LibreTexts — Compound Interest：https://math.libretexts.org/Workbench/FHSU_College_Algebra/04%3A_Exponential_and_Logarithmic_Functions/4.02%3A_Compound_Interest\n- ASIC Moneysmart — Compound interest：https://moneysmart.gov.au/saving/compound-interest\n\n浏览器检查由独立验收者执行，本次只保存产物。\n",
+      "image_calls": [
+        {
+          "tool": "image_edit",
+          "input": {
+            "prompt": "Using the Fold character from the reference sheet, create one new single-scene illustration on a plain white background.\n\nFold is the same original little paper-page character: one squat apricot-yellow page body with a slightly irregular dark hand-drawn outline, one teal folded corner at the viewer's upper-right in front view, two short dark dash eyes and no mouth, short flat paper-strip arms, and small folded paper-tab feet. Keep it flat, simple, curious, and restrained. It is not a book, robot, paper stack, or origami animal.\n\nScene action: Fold stands in a shallow three-quarter view and compares two nested paper-layer stacks sitting on a thin simple timeline on the ground. Fold leans in and supports the taller left stack with both paper-strip arms, demonstrating that the earlier start grew more layers. The left stack is clearly taller, with several nested apricot and cream paper layers. The right stack is clearly shorter, with only a few layers. Sparse props, lots of white space, flat color, light paper texture, no heavy shadows, no glossy materials.\n\nAdd only these two short handwritten Chinese labels: 「早开始」 beside the taller left stack, 「晚开始」 beside the shorter right stack. No other text, no numbers, no charts, no extra characters, no decorative signature.",
+            "image": [
+              "isolated-run/grok-e03/.grok/skills/ahafold/assets/fold/reference-sheet.png"
+            ],
+            "aspect_ratio": "4:3"
+          },
+          "status": "completed"
+        }
+      ],
+      "tool_counts": {
+        "read_file": 7,
+        "list_dir": 2,
+        "run_terminal_command": 6,
+        "image_edit": 1,
+        "search_replace": 5,
+        "grep": 1
+      },
+      "html_sha256": "da4127003edd1ddd50aa1b83b4e317f5288fb6744f9f489f14015df42b457210",
+      "original_unmodified": true,
+      "source_fetches": 2
+    },
+    {
+      "id": "grok-zero-rate",
+      "host": "grok",
+      "phase": "R1",
+      "exit": {
+        "exit_code": 1,
+        "timed_out": false,
+        "started_utc": "2026-09-05T01:56:02.244425+00:00",
+        "finished_utc": "2026-09-05T02:04:39.144647+00:00"
+      },
+      "prompt": "Use AhaFold to make an English edition of this compounding explanation at a fixed annual rate of 0%, preserving the original illustration and its Chinese labels. Keep the same end date and start-year control; retain the original 5% page and save a new edition.\n\nInput: input/compounding-5/index.html\nImage-call budget for this request: 0.\nBrowser checks will be performed by an independent reviewer; save the artifacts only in this run.\n",
+      "image_calls": 0,
+      "tool_counts": {
+        "read_file": 10,
+        "list_dir": 2,
+        "run_terminal_command": 12,
+        "todo_write": 2,
+        "write": 1,
+        "grep": 8,
+        "search_replace": 1
+      },
+      "html_sha256": "e3f721e7ee6afa0256fe57e3feae46a9e2a0b319377d0f4302237f8037800fcc",
+      "max_turns_reached": true,
+      "original_unmodified": true,
+      "source_fetches": 6
+    },
+    {
+      "id": "codex-image-edit",
+      "host": "codex",
+      "phase": "baseline-focus",
+      "exit_code": 0,
+      "prompt": "使用 AhaFold 编辑 original.png，只要图片，不要 HTML。参考 reference-sheet.png 中小折的形象：把小折右侧手臂改成指向前方道路的动作，把袋子的“过去”改为“已付”，把前方的“未来”改为“Next”。保留其他构图与供应商标记，原图保留，新图另存。这张中英混合标签图用来说明：已经无法收回的付出，与下一步仍能选择的道路。\n\n本次已授权最多1次当前宿主原生图片调用，含重试；费用未知。额度、认证失败或结果不确定时停止，不切换路线。本次只保存产物，独立验收者检查图片和页面；不调用其他宿主，不访问凭据或更改全局配置。\n",
+      "image_calls": 1,
+      "sha256": "b63917ae6c6a3c1dafcb2365a0f63f411cf61e029401c7ec36b9ff004536c692",
+      "original_input_sha256": "a21e6597b95d9a8e1e9e778d97375108f8709b61f5a1d4b766cbd85754bd865a",
+      "reference_sheet_sha256": "ce069334946531bb7a6b361bb1902d5f3469a9adc5fcfc900d4e89e07d7dd36a",
+      "only_image": true,
+      "original_inputs_unchanged": true,
+      "tool_trace_limit": "Codex events do not expose complete image-tool trace."
+    }
+  ]
+}

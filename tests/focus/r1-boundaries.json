@@ -1,0 +1,246 @@
+{
+  "date": "2026-09-05",
+  "scope": "Exactly 3 R1 followups explicitly directed by parent; no more retries",
+  "installation": "skills@1.5.23 local product source, host-specific copy installation. All 9 resources exactly matched source-skill-hashes.json, no symlinks.",
+  "environment_change": "Canonical physical temporary-directory path instead of its logical alias; timeout 600 s, Grok max 18 turns. Original permission policies retained. Original prompts/fixtures copied byte-for-byte; no expected JavaScript answers supplied in prompts.",
+  "results": [
+    {
+      "case": "r1-grok-e04",
+      "state": "FAIL (semantic)",
+      "exit_code": 0,
+      "timeout": false,
+      "duration_seconds": 273.78,
+      "changed_inputs": [],
+      "new_files": [
+        "ahafold-output/web-terms-v2/index.html"
+      ],
+      "observed_image_tools": [],
+      "pages": [
+        {
+          "path": "ahafold-output/web-terms/index.html",
+          "sha256": "8a634bb3b5edc519666716e6f3162d41e1edba3d66715d453dd2093d29d200c5",
+          "tags": {
+            "html": 1,
+            "title": 1,
+            "p": 1
+          },
+          "external_resources": []
+        },
+        {
+          "path": "ahafold-output/web-terms-v2/index.html",
+          "sha256": "aa38890c313c948d5bfb789649951c3a9fdcc951ac7effa16f657ce9d81245dc",
+          "tags": {
+            "html": 1,
+            "head": 1,
+            "meta": 3,
+            "title": 1,
+            "style": 1,
+            "body": 1,
+            "a": 1,
+            "header": 2,
+            "p": 25,
+            "main": 1,
+            "article": 1,
+            "h1": 1,
+            "strong": 18,
+            "div": 13,
+            "section": 5,
+            "h2": 5,
+            "form": 1,
+            "fieldset": 1,
+            "legend": 1,
+            "label": 3,
+            "input": 3,
+            "button": 1,
+            "h3": 2,
+            "span": 7,
+            "table": 1,
+            "thead": 1,
+            "tr": 4,
+            "th": 6,
+            "tbody": 1,
+            "td": 6,
+            "pre": 1,
+            "code": 4,
+            "dl": 1,
+            "dt": 3,
+            "dd": 3,
+            "details": 1,
+            "summary": 1,
+            "ul": 1,
+            "li": 3,
+            "footer": 1
+          },
+          "external_resources": []
+        }
+      ]
+    },
+    {
+      "case": "r1-codex-mixed",
+      "state": "PASS (semantic and static; browser owned by parent)",
+      "exit_code": 0,
+      "timeout": false,
+      "duration_seconds": 475.57,
+      "changed_inputs": [],
+      "new_files": [
+        "ahafold-output/load-user/index.html"
+      ],
+      "observed_image_tools": [],
+      "pages": [
+        {
+          "path": "ahafold-output/load-user/index.html",
+          "sha256": "1e3104fdfd6b0ea0bc06e158917f95227b7de1beca69fb4d33115cf8f78c2c2d",
+          "tags": {
+            "html": 1,
+            "head": 1,
+            "meta": 4,
+            "title": 1,
+            "style": 1,
+            "body": 1,
+            "a": 3,
+            "header": 2,
+            "p": 34,
+            "nav": 1,
+            "main": 1,
+            "article": 1,
+            "h1": 1,
+            "br": 2,
+            "span": 31,
+            "code": 80,
+            "strong": 7,
+            "section": 5,
+            "div": 14,
+            "h2": 5,
+            "pre": 1,
+            "ol": 1,
+            "li": 9,
+            "h3": 10,
+            "aside": 3,
+            "table": 1,
+            "caption": 1,
+            "thead": 1,
+            "tr": 7,
+            "th": 9,
+            "tbody": 1,
+            "td": 12,
+            "ul": 2,
+            "footer": 1
+          },
+          "external_resources": [],
+          "source_code_exact_after_outer_whitespace": true,
+          "pre_blocks": [
+            "type User = { id: string; name: string };\nasync function loadUser(id: string): Promise<User> {\n  const response = await fetch(`/api/users/${encodeURIComponent(id)}`);\n  if (!response.ok) throw new Error(`HTTP ${response.status}`);\n  return (await response.json()) as User;\n}\n"
+          ]
+        }
+      ]
+    },
+    {
+      "case": "r1-grok-mixed",
+      "state": "INCOMPLETE (watchdog; artifact has semantic issues)",
+      "exit_code": -15,
+      "timeout": true,
+      "duration_seconds": 600.02,
+      "changed_inputs": [],
+      "new_files": [
+        "ahafold-output/load-user/index.html"
+      ],
+      "observed_image_tools": [],
+      "pages": [
+        {
+          "path": "ahafold-output/load-user/index.html",
+          "sha256": "048ebaef0c707b42079b9b065d104cfa017ceb39f85f75b2c167cfc29b48021f",
+          "tags": {
+            "html": 1,
+            "head": 1,
+            "meta": 3,
+            "title": 2,
+            "style": 1,
+            "body": 1,
+            "a": 1,
+            "header": 2,
+            "p": 33,
+            "main": 1,
+            "article": 1,
+            "h1": 1,
+            "code": 120,
+            "br": 1,
+            "div": 9,
+            "section": 8,
+            "h2": 8,
+            "pre": 3,
+            "figure": 1,
+            "svg": 1,
+            "desc": 1,
+            "rect": 4,
+            "text": 9,
+            "path": 4,
+            "defs": 1,
+            "marker": 1,
+            "figcaption": 1,
+            "ol": 2,
+            "li": 21,
+            "span": 27,
+            "table": 1,
+            "thead": 1,
+            "tr": 5,
+            "th": 8,
+            "tbody": 1,
+            "td": 12,
+            "input": 6,
+            "label": 6,
+            "h3": 4,
+            "strong": 3,
+            "ul": 3,
+            "details": 1,
+            "summary": 1,
+            "footer": 1
+          },
+          "external_resources": [],
+          "source_code_exact_after_outer_whitespace": true,
+          "pre_blocks": [
+            "type User = { id: string; name: string };\nasync function loadUser(id: string): Promise<User> {\n  const response = await fetch(`/api/users/${encodeURIComponent(id)}`);\n  if (!response.ok) throw new Error(`HTTP ${response.status}`);\n  return (await response.json()) as User;\n}",
+            "return (await response.json()) as User;",
+            "return await response.json();"
+          ]
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "R1-GROK-E04-ABSOLUTE",
+      "status": "unresolved",
+      "artifact": "r1-grok-e04/ahafold-output/web-terms-v2/index.html",
+      "lines": [
+        361,
+        458
+      ],
+      "detail": "Main takeaway still says JavaScript only adds behavior during interaction, while the later counterexample says it can run without clicks. Appending the counterexample did not remove the contradictory core absolute.",
+      "additional": "Three radio options, reset and disclosure expand a simple terminology request; collision and no-image behavior passed."
+    },
+    {
+      "id": "R1-GROK-MIXED-TIMELINE",
+      "status": "requires correction; host run incomplete",
+      "artifact": "r1-grok-mixed/ahafold-output/load-user/index.html",
+      "lines": [
+        455,
+        587,
+        589,
+        631
+      ],
+      "detail": "Compile-time as User is drawn as the fourth execution stage, with wording about not executing or passing assertions. A later takeaway guarantees all four steps complete despite earlier failure exits. The lead and detailed type section correctly say the assertion is erased, making the timeline/summary inconsistent."
+    }
+  ],
+  "codex_mixed_assessment": "Correctly explains GET/fetch response semantics, non-2xx handling, body parsing/204 failures, TypeScript erasure and lack of shape validation, URL encoding boundaries, rejection propagation, no timeouts/retries, and browser-relative-URL assumptions. Displayed code matches exact source after outer whitespace. No scripts or external resources.",
+  "grok_mixed_artifact_status": "A real saved HTML artifact exists and code is exact. Four native corrections improved status text and SVG arrows. Watchdog interrupted before final delivery/verification; cannot count as completed. No external repairs were applied.",
+  "first_pass_preservation": {
+    "checked_files": 383,
+    "changed_files": []
+  },
+  "budget": {
+    "text_sessions": 3,
+    "image_calls_observed": 0,
+    "images_allowed": 0
+  },
+  "evidence_limit": "Codex JSON events are not a complete native-tool trace. Browser QA and user-facing final support decisions belong to parent."
+}

@@ -9,6 +9,7 @@ pnpm install --frozen-lockfile
 pnpm run typecheck
 pnpm run test:checks
 pnpm run check:package
+pnpm run test:install
 pnpm exec playwright install chromium
 pnpm run test:examples
 ```
@@ -23,8 +24,8 @@ For a scoped change, append `--template-only`, `--example sunk-cost` (also `reco
 
 | ID | Input and supplied material | Required observation |
 | --- | --- | --- |
-| E01 | 使用 AhaFold，中文解释沉没成本，做一页图解；图中可用“过去/未来”。 No factual source material is supplied. | Fold's action separates irrecoverable past cost from future alternatives. Inspect each requested label. The body explains relevant future costs/benefits and where the analogy ends. Use clearly fictional examples; do not invent real returns. Deliver readable HTML and a newly generated original image. |
-| E02 | Explain recognition versus recall for a general reader with AhaFold. Use one illustration with short labels. No factual source material is supplied. | English text accurately contrasts recognizing a presented option with retrieving an answer. The action and labels match that contrast. Interaction is optional and useful, with no course platform or user database. Preserve the original image. |
+| E01 | 使用 AhaFold，中文解释沉没成本，做一页图解；图中可用“过去/未来”。 The original assisted baseline supplied checked source summaries and a scene brief; minimally prompted followups are recorded separately. | Fold's action separates irrecoverable past cost from future alternatives. Inspect each requested label. The body explains relevant future costs/benefits and where the analogy ends. Use clearly fictional examples; do not invent real returns. Deliver readable HTML and a newly generated original image. |
+| E02 | Explain recognition versus recall for a general reader with AhaFold. Use one illustration with short labels. The original assisted baseline supplied checked source summaries and a scene brief; minimally prompted followups are recorded separately. | English text accurately contrasts recognizing a presented option with retrieving an answer. The action and labels match that contrast. Interaction is optional and useful, with no course platform or user database. Preserve the original image. |
 | E03 | 使用 AhaFold，用固定假设的复利例子解释开始时间，允许一个简单控件。 Teaching assumptions: principal 100 units, fixed annual compounding, default annual rate 5%, no extra contributions, fees, taxes, or inflation. | State assumptions and the formula in HTML/SVG. At 5%, years 0 = 100, 1 = 105, 10 ≈ 162.89. At 0%, value stays 100. Keyboard input and Reset work; displayed values and plotted values agree. Explain time under these assumptions, without promising real investment returns. |
 | E04 | 使用 AhaFold 做一个术语对照 HTML，不要角色、不要图片。 Supplied pairs: HTML = page structure; CSS = presentation; JavaScript = optional behavior. | Make a clear, readable HTML page with zero image calls. Do not force a character, image, or unrelated interaction. Record a zero call count from the installed-host session. |
 | E05 | On a copy of E01: 修改选定的一段文字，使其更适合初学者；保留图片和其他内容。 Supply the exact selected paragraph and replacement intent. | Only relevant HTML text changes. Before/after SHA-256 of each original and embedded image is identical; unchanged sections remain unchanged. No image calls or whole-page regeneration. The updated paragraph still agrees with the image. |
@@ -57,10 +58,20 @@ Run actual pinned-installer checks in temporary projects, including names with C
 
 For each claimed host/OS pass, observe installation → discovery → reading packaged reference/template → current host native generation → real file save → offline HTML. Record Windows native separately from WSL. Deterministic CI on an OS is not an OAuth/native-generation pass on that OS.
 
-Have one independent session follow only the English README, and another only the Chinese README. Each must make a first work, find its output, identify material limits, and complete one text-only change. Reuse the budgeted first run for that host; do not add duplicate image calls just to test translation.
+For a strict unaided onboarding test, have one independent session follow only the English README, and another only the Chinese README. The original development runs instead used already-installed packages and supplied educational/source material; they are assisted onboarding evidence, not this stricter test. Each must make a first work, find its output, identify material limits, and complete one text-only change. Reuse the budgeted first run for that host; do not add duplicate image calls just to test translation.
 
 ## Image budget and release evidence
 
 Count every submitted image request and every retry. The planned ceiling is 15: nine host/OS base runs plus two further core examples (11 total), with at most four shared extra requests for clean references, reference/edit capability, or corrective retries. A failed or unknown result still uses its submitted request slot. Announce each live batch and its scale before executing it; stop a blocked route and continue independent deterministic work.
 
 Release requires all six behavior cases, three real examples, installed-host evidence for every claimed support cell, correct failure judgment, offline/mobile/keyboard/calculation/revision checks, independent bilingual onboarding, licensing/provenance, and no unresolved Critical/High review finding. Record PASS, FAIL, BLOCKED, or NOT TESTED with evidence; never convert unavailable machines or quota into a pass. Public publication is a separate authorization step.
+
+## Focused followup
+
+The current [Codex/Grok audit](focus-validation.md) separates each host, language,
+scenario, original run and R1 retry. Antigravity CLI is deferred by user.
+`test:install` invokes the actual pinned local-source installer for Codex/Grok in
+isolated Unicode/space directories, exercises repeat/conflict/remove behavior,
+and preserves unrelated skills/output. Its dependency is maintainer-only.
+The observed overwrite limitation is asserted explicitly; it is not a protection
+claim and this deterministic command does not run an OAuth host.

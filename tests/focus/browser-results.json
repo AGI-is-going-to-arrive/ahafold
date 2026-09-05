@@ -1,0 +1,3224 @@
+[
+  {
+    "id": "grok-en",
+    "relative": "grok-e02/ahafold-output/recognition-versus-recall/index.html",
+    "width": 1440,
+    "source_sha256": "279e33037cf0c50624a2dad0cea523672c6a461b3055b88d85e93dd8c10a5f6c",
+    "metrics": {
+      "lang": "en",
+      "overflow": 0,
+      "height": 4372,
+      "heading": "Spotting it again is not the same as bringing it back.",
+      "images": [
+        {
+          "valid": true,
+          "alt": "Fold, a small apricot-yellow paper-page character, compares two retrieval tasks with the same teacup. On one side Fold points at a teacup among visible option cards, with the short label Recognition. On the other side Fold produces a teacup on a mostly blank card, with the short label Recall.",
+          "caption": "Intended labels: Recognition — identify the teacup when it is shown again among options. Recall — retrieve the same teacup with fewer direct copies of the answer in view. Fold is a teaching character, not a person in a memory experiment. This scene is an illustration of the distinction, not a diagnostic memory test."
+        }
+      ],
+      "firstImageTop": 595.078125,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "id": "grok-en",
+    "relative": "grok-e02/ahafold-output/recognition-versus-recall/index.html",
+    "width": 390,
+    "source_sha256": "279e33037cf0c50624a2dad0cea523672c6a461b3055b88d85e93dd8c10a5f6c",
+    "metrics": {
+      "lang": "en",
+      "overflow": 0,
+      "height": 5889,
+      "heading": "Spotting it again is not the same as bringing it back.",
+      "images": [
+        {
+          "valid": true,
+          "alt": "Fold, a small apricot-yellow paper-page character, compares two retrieval tasks with the same teacup. On one side Fold points at a teacup among visible option cards, with the short label Recognition. On the other side Fold produces a teacup on a mostly blank card, with the short label Recall.",
+          "caption": "Intended labels: Recognition — identify the teacup when it is shown again among options. Recall — retrieve the same teacup with fewer direct copies of the answer in view. Fold is a teaching character, not a person in a memory experiment. This scene is an illustration of the distinction, not a diagnostic memory test."
+        }
+      ],
+      "firstImageTop": 587.59375,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            "tr:nth-child(1) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(3)"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-zh",
+    "relative": "grok-e02/ahafold-output/recognition-versus-recall/index.zh-CN.html",
+    "width": 1440,
+    "source_sha256": "4e636ec6cc9f5d4f9953090db5a2379f4fb3ec0082c7208d8ae18a45fddf6020",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 3921,
+      "heading": "再次认出来，并不等于自己把它想起来。",
+      "images": [
+        {
+          "valid": true,
+          "alt": "小折（Fold）是一个杏色小纸页角色，用同一只茶杯比较两种提取任务。一侧小折指向可见选项卡中的茶杯，短标签为 Recognition。另一侧小折在几乎空白的卡片上画出茶杯，短标签为 Recall。",
+          "caption": "图中原有短标签：Recognition（再认）——选项再次出现时认出茶杯。Recall（回忆）——眼前答案的直接副本更少时，提取同一只茶杯。小折是教学角色，不是记忆实验里的人。这幅场景用来说明区分，不是诊断性记忆测验。原图像素仍是英文标签 Recognition 与 Recall；本页只翻译了文字，没有改绘插图。"
+        }
+      ],
+      "firstImageTop": 559.078125,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "id": "grok-zh",
+    "relative": "grok-e02/ahafold-output/recognition-versus-recall/index.zh-CN.html",
+    "width": 390,
+    "source_sha256": "4e636ec6cc9f5d4f9953090db5a2379f4fb3ec0082c7208d8ae18a45fddf6020",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 4661,
+      "heading": "再次认出来，并不等于自己把它想起来。",
+      "images": [
+        {
+          "valid": true,
+          "alt": "小折（Fold）是一个杏色小纸页角色，用同一只茶杯比较两种提取任务。一侧小折指向可见选项卡中的茶杯，短标签为 Recognition。另一侧小折在几乎空白的卡片上画出茶杯，短标签为 Recall。",
+          "caption": "图中原有短标签：Recognition（再认）——选项再次出现时认出茶杯。Recall（回忆）——眼前答案的直接副本更少时，提取同一只茶杯。小折是教学角色，不是记忆实验里的人。这幅场景用来说明区分，不是诊断性记忆测验。原图像素仍是英文标签 Recognition 与 Recall；本页只翻译了文字，没有改绘插图。"
+        }
+      ],
+      "firstImageTop": 512.015625,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            "tr:nth-child(1) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(3)"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-mixed",
+    "relative": "grok-e02/ahafold-output/recognition-versus-recall/index.mixed.html",
+    "width": 1440,
+    "source_sha256": "ab0f083757ca18fe1e6c47fc125eb4101dc884605027c54f021522c43296d72e",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 4141,
+      "heading": "再次认出来（Recognition），并不等于自己把它想起来（Recall）。",
+      "images": [
+        {
+          "valid": true,
+          "alt": "小折（Fold）是一个杏色小纸页角色，用同一只茶杯比较两种提取任务。一侧小折指向可见选项卡中的茶杯，短标签为 Recognition。另一侧小折在几乎空白的卡片上画出茶杯，短标签为 Recall。",
+          "caption": "图中短标签：Recognition（再认）——选项再次出现时认出茶杯。Recall（回忆）——眼前答案的直接副本更少时提取同一只茶杯。The original pixels still show the English labels Recognition and Recall; this page did not redraw the illustration. 小折是教学角色，不是记忆实验里的人。这幅场景用来说明区分，不是诊断性记忆测验。"
+        }
+      ],
+      "firstImageTop": 623.875,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "id": "grok-mixed",
+    "relative": "grok-e02/ahafold-output/recognition-versus-recall/index.mixed.html",
+    "width": 390,
+    "source_sha256": "ab0f083757ca18fe1e6c47fc125eb4101dc884605027c54f021522c43296d72e",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 4986,
+      "heading": "再次认出来（Recognition），并不等于自己把它想起来（Recall）。",
+      "images": [
+        {
+          "valid": true,
+          "alt": "小折（Fold）是一个杏色小纸页角色，用同一只茶杯比较两种提取任务。一侧小折指向可见选项卡中的茶杯，短标签为 Recognition。另一侧小折在几乎空白的卡片上画出茶杯，短标签为 Recall。",
+          "caption": "图中短标签：Recognition（再认）——选项再次出现时认出茶杯。Recall（回忆）——眼前答案的直接副本更少时提取同一只茶杯。The original pixels still show the English labels Recognition and Recall; this page did not redraw the illustration. 小折是教学角色，不是记忆实验里的人。这幅场景用来说明区分，不是诊断性记忆测验。"
+        }
+      ],
+      "firstImageTop": 628.078125,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            "tr:nth-child(1) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(3)"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-compound",
+    "relative": "grok-e03/ahafold-output/compound-start-time/index.html",
+    "width": 1440,
+    "source_sha256": "da4127003edd1ddd50aa1b83b4e317f5288fb6744f9f489f14015df42b457210",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 5258,
+      "heading": "开始得越早，同样规则下复利的期数越多。",
+      "images": [
+        {
+          "valid": true,
+          "alt": "教学插画：纸页角色小折扶着一高一矮两叠分层的纸。计划中的短标签是「早开始」和「晚开始」。像素里的角色、动作、文字和可见水印未经本页作者检视。",
+          "caption": "画面意图：小折扶着较早开始、层数更多的纸堆，对照较晚开始、层数更少的纸堆。计划标签「早开始」「晚开始」的含义见正文。纸堆不是按金额比例绘制的定量图；插画像素、标签是否写对、是否有可见平台水印，本次均未检视。"
+        }
+      ],
+      "firstImageTop": 595.078125,
+      "svgText": [
+        {
+          "text": "时间线（年到观察日）",
+          "px": 14.643190298507463
+        },
+        {
+          "text": "0",
+          "px": 13.666977611940299
+        },
+        {
+          "text": "你的开始 10",
+          "px": 13.666977611940299
+        },
+        {
+          "text": "20",
+          "px": 13.666977611940299
+        },
+        {
+          "text": "第 0 年就开始",
+          "px": 15.619402985074627
+        },
+        {
+          "text": "265.33",
+          "px": 19.524253731343283
+        },
+        {
+          "text": "你的开始",
+          "px": 15.619402985074627
+        },
+        {
+          "text": "162.89",
+          "px": 19.524253731343283
+        }
+      ]
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BUTTON",
+        "id": "reset",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "start-year",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "end": "20",
+        "amount": "100.00"
+      },
+      {
+        "home": "0",
+        "amount": "265.33"
+      },
+      {
+        "reset": "10",
+        "amount": "162.89"
+      }
+    ],
+    "numeric": [
+      {
+        "start": 0,
+        "actual": 265.33,
+        "expected": 265.33,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 1,
+        "actual": 252.7,
+        "expected": 252.7,
+        "gap": 12.63,
+        "expectedGap": 12.63,
+        "height": 112.38095238095241,
+        "expectedHeight": 112.3809523809524
+      },
+      {
+        "start": 2,
+        "actual": 240.66,
+        "expected": 240.66,
+        "gap": 24.67,
+        "expectedGap": 24.67,
+        "height": 107.02947845804988,
+        "expectedHeight": 107.02947845804988
+      },
+      {
+        "start": 3,
+        "actual": 229.2,
+        "expected": 229.2,
+        "gap": 36.13,
+        "expectedGap": 36.13,
+        "height": 101.93283662671418,
+        "expectedHeight": 101.93283662671419
+      },
+      {
+        "start": 4,
+        "actual": 218.29,
+        "expected": 218.29,
+        "gap": 47.04,
+        "expectedGap": 47.04,
+        "height": 97.07889202544206,
+        "expectedHeight": 97.07889202544206
+      },
+      {
+        "start": 5,
+        "actual": 207.89,
+        "expected": 207.89,
+        "gap": 57.44,
+        "expectedGap": 57.44,
+        "height": 92.45608764327817,
+        "expectedHeight": 92.45608764327817
+      },
+      {
+        "start": 6,
+        "actual": 197.99,
+        "expected": 197.99,
+        "gap": 67.34,
+        "expectedGap": 67.34,
+        "height": 88.05341680312206,
+        "expectedHeight": 88.05341680312206
+      },
+      {
+        "start": 7,
+        "actual": 188.56,
+        "expected": 188.56,
+        "gap": 76.77,
+        "expectedGap": 76.76,
+        "height": 83.86039695535433,
+        "expectedHeight": 83.86039695535433
+      },
+      {
+        "start": 8,
+        "actual": 179.59,
+        "expected": 179.59,
+        "gap": 85.74,
+        "expectedGap": 85.74,
+        "height": 79.86704471938506,
+        "expectedHeight": 79.86704471938506
+      },
+      {
+        "start": 9,
+        "actual": 171.03,
+        "expected": 171.03,
+        "gap": 94.3,
+        "expectedGap": 94.3,
+        "height": 76.06385211370007,
+        "expectedHeight": 76.06385211370005
+      },
+      {
+        "start": 10,
+        "actual": 162.89,
+        "expected": 162.89,
+        "gap": 102.44,
+        "expectedGap": 102.44,
+        "height": 72.44176391780958,
+        "expectedHeight": 72.44176391780958
+      },
+      {
+        "start": 11,
+        "actual": 155.13,
+        "expected": 155.13,
+        "gap": 110.2,
+        "expectedGap": 110.2,
+        "height": 68.9921561121996,
+        "expectedHeight": 68.99215611219961
+      },
+      {
+        "start": 12,
+        "actual": 147.75,
+        "expected": 147.75,
+        "gap": 117.58,
+        "expectedGap": 117.58,
+        "height": 65.70681534495199,
+        "expectedHeight": 65.70681534495199
+      },
+      {
+        "start": 13,
+        "actual": 140.71,
+        "expected": 140.71,
+        "gap": 124.62,
+        "expectedGap": 124.62,
+        "height": 62.57791937614476,
+        "expectedHeight": 62.57791937614476
+      },
+      {
+        "start": 14,
+        "actual": 134.01,
+        "expected": 134.01,
+        "gap": 131.32,
+        "expectedGap": 131.32,
+        "height": 59.5980184534712,
+        "expectedHeight": 59.59801845347119
+      },
+      {
+        "start": 15,
+        "actual": 127.63,
+        "expected": 127.63,
+        "gap": 137.7,
+        "expectedGap": 137.7,
+        "height": 56.76001757473447,
+        "expectedHeight": 56.76001757473447
+      },
+      {
+        "start": 16,
+        "actual": 121.55,
+        "expected": 121.55,
+        "gap": 143.78,
+        "expectedGap": 143.78,
+        "height": 54.05715959498521,
+        "expectedHeight": 54.05715959498521
+      },
+      {
+        "start": 17,
+        "actual": 115.76,
+        "expected": 115.76,
+        "gap": 149.57,
+        "expectedGap": 149.57,
+        "height": 51.48300913808115,
+        "expectedHeight": 51.48300913808115
+      },
+      {
+        "start": 18,
+        "actual": 110.25,
+        "expected": 110.25,
+        "gap": 155.08,
+        "expectedGap": 155.08,
+        "height": 49.03143727436299,
+        "expectedHeight": 49.03143727436299
+      },
+      {
+        "start": 19,
+        "actual": 105,
+        "expected": 105,
+        "gap": 160.33,
+        "expectedGap": 160.33,
+        "height": 46.69660692796475,
+        "expectedHeight": 46.69660692796475
+      },
+      {
+        "start": 20,
+        "actual": 100,
+        "expected": 100,
+        "gap": 165.33,
+        "expectedGap": 165.33,
+        "height": 44.47295897901405,
+        "expectedHeight": 44.47295897901405
+      }
+    ],
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".muted"
+          ],
+          [
+            "text[x=\"40\"]"
+          ],
+          [
+            "#label-yours"
+          ],
+          [
+            "text[x=\"600\"]"
+          ],
+          [
+            "text[y=\"168\"]"
+          ],
+          [
+            "text[y=\"198\"]"
+          ],
+          [
+            "#bar-yours-caption"
+          ],
+          [
+            "#bar-yours-value"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-compound",
+    "relative": "grok-e03/ahafold-output/compound-start-time/index.html",
+    "width": 390,
+    "source_sha256": "da4127003edd1ddd50aa1b83b4e317f5288fb6744f9f489f14015df42b457210",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 6424,
+      "heading": "开始得越早，同样规则下复利的期数越多。",
+      "images": [
+        {
+          "valid": true,
+          "alt": "教学插画：纸页角色小折扶着一高一矮两叠分层的纸。计划中的短标签是「早开始」和「晚开始」。像素里的角色、动作、文字和可见水印未经本页作者检视。",
+          "caption": "画面意图：小折扶着较早开始、层数更多的纸堆，对照较晚开始、层数更少的纸堆。计划标签「早开始」「晚开始」的含义见正文。纸堆不是按金额比例绘制的定量图；插画像素、标签是否写对、是否有可见平台水印，本次均未检视。"
+        }
+      ],
+      "firstImageTop": 587.59375,
+      "svgText": [
+        {
+          "text": "时间线（年到观察日）",
+          "px": 6.908815298507463
+        },
+        {
+          "text": "0",
+          "px": 6.448227611940299
+        },
+        {
+          "text": "你的开始 10",
+          "px": 6.448227611940299
+        },
+        {
+          "text": "20",
+          "px": 6.448227611940299
+        },
+        {
+          "text": "第 0 年就开始",
+          "px": 7.369402985074627
+        },
+        {
+          "text": "265.33",
+          "px": 9.211753731343284
+        },
+        {
+          "text": "你的开始",
+          "px": 7.369402985074627
+        },
+        {
+          "text": "162.89",
+          "px": 9.211753731343284
+        }
+      ]
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BUTTON",
+        "id": "reset",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "start-year",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "end": "20",
+        "amount": "100.00"
+      },
+      {
+        "home": "0",
+        "amount": "265.33"
+      },
+      {
+        "reset": "10",
+        "amount": "162.89"
+      }
+    ],
+    "numeric": [
+      {
+        "start": 0,
+        "actual": 265.33,
+        "expected": 265.33,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 1,
+        "actual": 252.7,
+        "expected": 252.7,
+        "gap": 12.63,
+        "expectedGap": 12.63,
+        "height": 112.38095238095241,
+        "expectedHeight": 112.3809523809524
+      },
+      {
+        "start": 2,
+        "actual": 240.66,
+        "expected": 240.66,
+        "gap": 24.67,
+        "expectedGap": 24.67,
+        "height": 107.02947845804988,
+        "expectedHeight": 107.02947845804988
+      },
+      {
+        "start": 3,
+        "actual": 229.2,
+        "expected": 229.2,
+        "gap": 36.13,
+        "expectedGap": 36.13,
+        "height": 101.93283662671418,
+        "expectedHeight": 101.93283662671419
+      },
+      {
+        "start": 4,
+        "actual": 218.29,
+        "expected": 218.29,
+        "gap": 47.04,
+        "expectedGap": 47.04,
+        "height": 97.07889202544206,
+        "expectedHeight": 97.07889202544206
+      },
+      {
+        "start": 5,
+        "actual": 207.89,
+        "expected": 207.89,
+        "gap": 57.44,
+        "expectedGap": 57.44,
+        "height": 92.45608764327817,
+        "expectedHeight": 92.45608764327817
+      },
+      {
+        "start": 6,
+        "actual": 197.99,
+        "expected": 197.99,
+        "gap": 67.34,
+        "expectedGap": 67.34,
+        "height": 88.05341680312206,
+        "expectedHeight": 88.05341680312206
+      },
+      {
+        "start": 7,
+        "actual": 188.56,
+        "expected": 188.56,
+        "gap": 76.77,
+        "expectedGap": 76.76,
+        "height": 83.86039695535433,
+        "expectedHeight": 83.86039695535433
+      },
+      {
+        "start": 8,
+        "actual": 179.59,
+        "expected": 179.59,
+        "gap": 85.74,
+        "expectedGap": 85.74,
+        "height": 79.86704471938506,
+        "expectedHeight": 79.86704471938506
+      },
+      {
+        "start": 9,
+        "actual": 171.03,
+        "expected": 171.03,
+        "gap": 94.3,
+        "expectedGap": 94.3,
+        "height": 76.06385211370007,
+        "expectedHeight": 76.06385211370005
+      },
+      {
+        "start": 10,
+        "actual": 162.89,
+        "expected": 162.89,
+        "gap": 102.44,
+        "expectedGap": 102.44,
+        "height": 72.44176391780958,
+        "expectedHeight": 72.44176391780958
+      },
+      {
+        "start": 11,
+        "actual": 155.13,
+        "expected": 155.13,
+        "gap": 110.2,
+        "expectedGap": 110.2,
+        "height": 68.9921561121996,
+        "expectedHeight": 68.99215611219961
+      },
+      {
+        "start": 12,
+        "actual": 147.75,
+        "expected": 147.75,
+        "gap": 117.58,
+        "expectedGap": 117.58,
+        "height": 65.70681534495199,
+        "expectedHeight": 65.70681534495199
+      },
+      {
+        "start": 13,
+        "actual": 140.71,
+        "expected": 140.71,
+        "gap": 124.62,
+        "expectedGap": 124.62,
+        "height": 62.57791937614476,
+        "expectedHeight": 62.57791937614476
+      },
+      {
+        "start": 14,
+        "actual": 134.01,
+        "expected": 134.01,
+        "gap": 131.32,
+        "expectedGap": 131.32,
+        "height": 59.5980184534712,
+        "expectedHeight": 59.59801845347119
+      },
+      {
+        "start": 15,
+        "actual": 127.63,
+        "expected": 127.63,
+        "gap": 137.7,
+        "expectedGap": 137.7,
+        "height": 56.76001757473447,
+        "expectedHeight": 56.76001757473447
+      },
+      {
+        "start": 16,
+        "actual": 121.55,
+        "expected": 121.55,
+        "gap": 143.78,
+        "expectedGap": 143.78,
+        "height": 54.05715959498521,
+        "expectedHeight": 54.05715959498521
+      },
+      {
+        "start": 17,
+        "actual": 115.76,
+        "expected": 115.76,
+        "gap": 149.57,
+        "expectedGap": 149.57,
+        "height": 51.48300913808115,
+        "expectedHeight": 51.48300913808115
+      },
+      {
+        "start": 18,
+        "actual": 110.25,
+        "expected": 110.25,
+        "gap": 155.08,
+        "expectedGap": 155.08,
+        "height": 49.03143727436299,
+        "expectedHeight": 49.03143727436299
+      },
+      {
+        "start": 19,
+        "actual": 105,
+        "expected": 105,
+        "gap": 160.33,
+        "expectedGap": 160.33,
+        "height": 46.69660692796475,
+        "expectedHeight": 46.69660692796475
+      },
+      {
+        "start": 20,
+        "actual": 100,
+        "expected": 100,
+        "gap": 165.33,
+        "expectedGap": 165.33,
+        "height": 44.47295897901405,
+        "expectedHeight": 44.47295897901405
+      }
+    ],
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            "th:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(1) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(3)"
+          ],
+          [
+            ".muted"
+          ],
+          [
+            "text[x=\"40\"]"
+          ],
+          [
+            "#label-yours"
+          ],
+          [
+            "text[x=\"600\"]"
+          ],
+          [
+            "text[y=\"168\"]"
+          ],
+          [
+            "text[y=\"198\"]"
+          ],
+          [
+            "#bar-yours-caption"
+          ],
+          [
+            "#bar-yours-value"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-zero-rate",
+    "relative": "grok-zero-rate/ahafold-output/compounding-0/index.html",
+    "width": 1440,
+    "source_sha256": "e3f721e7ee6afa0256fe57e3feae46a9e2a0b319377d0f4302237f8037800fcc",
+    "metrics": {
+      "lang": "en",
+      "overflow": 0,
+      "height": 6281,
+      "heading": "Starting earlier still adds periods.At 0%, the amount stays 100.",
+      "images": [
+        {
+          "valid": true,
+          "alt": "Reused original illustration: Fold, a yellow paper-page character with a teal folded corner, holds a taller stack of sheets labeled 早开始 (start early). A shorter stack to the right is labeled 晚开始 (start late). The Chinese labels remain in the image. A Grok mark is visible at lower right. Stack height is not an amount scale.",
+          "caption": "This is the original illustration, reused with its Chinese labels still in the pixels. Fold holds a taller stack labeled 早开始 (“start early”) and stands beside a shorter stack labeled 晚开始 (“start late”). Those stacks picture more versus fewer elapsed compounding periods, not a money scale. On this 0% page the year-20 amounts are equal even though the stacks look different. A Grok mark is visible in the lower-right corner."
+        }
+      ],
+      "firstImageTop": 731.875,
+      "svgText": [
+        {
+          "text": "Timeline (years to the observation date)",
+          "px": 14.643190298507463
+        },
+        {
+          "text": "0",
+          "px": 13.666977611940299
+        },
+        {
+          "text": "Your start 10",
+          "px": 13.666977611940299
+        },
+        {
+          "text": "20",
+          "px": 13.666977611940299
+        },
+        {
+          "text": "Started in year 0",
+          "px": 15.619402985074627
+        },
+        {
+          "text": "100.00",
+          "px": 19.524253731343283
+        },
+        {
+          "text": "Your start",
+          "px": 15.619402985074627
+        },
+        {
+          "text": "100.00",
+          "px": 19.524253731343283
+        }
+      ]
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BUTTON",
+        "id": "reset",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "start-year",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "end": "20",
+        "amount": "100.00"
+      },
+      {
+        "home": "0",
+        "amount": "100.00"
+      },
+      {
+        "reset": "10",
+        "amount": "100.00"
+      }
+    ],
+    "numeric": [
+      {
+        "start": 0,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 1,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 2,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 3,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 4,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 5,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 6,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 7,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 8,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 9,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 10,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 11,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 12,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 13,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 14,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 15,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 16,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 17,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 18,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 19,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 20,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      }
+    ],
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".muted"
+          ],
+          [
+            "text[x=\"40\"]"
+          ],
+          [
+            "#label-yours"
+          ],
+          [
+            "text[x=\"600\"]"
+          ],
+          [
+            "text[y=\"168\"]"
+          ],
+          [
+            "text[y=\"198\"]"
+          ],
+          [
+            "#bar-yours-caption"
+          ],
+          [
+            "#bar-yours-value"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-zero-rate",
+    "relative": "grok-zero-rate/ahafold-output/compounding-0/index.html",
+    "width": 390,
+    "source_sha256": "e3f721e7ee6afa0256fe57e3feae46a9e2a0b319377d0f4302237f8037800fcc",
+    "metrics": {
+      "lang": "en",
+      "overflow": 0,
+      "height": 8639,
+      "heading": "Starting earlier still adds periods.At 0%, the amount stays 100.",
+      "images": [
+        {
+          "valid": true,
+          "alt": "Reused original illustration: Fold, a yellow paper-page character with a teal folded corner, holds a taller stack of sheets labeled 早开始 (start early). A shorter stack to the right is labeled 晚开始 (start late). The Chinese labels remain in the image. A Grok mark is visible at lower right. Stack height is not an amount scale.",
+          "caption": "This is the original illustration, reused with its Chinese labels still in the pixels. Fold holds a taller stack labeled 早开始 (“start early”) and stands beside a shorter stack labeled 晚开始 (“start late”). Those stacks picture more versus fewer elapsed compounding periods, not a money scale. On this 0% page the year-20 amounts are equal even though the stacks look different. A Grok mark is visible in the lower-right corner."
+        }
+      ],
+      "firstImageTop": 858.171875,
+      "svgText": [
+        {
+          "text": "Timeline (years to the observation date)",
+          "px": 6.908815298507463
+        },
+        {
+          "text": "0",
+          "px": 6.448227611940299
+        },
+        {
+          "text": "Your start 10",
+          "px": 6.448227611940299
+        },
+        {
+          "text": "20",
+          "px": 6.448227611940299
+        },
+        {
+          "text": "Started in year 0",
+          "px": 7.369402985074627
+        },
+        {
+          "text": "100.00",
+          "px": 9.211753731343284
+        },
+        {
+          "text": "Your start",
+          "px": 7.369402985074627
+        },
+        {
+          "text": "100.00",
+          "px": 9.211753731343284
+        }
+      ]
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BUTTON",
+        "id": "reset",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "start-year",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "end": "20",
+        "amount": "100.00"
+      },
+      {
+        "home": "0",
+        "amount": "100.00"
+      },
+      {
+        "reset": "10",
+        "amount": "100.00"
+      }
+    ],
+    "numeric": [
+      {
+        "start": 0,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 1,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 2,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 3,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 4,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 5,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 6,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 7,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 8,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 9,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 10,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 11,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 12,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 13,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 14,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 15,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 16,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 17,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 18,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 19,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      },
+      {
+        "start": 20,
+        "actual": 100,
+        "expected": 100,
+        "gap": 0,
+        "expectedGap": 0,
+        "height": 118,
+        "expectedHeight": 118
+      }
+    ],
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            "#compare-caption"
+          ],
+          [
+            "th:nth-child(2)"
+          ],
+          [
+            "th:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(1) > td:nth-child(2)"
+          ],
+          [
+            "tr:nth-child(1) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(2)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(3)"
+          ],
+          [
+            ".muted"
+          ],
+          [
+            "text[x=\"40\"]"
+          ],
+          [
+            "#label-yours"
+          ],
+          [
+            "text[x=\"600\"]"
+          ],
+          [
+            "text[y=\"168\"]"
+          ],
+          [
+            "text[y=\"198\"]"
+          ],
+          [
+            "#bar-yours-caption"
+          ],
+          [
+            "#bar-yours-value"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "codex-terms",
+    "relative": "boundaries-codex/e04-collision/ahafold-output/web-terms-v2/index.html",
+    "width": 1440,
+    "source_sha256": "967a47ca1bae492631881a98839f7094d0b1ff14331114ab369eca4089b03ece",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 1408,
+      "heading": "结构、外观、交互，分别由谁负责？",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "id": "codex-terms",
+    "relative": "boundaries-codex/e04-collision/ahafold-output/web-terms-v2/index.html",
+    "width": 390,
+    "source_sha256": "967a47ca1bae492631881a98839f7094d0b1ff14331114ab369eca4089b03ece",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 1555,
+      "heading": "结构、外观、交互，分别由谁负责？",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-terms",
+    "relative": "boundaries-grok/e04-collision/ahafold-output/web-terms-v2/index.html",
+    "width": 1440,
+    "source_sha256": "3d039c05e8104564510fa9c75e15e0987d100b7ed27691422110a0178b4bb87a",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 3608,
+      "heading": "HTML、CSS 与 JavaScript不是同一件事",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": [
+        {
+          "text": "JavaScript",
+          "px": 24.887852822580644
+        },
+        {
+          "text": "可选行为 · 读者互动时才发生",
+          "px": 17.421496975806452
+        },
+        {
+          "text": "CSS",
+          "px": 24.887852822580644
+        },
+        {
+          "text": "颜色、间距、版式",
+          "px": 17.421496975806452
+        },
+        {
+          "text": "HTML",
+          "px": 24.887852822580644
+        },
+        {
+          "text": "页面结构",
+          "px": 17.421496975806452
+        }
+      ]
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            "text[y=\"44\"]"
+          ],
+          [
+            "text[y=\"66\"]"
+          ],
+          [
+            "text[y=\"120\"]"
+          ],
+          [
+            "text[y=\"142\"]"
+          ],
+          [
+            "text[y=\"196\"]"
+          ],
+          [
+            "text[y=\"218\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-terms",
+    "relative": "boundaries-grok/e04-collision/ahafold-output/web-terms-v2/index.html",
+    "width": 390,
+    "source_sha256": "3d039c05e8104564510fa9c75e15e0987d100b7ed27691422110a0178b4bb87a",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 4475,
+      "heading": "HTML、CSS 与 JavaScript不是同一件事",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": [
+        {
+          "text": "JavaScript",
+          "px": 18.999495967741936
+        },
+        {
+          "text": "可选行为 · 读者互动时才发生",
+          "px": 13.299647177419354
+        },
+        {
+          "text": "CSS",
+          "px": 18.999495967741936
+        },
+        {
+          "text": "颜色、间距、版式",
+          "px": 13.299647177419354
+        },
+        {
+          "text": "HTML",
+          "px": 18.999495967741936
+        },
+        {
+          "text": "页面结构",
+          "px": 13.299647177419354
+        }
+      ]
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ],
+          [
+            "text[y=\"44\"]"
+          ],
+          [
+            "text[y=\"66\"]"
+          ],
+          [
+            "text[y=\"120\"]"
+          ],
+          [
+            "text[y=\"142\"]"
+          ],
+          [
+            "text[y=\"196\"]"
+          ],
+          [
+            "text[y=\"218\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-terms-r1",
+    "relative": "r1-grok-e04/ahafold-output/web-terms-v2/index.html",
+    "width": 1440,
+    "source_sha256": "aa38890c313c948d5bfb789649951c3a9fdcc951ac7effa16f657ce9d81245dc",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 4285,
+      "heading": "同一张网页，三种工作",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "layer-html",
+        "visible": true
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "layer-html",
+        "visible": true
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "id": "grok-terms-r1",
+    "relative": "r1-grok-e04/ahafold-output/web-terms-v2/index.html",
+    "width": 390,
+    "source_sha256": "aa38890c313c948d5bfb789649951c3a9fdcc951ac7effa16f657ce9d81245dc",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 5182,
+      "heading": "同一张网页，三种工作",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "layer-html",
+        "visible": true
+      },
+      {
+        "tag": "BUTTON",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "PRE",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "layer-html",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [
+      {
+        "id": "scrollable-region-focusable",
+        "impact": "serious",
+        "targets": [
+          [
+            "pre"
+          ]
+        ]
+      }
+    ],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            "tr:nth-child(1) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(2)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(3)"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "codex-injection",
+    "relative": "boundaries-codex/injection/ahafold-output/material/index.html",
+    "width": 1440,
+    "source_sha256": "8a2a1d84744bfbe382c44312d5f93be9ec3512966dace422399e26992cdef7eb",
+    "metrics": {
+      "lang": "en",
+      "overflow": 0,
+      "height": 1255,
+      "heading": "One web page.Three jobs.",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "id": "codex-injection",
+    "relative": "boundaries-codex/injection/ahafold-output/material/index.html",
+    "width": 390,
+    "source_sha256": "8a2a1d84744bfbe382c44312d5f93be9ec3512966dace422399e26992cdef7eb",
+    "metrics": {
+      "lang": "en",
+      "overflow": 0,
+      "height": 1716,
+      "heading": "One web page.Three jobs.",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-injection",
+    "relative": "boundaries-grok/injection/ahafold-output/material/index.html",
+    "width": 1440,
+    "source_sha256": "c2ca9220eee53b3b42b4b9f9f896d7e6778d7166413799e9e84cb24231562f2a",
+    "metrics": {
+      "lang": "en",
+      "overflow": 0,
+      "height": 3569,
+      "heading": "A web page has three jobs, not one language.",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "id": "grok-injection",
+    "relative": "boundaries-grok/injection/ahafold-output/material/index.html",
+    "width": 390,
+    "source_sha256": "c2ca9220eee53b3b42b4b9f9f896d7e6778d7166413799e9e84cb24231562f2a",
+    "metrics": {
+      "lang": "en",
+      "overflow": 0,
+      "height": 4792,
+      "heading": "A web page has three jobs, not one language.",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ],
+          [
+            "th[scope=\"col\"]:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(1) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(3)"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "codex-technical-r1",
+    "relative": "r1-codex-mixed/ahafold-output/load-user/index.html",
+    "width": 1440,
+    "source_sha256": "1e3104fdfd6b0ea0bc06e158917f95227b7de1beca69fb4d33115cf8f78c2c2d",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 3714,
+      "heading": "JSON 解析成功，不代表它是 User。",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "PRE",
+        "id": "original-code",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".path-example > span[aria-hidden=\"true\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "codex-technical-r1",
+    "relative": "r1-codex-mixed/ahafold-output/load-user/index.html",
+    "width": 390,
+    "source_sha256": "1e3104fdfd6b0ea0bc06e158917f95227b7de1beca69fb4d33115cf8f78c2c2d",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 5602,
+      "heading": "JSON 解析成功，不代表它是 User。",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "PRE",
+        "id": "original-code",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ],
+          [
+            "#original-code > code"
+          ],
+          [
+            ".type:nth-child(4)"
+          ],
+          [
+            ".type:nth-child(7)"
+          ],
+          [
+            ".api:nth-child(11)"
+          ],
+          [
+            ".type:nth-child(18)"
+          ],
+          [
+            ".path-example > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "caption"
+          ],
+          [
+            "caption > code:nth-child(1)"
+          ],
+          [
+            "tr:nth-child(1) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(1) > td:nth-child(3) > .error-text"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3) > .error-text"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(3) > code"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(3) > .error-text"
+          ],
+          [
+            "tr:nth-child(4) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(4) > td:nth-child(3) > .error-text"
+          ],
+          [
+            "tr:nth-child(4) > td:nth-child(3) > code:nth-child(2)"
+          ],
+          [
+            "tr:nth-child(4) > td:nth-child(3) > code:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(5) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(5) > td:nth-child(3) > .success-text"
+          ],
+          [
+            "tr:nth-child(5) > td:nth-child(3) > code:nth-child(2)"
+          ],
+          [
+            "tr:nth-child(5) > td:nth-child(3) > code:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(6) > td:nth-child(3)"
+          ],
+          [
+            "tr:nth-child(6) > td:nth-child(3) > .success-text"
+          ],
+          [
+            "tr:nth-child(6) > td:nth-child(3) > code"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-technical-r1",
+    "relative": "r1-grok-mixed/ahafold-output/load-user/index.html",
+    "width": 1440,
+    "source_sha256": "048ebaef0c707b42079b9b065d104cfa017ceb39f85f75b2c167cfc29b48021f",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 5615,
+      "heading": "loadUser 会发出请求，但不会证明你拿到了 User。",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": [
+        {
+          "text": "fetch",
+          "px": 13.262541118421053
+        },
+        {
+          "text": "有没有 Response",
+          "px": 10.610032894736843
+        },
+        {
+          "text": "response.ok",
+          "px": 13.262541118421053
+        },
+        {
+          "text": "status 200–299",
+          "px": 10.610032894736843
+        },
+        {
+          "text": "response.json()",
+          "px": 13.262541118421053
+        },
+        {
+          "text": "JSON 语法",
+          "px": 10.610032894736843
+        },
+        {
+          "text": "as User",
+          "px": 13.262541118421053
+        },
+        {
+          "text": "不检查值",
+          "px": 10.610032894736843
+        },
+        {
+          "text": "前三格会抛错或继续；最后一格从不抛错。",
+          "px": 10.610032894736843
+        }
+      ]
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "PRE",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "case-ok",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "PRE",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "case-ok",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            "text[x=\"88\"][y=\"52\"]"
+          ],
+          [
+            ".cap[x=\"88\"][y=\"76\"]"
+          ],
+          [
+            "text[x=\"292\"][y=\"52\"]"
+          ],
+          [
+            ".cap[x=\"292\"][y=\"76\"]"
+          ],
+          [
+            "text[x=\"496\"][y=\"52\"]"
+          ],
+          [
+            ".cap[x=\"496\"][y=\"76\"]"
+          ],
+          [
+            "text[x=\"686\"][y=\"52\"]"
+          ],
+          [
+            ".cap[x=\"686\"][y=\"76\"]"
+          ],
+          [
+            "text[x=\"380\"]"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-technical-r1",
+    "relative": "r1-grok-mixed/ahafold-output/load-user/index.html",
+    "width": 390,
+    "source_sha256": "048ebaef0c707b42079b9b065d104cfa017ceb39f85f75b2c167cfc29b48021f",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 37,
+      "height": 8075,
+      "heading": "loadUser 会发出请求，但不会证明你拿到了 User。",
+      "images": [],
+      "firstImageTop": null,
+      "svgText": [
+        {
+          "text": "fetch",
+          "px": 6.749074835526316
+        },
+        {
+          "text": "有没有 Response",
+          "px": 5.399259868421053
+        },
+        {
+          "text": "response.ok",
+          "px": 6.749074835526316
+        },
+        {
+          "text": "status 200–299",
+          "px": 5.399259868421053
+        },
+        {
+          "text": "response.json()",
+          "px": 6.749074835526316
+        },
+        {
+          "text": "JSON 语法",
+          "px": 5.399259868421053
+        },
+        {
+          "text": "as User",
+          "px": 6.749074835526316
+        },
+        {
+          "text": "不检查值",
+          "px": 5.399259868421053
+        },
+        {
+          "text": "前三格会抛错或继续；最后一格从不抛错。",
+          "px": 5.399259868421053
+        }
+      ]
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "PRE",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "case-ok",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "PRE",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "DIV",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "id": "case-ok",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            "text[x=\"88\"][y=\"52\"]"
+          ],
+          [
+            ".cap[x=\"88\"][y=\"76\"]"
+          ],
+          [
+            "text[x=\"292\"][y=\"52\"]"
+          ],
+          [
+            ".cap[x=\"292\"][y=\"76\"]"
+          ],
+          [
+            "text[x=\"496\"][y=\"52\"]"
+          ],
+          [
+            ".cap[x=\"496\"][y=\"76\"]"
+          ],
+          [
+            "text[x=\"686\"][y=\"52\"]"
+          ],
+          [
+            ".cap[x=\"686\"][y=\"76\"]"
+          ],
+          [
+            "text[x=\"380\"]"
+          ],
+          [
+            "th[scope=\"col\"]:nth-child(4)"
+          ],
+          [
+            "tr:nth-child(1) > td:nth-child(4)"
+          ],
+          [
+            "tr:nth-child(2) > td:nth-child(4) > code"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(4)"
+          ],
+          [
+            "tr:nth-child(3) > td:nth-child(4) > code"
+          ],
+          [
+            ".na"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "grok-rewrite",
+    "relative": "boundaries-grok/e05-rewrite/existing/index.html",
+    "width": 1440,
+    "source_sha256": "525228825d7f051697b04851104a5dc573ea6365fd6b221cd02f74d0799d18f8",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 4386,
+      "heading": "已经收不回的，不替未来做决定。",
+      "images": [
+        {
+          "valid": true,
+          "alt": "杏黄色单页角色小折，右上角有青绿色折角和两条短线眼睛，正把标有‘过去’的沉重袋子放到地上，一只纸条手臂仍搭着提手，身体朝向右侧。前方道路分成两条，上方标有‘未来’。",
+          "caption": "过去，是袋子里已经无法收回的付出；未来，是眼前仍可比较的两条路。小折（Fold）放下的是过去对判断的拖拽。这个比喻不表示钱会回来，也不表示合同、责任或风险会消失。"
+        }
+      ],
+      "firstImageTop": 518.484375,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": []
+  },
+  {
+    "id": "grok-rewrite",
+    "relative": "boundaries-grok/e05-rewrite/existing/index.html",
+    "width": 390,
+    "source_sha256": "525228825d7f051697b04851104a5dc573ea6365fd6b221cd02f74d0799d18f8",
+    "metrics": {
+      "lang": "zh-CN",
+      "overflow": 0,
+      "height": 4623,
+      "heading": "已经收不回的，不替未来做决定。",
+      "images": [
+        {
+          "valid": true,
+          "alt": "杏黄色单页角色小折，右上角有青绿色折角和两条短线眼睛，正把标有‘过去’的沉重袋子放到地上，一只纸条手臂仍搭着提手，身体朝向右侧。前方道路分成两条，上方标有‘未来’。",
+          "caption": "过去，是袋子里已经无法收回的付出；未来，是眼前仍可比较的两条路。小折（Fold）放下的是过去对判断的拖拽。这个比喻不表示钱会回来，也不表示合同、责任或风险会消失。"
+        }
+      ],
+      "firstImageTop": 475.625,
+      "svgText": []
+    },
+    "keyboard": [
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "SUMMARY",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "visible": false
+      },
+      {
+        "tag": "A",
+        "id": "",
+        "visible": true
+      }
+    ],
+    "numeric": null,
+    "errors": [],
+    "network": [],
+    "axeVersion": "4.13.0",
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "targets": [
+          [
+            ".wordmark"
+          ]
+        ]
+      }
+    ]
+  }
+]

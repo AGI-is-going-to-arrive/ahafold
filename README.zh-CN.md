@@ -8,6 +8,8 @@
 纸页角色**小折（Fold）**通过动作演示概念；有帮助时加入交互，图片由当前宿主的原生工具生成。
 
 **v0.1 私有开发中。** 安装需要仓库访问权限。目前没有公开发布，也未宣称所有目标平台全面通过。
+[Codex/Grok专项多维审计](tests/focus-validation.md) 已覆盖中文、英文和混排使用，
+发现Grok的实际正确性／图文问题及未完成任务；此前成品不代表任意场景均可靠。
 
 ## 先看成品
 
@@ -145,9 +147,9 @@ npx skills@1.5.23 remove ahafold -y
 
 | 组合 | 状态 | 证据 / 限制 |
 | --- | --- | --- |
-| macOS / Codex | PASS | 安装后原生生图、三个示例及离线浏览器检查通过；参考图/编辑未测。 |
-| macOS / Grok Build | PASS | 生图→一次原生编辑修正→完成HTML；保留可见水印，不满足严格无水印任务。 |
-| macOS / Antigravity CLI | BLOCKED | 已读取安装包；原生生图返回429，保留草稿。 |
+| macOS / Codex | PASS | 已验证有限的安装后生图／编辑和多语言场景；技术任务曾需调整环境／时限后重测。 |
+| macOS / Grok Build | PARTIAL | 原生生图／参考／编辑可用；专项测试发现内容、图文与手机问题，需独立复核；保留水印。 |
+| macOS / Antigravity CLI | BLOCKED | 按用户要求暂缓；保留此前429及草稿，本轮未再调用CLI。 |
 | Windows / Codex | NOT TESTED | — |
 | Windows / Grok Build | NOT TESTED | — |
 | Windows / Antigravity CLI | NOT TESTED | — |
@@ -181,6 +183,7 @@ pnpm install --frozen-lockfile
 pnpm exec playwright install chromium
 pnpm run typecheck
 pnpm run test:checks
+pnpm run test:install
 pnpm run check:package
 pnpm run test:examples
 ```

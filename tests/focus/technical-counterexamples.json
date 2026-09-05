@@ -1,0 +1,57 @@
+[
+  {
+    "id": "normal",
+    "outcome": "resolved",
+    "value": {
+      "id": "1",
+      "name": "Ada"
+    },
+    "jsonCalls": 1,
+    "url": "/api/users/a%2Fb"
+  },
+  {
+    "id": "http404",
+    "outcome": "rejected",
+    "error": "HTTP 404",
+    "jsonCalls": 0,
+    "url": "/api/users/a%2Fb"
+  },
+  {
+    "id": "html",
+    "outcome": "rejected",
+    "error": "Unexpected token '<', \"<html>ok</html>\" is not valid JSON",
+    "jsonCalls": 1,
+    "url": "/api/users/a%2Fb"
+  },
+  {
+    "id": "wrongType",
+    "outcome": "resolved",
+    "value": {
+      "id": 1,
+      "name": "Ada"
+    },
+    "jsonCalls": 1,
+    "url": "/api/users/a%2Fb"
+  },
+  {
+    "id": "null",
+    "outcome": "resolved",
+    "value": null,
+    "jsonCalls": 1,
+    "url": "/api/users/a%2Fb"
+  },
+  {
+    "id": "noContent",
+    "outcome": "rejected",
+    "error": "Unexpected end of JSON input",
+    "jsonCalls": 1,
+    "url": "/api/users/a%2Fb"
+  },
+  {
+    "id": "network",
+    "outcome": "rejected",
+    "error": "synthetic network failure",
+    "jsonCalls": 0,
+    "url": "/api/users/a%2Fb"
+  }
+]

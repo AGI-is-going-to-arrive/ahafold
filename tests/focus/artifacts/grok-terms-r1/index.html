@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTML、CSS 与 JavaScript 各自管什么 — AhaFold</title>
+  <meta name="description" content="面向初学者的术语对照：HTML 提供页面结构，CSS 决定颜色、间距和版式，JavaScript 在读者互动时加上可选行为。">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --teal: #2a8c82;
+      --teal-ink: #17665e;
+      --line: #d9dfdd;
+      --page-width: 60rem;
+      --reading-width: 42rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: 100%;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    a { color: var(--teal-ink); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    :target { scroll-margin-top: 1.5rem; }
+    p, li, dd, figcaption, th, td { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.25rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { line-height: 1.35; text-wrap: balance; }
+    h1 { margin: 0; font-size: 3rem; font-weight: 700; letter-spacing: -0.025em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.625rem; font-weight: 650; }
+    h3 { margin: 2rem 0 0.75rem; font-size: 1.25rem; }
+    strong { font-weight: 650; }
+    svg { display: block; max-width: 100%; height: auto; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: 1.25rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    code { font-size: 0.92em; }
+    pre {
+      max-width: 100%;
+      overflow-x: auto;
+      padding: 1rem 1.25rem;
+      background: #f5f7f6;
+      border-radius: 12px;
+      line-height: 1.6;
+    }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    th, td { padding: 0.75rem 0.85rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { font-weight: 650; background: #f7f9f8; }
+    input, button { font: inherit; accent-color: var(--teal); caret-color: var(--teal-ink); }
+    button, input, summary { min-height: 2.75rem; }
+
+    .skip-link {
+      position: absolute;
+      inset: 0.75rem auto auto 1rem;
+      z-index: 1;
+      padding: 0.5rem 1rem;
+      background: var(--paper);
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, main, .page-footer {
+      width: min(calc(100% - 3rem), var(--page-width));
+      margin-inline: auto;
+    }
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1.5rem;
+      padding-block: 1.75rem 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+    .introduction { max-width: var(--reading-width); padding-block: 4.5rem 3.5rem; }
+    .lead { margin-top: 1.75rem; font-size: 1.25rem; line-height: 1.8; }
+    .reading-body { max-width: var(--reading-width); }
+    .reading-body > section { padding-block: 2.5rem; border-top: 1px solid var(--line); }
+    .takeaway {
+      margin: 1.75rem 0 0;
+      padding: 1.5rem 1.75rem;
+      background: var(--apricot-wash);
+      border: 1px solid var(--apricot);
+      border-radius: 12px;
+      font-size: 1.25rem;
+      line-height: 1.7;
+    }
+    .takeaway strong {
+      text-decoration: underline;
+      text-decoration-color: var(--apricot);
+      text-underline-offset: 0.25em;
+    }
+    .table-scroll {
+      max-width: 100%;
+      overflow-x: auto;
+      margin: 1.5rem 0 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .table-scroll table { min-width: 36rem; }
+    .table-scroll th:first-child,
+    .table-scroll td:first-child { white-space: nowrap; }
+    .supporting { color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    details { margin-top: 1.75rem; border-block: 1px solid var(--line); }
+    summary {
+      padding-block: 1rem;
+      color: var(--teal-ink);
+      font-weight: 650;
+      cursor: pointer;
+    }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+    summary::marker { color: var(--teal-ink); }
+    details[open] summary { margin-bottom: 0.25rem; }
+    .detail-content { padding-bottom: 1.5rem; }
+    .source-list { margin: 1rem 0 0; padding-left: 1.5rem; }
+    .source-list li + li { margin-top: 0.75rem; }
+    .page-footer { padding-block: 1.75rem 3rem; border-top: 1px solid var(--line); }
+    .page-footer p { max-width: var(--reading-width); color: var(--muted); font-size: 0.9375rem; }
+
+    .demo {
+      margin: 1.75rem 0 0;
+      padding: 1.25rem 1.35rem 1.5rem;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fbfcfb;
+    }
+    .demo legend {
+      padding: 0 0.35rem;
+      font-weight: 650;
+    }
+    .mode-switch {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.25rem;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+    .mode-switch label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-height: 2.75rem;
+      cursor: pointer;
+    }
+    .mode-switch input { width: 1.15rem; height: 1.15rem; flex: none; }
+    .demo-reset {
+      margin-top: 0.75rem;
+      padding: 0.4rem 0.95rem;
+      color: var(--teal-ink);
+      background: var(--paper);
+      border: 1px solid var(--teal);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .demo-reset:hover { background: var(--apricot-wash); }
+    .stage {
+      margin-top: 1.25rem;
+      padding: 1.1rem;
+      background: repeating-linear-gradient(
+        -45deg,
+        #f3f5f4,
+        #f3f5f4 8px,
+        #eef1f0 8px,
+        #eef1f0 16px
+      );
+      border-radius: 12px;
+    }
+    .mock {
+      max-width: 28rem;
+      margin: 0 auto;
+      padding: 1rem;
+      background: var(--paper);
+      border: 1px dashed #8b9391;
+    }
+    .mock-label {
+      display: inline-block;
+      margin: 0 0.35rem 0 0;
+      padding: 0 0.35rem;
+      border: 1px solid #8b9391;
+      font-size: 0.75rem;
+      font-weight: 650;
+      letter-spacing: 0.02em;
+      vertical-align: middle;
+    }
+    .mock h3,
+    .mock p,
+    .mock .mock-button {
+      margin: 0.35rem 0;
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 400;
+      color: inherit;
+      background: none;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+    }
+    .mock .mock-button {
+      display: inline-block;
+      min-height: 0;
+      color: #0000ee;
+      text-decoration: underline;
+      cursor: default;
+    }
+    .mock .js-line { display: none; }
+    .notes {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1.15rem;
+    }
+    .note {
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+    }
+    .note p { margin: 0; }
+    .note .kicker {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: var(--muted);
+      font-size: 0.8125rem;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+    }
+
+    .demo:has(#layer-css:checked) .mock,
+    .demo:has(#layer-js:checked) .mock {
+      padding: 1.35rem 1.5rem 1.5rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgb(36 42 45 / 0.06);
+    }
+    .demo:has(#layer-css:checked) .mock-label,
+    .demo:has(#layer-js:checked) .mock-label { display: none; }
+    .demo:has(#layer-css:checked) .mock h3,
+    .demo:has(#layer-js:checked) .mock h3 {
+      margin: 0 0 0.65rem;
+      color: var(--teal-ink);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+    .demo:has(#layer-css:checked) .mock p,
+    .demo:has(#layer-js:checked) .mock p {
+      margin: 0 0 1.1rem;
+      color: var(--ink);
+      line-height: 1.7;
+    }
+    .demo:has(#layer-css:checked) .mock .mock-button,
+    .demo:has(#layer-js:checked) .mock .mock-button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      padding: 0 1rem;
+      color: var(--paper);
+      background: var(--teal);
+      border: 0;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 650;
+    }
+    .demo:has(#layer-js:checked) .mock .js-line {
+      display: block;
+      margin: 1rem 0 0;
+      padding: 0.85rem 1rem;
+      background: var(--apricot-wash);
+      border-left: 4px solid var(--apricot);
+    }
+    .demo:has(#layer-html:checked) .note-html,
+    .demo:has(#layer-css:checked) .note-css,
+    .demo:has(#layer-js:checked) .note-js {
+      border-color: var(--teal);
+      box-shadow: inset 4px 0 0 var(--teal);
+    }
+
+    .stack {
+      margin: 1.75rem 0 0;
+      display: grid;
+      gap: 0.65rem;
+    }
+    .stack-item {
+      display: grid;
+      grid-template-columns: 7.5rem minmax(0, 1fr);
+      gap: 0.85rem 1.25rem;
+      padding: 0.95rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+    }
+    .stack-item dt {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .stack-item dd { margin: 0; }
+
+    @media (max-width: 42rem) {
+      .page-header, main, .page-footer { width: calc(100% - 3rem); }
+      .page-header { padding-top: 1.25rem; }
+      .introduction { padding-block: 3rem 2.5rem; }
+      h1 { font-size: 2rem; letter-spacing: -0.02em; }
+      h2 { font-size: 1.375rem; }
+      .lead { font-size: 1.125rem; }
+      .reading-body > section { padding-block: 2rem; }
+      .takeaway { padding: 1.25rem; font-size: 1.125rem; }
+      .stack-item { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; }
+      .demo { padding: 1rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+
+    @media print {
+      :root { font-size: 11pt; }
+      .skip-link { display: none; }
+      .page-header, main, .page-footer { width: 100%; }
+      .introduction { padding-block: 2rem; }
+      .reading-body > section { break-inside: avoid; }
+      .demo-reset { display: none; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <article aria-labelledby="page-title">
+      <header class="introduction">
+        <h1 id="page-title">同一张网页，三种工作</h1>
+        <p class="lead">初学时，<strong>HTML</strong>、<strong>CSS</strong> 和 <strong>JavaScript</strong> 很容易被当成三门可以互相替换的“做网页语言”。更清楚的记法是：它们叠在同一页上，各管一件不同的事。</p>
+      </header>
+
+      <div class="reading-body">
+        <section aria-labelledby="central-idea">
+          <h2 id="central-idea">先把三个术语分开</h2>
+          <p><strong>HTML</strong> provides the page structure：它标出标题、段落、按钮这些部件，告诉浏览器“这一页里有什么、它们是什么”。</p>
+          <p><strong>CSS</strong> 决定颜色、间距和版式：部件已经在，它负责这些部件看起来怎样、彼此隔多远、怎样排。</p>
+          <p><strong>JavaScript</strong> adds optional behavior when the reader interacts with the page：读者点击、输入或做其他操作时，页面可以多做一件事；不操作，原有内容通常仍能阅读。</p>
+          <div class="takeaway">
+            <p><strong>HTML</strong> 搭结构，<strong>CSS</strong> 管外观，<strong>JavaScript</strong> 只在互动时加上可选行为。三者不是三个版本的同一件事。</p>
+          </div>
+        </section>
+
+        <section aria-labelledby="same-notice">
+          <h2 id="same-notice">用同一张告示对照</h2>
+          <p>下面这张图书馆告示始终是同一页内容。切换选项时，变的不是题目，而是这一页上哪一种工作被点亮。</p>
+
+          <form class="demo" aria-labelledby="demo-legend">
+            <fieldset class="mode-switch">
+              <legend id="demo-legend">同一张告示，三种工作</legend>
+              <label for="layer-html"><input id="layer-html" name="layer" type="radio" value="html" checked> 只看 HTML</label>
+              <label for="layer-css"><input id="layer-css" name="layer" type="radio" value="css"> 加上 CSS</label>
+              <label for="layer-js"><input id="layer-js" name="layer" type="radio" value="js"> 再看 JavaScript</label>
+            </fieldset>
+            <button class="demo-reset" type="reset">恢复为只看结构</button>
+
+            <div class="stage">
+              <div class="mock" aria-hidden="false">
+                <h3><span class="mock-label">标题</span>今日告示</h3>
+                <p><span class="mock-label">段落</span>图书馆周六闭馆。</p>
+                <p><span class="mock-label">按钮</span><span class="mock-button">查看开放时间</span></p>
+                <p class="js-line">读者点过按钮后：周日 9:00–17:00 开放。</p>
+              </div>
+            </div>
+
+            <div class="notes">
+              <div class="note note-html">
+                <p><span class="kicker">HTML · 结构</span>标题、段落、按钮都已标出。没有颜色和间距安排时，内容仍在，只是看起来像未排版的草稿。</p>
+              </div>
+              <div class="note note-css">
+                <p><span class="kicker">CSS · 外观</span>同一组部件被加上颜色、间距和版式。告示更好读，但按钮此时还不会变出新句子。</p>
+              </div>
+              <div class="note note-js">
+                <p><span class="kicker">JavaScript · 可选行为</span>读者互动之后，才多出“周日开放时间”。这行不是结构本身，也不是颜色或留白。</p>
+              </div>
+            </div>
+          </form>
+          <p class="supporting">示意里的按钮不能真的点按；第三项用已经出现的那行字，代表“互动之后才加上的行为”。三种说明始终都在，不依赖颜色来区分。</p>
+        </section>
+
+        <section aria-labelledby="term-table">
+          <h2 id="term-table">术语对照</h2>
+          <p>把三个英文术语放回同一张表里。中间一列是这份材料给出的职责；右侧是入门时可用的记法，不是完整技术定义。</p>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="HTML、CSS 与 JavaScript 术语对照表">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">术语</th>
+                  <th scope="col">这份材料里它做什么</th>
+                  <th scope="col">可以这样记</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">HTML</th>
+                  <td>provides the page structure（提供页面结构）</td>
+                  <td>这一页有哪些部件，每个部件是什么。</td>
+                </tr>
+                <tr>
+                  <th scope="row">CSS</th>
+                  <td>决定颜色、间距和版式</td>
+                  <td>这些部件看起来怎样、隔多远、如何排列。</td>
+                </tr>
+                <tr>
+                  <th scope="row">JavaScript</th>
+                  <td>adds optional behavior when the reader interacts with the page（读者互动时加上可选行为）</td>
+                  <td>有人操作后，页面可以多做什么；不操作，原页仍在。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>写在代码里，会看到什么</h3>
+          <p>结构常常先写成标记。下面只有 <strong>HTML</strong>，还没有写出颜色，也没有写出点击后要发生的事：</p>
+          <pre><code>&lt;h1&gt;今日告示&lt;/h1&gt;
+&lt;p&gt;图书馆周六闭馆。&lt;/p&gt;
+&lt;button type="button"&gt;查看开放时间&lt;/button&gt;</code></pre>
+          <dl class="stack">
+            <div class="stack-item">
+              <dt>HTML</dt>
+              <dd>给出 <code>h1</code>、<code>p</code>、<code>button</code> 这三个部件。</dd>
+            </div>
+            <div class="stack-item">
+              <dt>CSS</dt>
+              <dd>另写规则，指定字号、留白、颜色和按钮形状。不改上面这三个部件“是什么”。</dd>
+            </div>
+            <div class="stack-item">
+              <dt>JavaScript</dt>
+              <dd>另写脚本，在按钮被使用后插入开放时间。没有这段脚本，告示仍可阅读。</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section aria-labelledby="limits">
+          <h2 id="limits">这张对照停在哪里</h2>
+          <p>这是按所给材料做的<strong>入门分工</strong>，方便把三个词先分开。它不是互斥的能力清单，也不表示某一项“只能”或“永远不能”做另一项的事。</p>
+          <p>例如：<strong>CSS</strong> 也能在指针悬停时改变颜色，不必写 <strong>JavaScript</strong>；<strong>JavaScript</strong> 也能在无人点击时运行，例如计时更新。<strong>HTML</strong> 里偶尔也能写到外观相关的属性，但入门时仍应把它记成结构。</p>
+          <p>房子骨架 / 粉刷 / 门铃这样的比喻只用来记住分工。真实网页里三种技术经常写在一起，并且还可以配合图片、无障碍属性、服务器逻辑等这里没有展开的部分。</p>
+
+          <details>
+            <summary>少了其中一项，初学者会看到什么？</summary>
+            <div class="detail-content">
+              <p>按这份材料的模型：没有 <strong>HTML</strong>，就没有这些被标出来的标题、段落和按钮。没有 <strong>CSS</strong>，内容通常还在，只是颜色、间距和版式未经指定，浏览器会用默认样子显示。没有 <strong>JavaScript</strong>，页面仍可阅读，只是读者互动后不会出现那件可选的额外行为。</p>
+              <p>实际项目里，缺哪一层、缺到什么程度，取决于作者怎么写，不能从这一页推出所有网站的必然结果。</p>
+            </div>
+          </details>
+        </section>
+
+        <section aria-labelledby="sources">
+          <h2 id="sources">来源与说明</h2>
+          <p>正文依据用户提供的三句入门材料，没有核验 HTML / CSS / JavaScript 官方规范，也没有引用外部教程。材料原文如下：</p>
+          <ul class="source-list">
+            <li>HTML provides the page structure.</li>
+            <li>CSS 决定颜色、间距和版式。</li>
+            <li>JavaScript adds optional behavior when the reader interacts with the page.</li>
+          </ul>
+          <p class="supporting">告示例子、代码片段和“骨架 / 粉刷 / 门铃”的比喻是为讲清分工而设的教学说明，不是对某个真实网站的描述。页面无插画、无角色；对照示意由 HTML 与 CSS 绘制，阅读时不发起网络请求。</p>
+        </section>
+      </div>
+    </article>
+  </main>
+
+  <footer class="page-footer">
+    <p>本页可离线打开。核心对照写在正文和表格里，不执行脚本也能阅读；上方选项用原生表单切换示意，重置后回到“只看 HTML”。</p>
+  </footer>
+</body>
+</html>

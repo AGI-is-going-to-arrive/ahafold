@@ -1,0 +1,2 @@
+使用 AhaFold，为刚学 TypeScript 的读者解释 snippet.ts 的请求流程。简体中文正文，保留 English API names 和代码标识符。请清楚呈现 fetch、HTTP status 检查、JSON parsing、TypeScript 类型断言之间的关系，并解释这段代码能够和不能保证什么。原代码应能在页面中选择复制。用 HTML 或 SVG 表达步骤，不要角色、不要图片，保存到 ahafold-output/load-user/index.html。
+本次图片调用预算为 0。仅使用当前宿主；不要联网、使用浏览器、启动其他 CLI 宿主或子代理，不读取凭据或修改全局配置。

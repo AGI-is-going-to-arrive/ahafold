@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="面向初学者的网页术语对照：HTML 提供结构，CSS 决定外观，JavaScript 添加可选的交互行为。">
+  <title>HTML、CSS、JavaScript 术语对照 — AhaFold</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #fff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --line: #d9dfdd;
+      --teal: #17665e;
+      --wash: #fff7e5;
+      --apricot: #f4c96b;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-size: 1.0625rem; line-height: 1.8; }
+    ::selection { background: var(--apricot); color: var(--ink); }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    a { color: var(--teal); text-underline-offset: 0.2em; }
+    p { margin: 0; }
+    p, h1, h2, th, td { overflow-wrap: anywhere; }
+    h1, h2 { line-height: 1.35; text-wrap: balance; }
+    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.25rem); letter-spacing: -0.035em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.375rem; }
+    .page-header, main, .page-footer { width: min(calc(100% - 3rem), 58rem); margin-inline: auto; }
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1.5rem;
+      padding-block: 1.5rem 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline, .eyebrow, .page-footer { color: var(--muted); font-size: 0.9375rem; }
+    .skip-link { position: absolute; left: 1rem; top: 0.5rem; padding: 0.5rem 1rem; background: var(--paper); transform: translateY(-200%); }
+    .skip-link:focus { transform: translateY(0); }
+    .introduction { padding-block: 3.5rem 2.5rem; }
+    .eyebrow { margin-bottom: 0.75rem; color: var(--teal); }
+    .lead { max-width: 42rem; margin-top: 1.25rem; font-size: 1.1875rem; }
+    .comparison { padding-bottom: 2.5rem; }
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    caption { text-align: left; font-size: 1.375rem; font-weight: 650; padding-bottom: 1.25rem; }
+    .term-column { width: 27%; }
+    .meaning-column { width: 22%; }
+    th, td { text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); padding: 1.25rem 1rem; }
+    thead th { padding-block: 0.75rem; background: #f5f7f6; color: var(--muted); font-size: 0.9375rem; font-weight: 550; }
+    tbody th { font-size: 1.125rem; font-weight: 650; }
+    .english { display: block; font-size: 0.875rem; font-weight: 400; color: var(--muted); }
+    .optional { display: block; width: fit-content; margin-top: 0.35rem; padding: 0.05rem 0.5rem; border: 1px solid #aac9c4; color: var(--teal); font-size: 0.8125rem; }
+    .takeaway { margin-top: 1.5rem; padding: 1.25rem 1.5rem; background: var(--wash); border-left: 3px solid var(--apricot); }
+    .example { border-top: 1px solid var(--line); padding-block: 2.5rem; }
+    .example > p { color: var(--muted); margin-bottom: 1rem; }
+    .example-list { margin: 0; padding-left: 1.5rem; }
+    .example-list li { padding-left: 0.25rem; }
+    .example-list li + li { margin-top: 0.75rem; }
+    .page-footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; }
+    @media (max-width: 42rem) {
+      .page-header, main, .page-footer { width: calc(100% - 2rem); }
+      .introduction { padding-block: 2.5rem 2rem; }
+      .lead { font-size: 1.0625rem; }
+      th, td { padding: 1rem 0.5rem; }
+      tbody th { font-size: 1rem; }
+      .term-column { width: 28%; }
+      .meaning-column { width: 23%; }
+      .takeaway { padding: 1rem; }
+      .example { padding-block: 2rem; }
+    }
+    @media print {
+      :root { font-size: 11pt; }
+      .skip-link { display: none; }
+      .page-header, main, .page-footer { width: 100%; }
+      .introduction { padding-block: 2rem; }
+      tr, .takeaway, .example { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="page-header">
+    <p class="wordmark" lang="en">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。</p>
+  </header>
+  <main id="main" tabindex="-1">
+    <article aria-labelledby="page-title">
+      <header class="introduction">
+        <p class="eyebrow">网页入门 · 术语对照</p>
+        <h1 id="page-title">结构、外观、交互，<br>分别由谁负责？</h1>
+        <p class="lead"><span lang="en">HTML</span> 提供页面结构，<span lang="en">CSS</span> 决定外观，<span lang="en">JavaScript</span> 可以添加交互行为。先记住这三项分工。</p>
+      </header>
+      <section class="comparison" aria-labelledby="comparison-title">
+        <table>
+          <caption id="comparison-title">三个术语，放在一起看</caption>
+          <colgroup><col class="term-column"><col class="meaning-column"><col></colgroup>
+          <thead>
+            <tr><th scope="col">英文术语</th><th scope="col">中文理解</th><th scope="col">它负责什么？</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" lang="en">HTML</th>
+              <td>结构<span class="english" lang="en">Structure</span></td>
+              <td>提供页面的内容结构，例如区分标题和段落。</td>
+            </tr>
+            <tr>
+              <th scope="row" lang="en">CSS</th>
+              <td>样式<span class="english" lang="en">Style</span></td>
+              <td>决定页面的颜色、间距和版式，让内容按设定的外观呈现。</td>
+            </tr>
+            <tr>
+              <th scope="row" lang="en">JavaScript</th>
+              <td>行为<span class="english" lang="en">Behavior</span><span class="optional">可选</span></td>
+              <td>在读者与页面交互时，添加所需的额外行为。</td>
+            </tr>
+          </tbody>
+        </table>
+        <aside class="takeaway" aria-label="关键提醒">
+          <p><strong>交互行为是可选的。</strong>如果页面只需要展示文字与样式，可以使用 <span lang="en">HTML</span> 和 <span lang="en">CSS</span>，不必添加 <span lang="en">JavaScript</span>。</p>
+        </aside>
+      </section>
+      <section class="example" aria-labelledby="example-title">
+        <h2 id="example-title">放进一个例子：课程介绍页</h2>
+        <p>下面用同一个页面，帮助理解三者的常见用途。</p>
+        <ul class="example-list">
+          <li><strong lang="en">HTML</strong>：把课程名称设为标题，把课程说明放进段落。</li>
+          <li><strong lang="en">CSS</strong>：把标题设为深绿色，调整段落之间的距离和整体排版。</li>
+          <li><strong lang="en">JavaScript</strong>：如果需要，可以在读者点击“切换课程”后，更新页面上的课程介绍。</li>
+        </ul>
+      </section>
+    </article>
+  </main>
+  <footer class="page-footer">
+    <p>资料来源：用户提供的三句说明。课程介绍页为辅助理解的教学示例；本页只介绍资料涉及的基础分工。</p>
+  </footer>
+</body>
+</html>

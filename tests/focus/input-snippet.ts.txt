@@ -1,0 +1,6 @@
+type User = { id: string; name: string };
+async function loadUser(id: string): Promise<User> {
+  const response = await fetch(`/api/users/${encodeURIComponent(id)}`);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return (await response.json()) as User;
+}

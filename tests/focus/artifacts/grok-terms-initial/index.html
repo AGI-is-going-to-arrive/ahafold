@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTML、CSS 与 JavaScript 各管什么 — AhaFold</title>
+  <meta name="description" content="给初学者的术语对照：HTML 提供页面结构，CSS 决定颜色、间距和版式，JavaScript 在互动时加上可选行为。">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --teal: #2a8c82;
+      --teal-ink: #17665e;
+      --line: #d9dfdd;
+      --page-width: 60rem;
+      --reading-width: 42rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: 100%;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    a { color: var(--teal-ink); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    :target { scroll-margin-top: 1.5rem; }
+    p, li, dd, figcaption, td, th { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.25rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { line-height: 1.35; text-wrap: balance; }
+    h1 { margin: 0; font-size: 3rem; font-weight: 700; letter-spacing: -0.025em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.625rem; font-weight: 650; }
+    h3 { margin: 0 0 0.5rem; font-size: 1.125rem; font-weight: 650; }
+    strong { font-weight: 650; }
+    svg { display: block; max-width: 100%; height: auto; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: 1.25rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.92em; }
+
+    .skip-link {
+      position: absolute;
+      inset: 0.75rem auto auto 1rem;
+      z-index: 1;
+      padding: 0.5rem 1rem;
+      background: var(--paper);
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, main, .page-footer {
+      width: min(calc(100% - 3rem), var(--page-width));
+      margin-inline: auto;
+    }
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1.5rem;
+      padding-block: 1.75rem 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+    .introduction { max-width: var(--reading-width); padding-block: 4.5rem 3.5rem; }
+    .lead { margin-top: 1.75rem; font-size: 1.25rem; line-height: 1.8; }
+    .reading-body { max-width: var(--reading-width); }
+    .reading-body > section { padding-block: 2.5rem; border-top: 1px solid var(--line); }
+    .takeaway {
+      margin: 1.75rem 0 0;
+      padding: 1.5rem 1.75rem;
+      background: var(--apricot-wash);
+      border: 1px solid var(--apricot);
+      border-radius: 12px;
+      font-size: 1.25rem;
+      line-height: 1.7;
+    }
+    .takeaway strong {
+      text-decoration: underline;
+      text-decoration-color: var(--apricot);
+      text-underline-offset: 0.25em;
+    }
+
+    .stack {
+      width: min(100%, 28rem);
+      margin-inline: auto;
+    }
+    .stack text { font-family: inherit; }
+    .stack .layer { fill: var(--paper); stroke: var(--line); stroke-width: 1.5; }
+    .stack .layer-html { fill: var(--apricot-wash); stroke: var(--apricot); }
+    .stack .term { fill: var(--ink); font-size: 20px; font-weight: 700; }
+    .stack .job { fill: var(--muted); font-size: 14px; font-weight: 500; }
+
+    .compare {
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+    }
+    .table-scroll {
+      overflow-x: auto;
+      margin: 1.5rem 0 0;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .compare th, .compare td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    .compare thead th {
+      background: #f5f7f6;
+      font-weight: 650;
+    }
+    .compare tbody tr:last-child th,
+    .compare tbody tr:last-child td { border-bottom: 0; }
+    .compare th[scope="row"] {
+      white-space: nowrap;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-weight: 700;
+    }
+
+    .roles { margin: 1.75rem 0 0; }
+    .role {
+      display: grid;
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      gap: 1.5rem;
+      padding-block: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .role dt {
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-weight: 700;
+    }
+    .role dd { margin: 0; }
+    .supporting { color: var(--muted); font-size: 1rem; line-height: 1.7; }
+
+    details { margin-top: 1.75rem; border-block: 1px solid var(--line); }
+    summary {
+      padding-block: 1rem;
+      color: var(--teal-ink);
+      font-weight: 650;
+      cursor: pointer;
+      min-height: 2.75rem;
+    }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+    summary::marker { color: var(--teal-ink); }
+    details[open] summary { margin-bottom: 0.25rem; }
+    .detail-content { padding-bottom: 1.5rem; }
+    .page-footer { padding-block: 1.75rem 3rem; border-top: 1px solid var(--line); }
+    .page-footer p { max-width: var(--reading-width); color: var(--muted); font-size: 0.9375rem; }
+
+    @media (max-width: 42rem) {
+      .page-header, main, .page-footer { width: calc(100% - 3rem); }
+      .page-header { padding-top: 1.25rem; }
+      .introduction { padding-block: 3rem 2.5rem; }
+      h1 { font-size: 2rem; letter-spacing: -0.02em; }
+      h2 { font-size: 1.375rem; }
+      .lead { font-size: 1.125rem; }
+      .reading-body > section { padding-block: 2rem; }
+      .takeaway { padding: 1.25rem; font-size: 1.125rem; }
+      .role { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+      .compare th[scope="row"] { white-space: normal; }
+    }
+
+    @media print {
+      :root { font-size: 11pt; }
+      .skip-link { display: none; }
+      .page-header, main, .page-footer { width: 100%; }
+      .introduction { padding-block: 2rem; }
+      .reading-body > section { break-inside: avoid; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">把复杂，展开讲。</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <article aria-labelledby="page-title">
+      <header class="introduction">
+        <h1 id="page-title">HTML、CSS 与 JavaScript<br>不是同一件事</h1>
+        <p class="lead">做网页常会同时听到三个英文术语：<strong>HTML</strong>、<strong>CSS</strong>、<strong>JavaScript</strong>。初学者容易把它们当成「写网页的同一种语言」。它们可以出现在同一页里，但各管一件不同的事。</p>
+      </header>
+
+      <div class="reading-body">
+        <section aria-labelledby="central-idea">
+          <h2 id="central-idea">先记住这一句分工</h2>
+          <p><strong>HTML</strong> 提供页面结构：哪些是标题、哪些是段落、内容按什么顺序出现。<strong>CSS</strong> 决定颜色、间距和版式，也就是看起来怎样。<strong>JavaScript</strong> 不负责把内容「写出来」，它只在读者与页面互动时，加上可选的行为。</p>
+          <div class="takeaway">
+            <p>同一页里：<strong>HTML</strong> 管结构，<strong>CSS</strong> 管样子，<strong>JavaScript</strong> 管可选的互动。</p>
+          </div>
+        </section>
+
+        <section aria-labelledby="stack">
+          <h2 id="stack">三者叠在同一页上</h2>
+          <p>可以想成三层：最底下是能读的骨架，中间是外观，最上面才是互动。没有上一层，下一层往往仍能单独成立。</p>
+          <figure>
+            <svg class="stack" viewBox="0 0 360 248" role="img" aria-labelledby="stack-title stack-desc">
+              <title id="stack-title">HTML、CSS、JavaScript 三层分工</title>
+              <desc id="stack-desc">自下而上三层：HTML 是页面结构，CSS 是颜色、间距和版式，JavaScript 是互动时的可选行为。</desc>
+              <rect class="layer" x="28" y="16" width="304" height="64" rx="12"></rect>
+              <text class="term" x="180" y="44" text-anchor="middle">JavaScript</text>
+              <text class="job" x="180" y="66" text-anchor="middle">可选行为 · 读者互动时才发生</text>
+              <rect class="layer" x="28" y="92" width="304" height="64" rx="12"></rect>
+              <text class="term" x="180" y="120" text-anchor="middle">CSS</text>
+              <text class="job" x="180" y="142" text-anchor="middle">颜色、间距、版式</text>
+              <rect class="layer layer-html" x="28" y="168" width="304" height="64" rx="12"></rect>
+              <text class="term" x="180" y="196" text-anchor="middle">HTML</text>
+              <text class="job" x="180" y="218" text-anchor="middle">页面结构</text>
+            </svg>
+            <figcaption>自下而上阅读：HTML 先给出结构；CSS 再决定颜色、间距和版式；JavaScript 只在需要互动时才加上。这是职责分层，不是必须分成三个文件。</figcaption>
+          </figure>
+        </section>
+
+        <section aria-labelledby="compare">
+          <h2 id="compare">并排对照，避免混用</h2>
+          <p>判断自己有没有把术语用混，可以问：这句话说的是「里面有什么、按什么顺序」，还是「看起来怎样」，还是「点了以后会怎样」。</p>
+          <div class="table-scroll" tabindex="0" role="region" aria-label="HTML、CSS、JavaScript 术语对照表">
+            <table class="compare">
+              <thead>
+                <tr>
+                  <th scope="col">术语</th>
+                  <th scope="col">它管什么</th>
+                  <th scope="col">没有它会怎样</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">HTML</th>
+                  <td>页面结构：标题、段落、列表、谁先谁后</td>
+                  <td>没有可阅读的内容骨架，页面无从谈起</td>
+                </tr>
+                <tr>
+                  <th scope="row">CSS</th>
+                  <td>颜色、间距、版式</td>
+                  <td>内容往往仍可读，但几乎是浏览器默认的样子</td>
+                </tr>
+                <tr>
+                  <th scope="row">JavaScript</th>
+                  <td>读者互动时的可选行为</td>
+                  <td>页面仍可阅读、仍可有样式，只是少了点击或输入后的变化</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <dl class="roles">
+            <div class="role">
+              <dt>HTML</dt>
+              <dd>
+                <p>提供页面结构。它回答的是：这一页有哪些部分，它们怎样排列成一份可读的内容。</p>
+                <p class="supporting">英文术语保持为 HTML。教学上可把它想成「骨架」，但骨架只是比喻，不是技术文件名。</p>
+              </dd>
+            </div>
+            <div class="role">
+              <dt>CSS</dt>
+              <dd>
+                <p>决定颜色、间距和版式。结构已经在 HTML 里，CSS 改的是观感：字大不大、块与块隔多远、文字如何排布。</p>
+                <p class="supporting">没有 CSS，HTML 结构通常还在。有 CSS，也不等于页面会自己响应点击。</p>
+              </dd>
+            </div>
+            <div class="role">
+              <dt>JavaScript</dt>
+              <dd>
+                <p>在读者与页面互动时，加上可选行为。例如按下按钮后出现一段说明，或输入后检查是否填完。</p>
+                <p class="supporting">资料里的关键词是「可选」：一页可以只有 HTML，或只有 HTML 加 CSS，仍然是网页。</p>
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <section aria-labelledby="limits">
+          <h2 id="limits">这个对照停在哪里</h2>
+          <p>「三层叠在一起」只用来分清职责。真实项目里，这三者可以分开放在不同文件，也可以写在同一份文件里；HTML 里偶尔也会出现影响外观的属性。那是后一步的细节，不推翻「结构 / 样子 / 可选行为」这条入门界线。</p>
+          <p>本页也不声称：学网页必须按这个顺序写代码，或 JavaScript 比另外两者更高级。它只说明三个英文术语各自在说什么。</p>
+
+          <details>
+            <summary>如果一页只有 HTML，还算网页吗？</summary>
+            <div class="detail-content">
+              <p>算。只有 HTML 时，读者仍然能看到标题、段落等结构，只是颜色、间距和版式多半是浏览器默认值，并且缺少点击后的额外变化。</p>
+              <p>加上 CSS，改变的是看起来怎样。再加上 JavaScript，才是在互动发生时添加行为。这三步不是「三种网页」，而是同一页上可以叠加的职责。</p>
+            </div>
+          </details>
+        </section>
+
+        <section aria-labelledby="sources">
+          <h2 id="sources">来源与说明</h2>
+          <p>正文依据用户提供的三句材料改写，供初学者对照术语，未另查 HTML、CSS 或 JavaScript 规范：</p>
+          <ul>
+            <li>HTML provides the page structure.</li>
+            <li>CSS 决定颜色、间距和版式。</li>
+            <li>JavaScript adds optional behavior when the reader interacts with the page.</li>
+          </ul>
+          <p class="supporting">「骨架 / 外观 / 互动」是教学比喻，不是规范用语。分层图表示职责关系，不表示浏览器内部如何实现，也不表示必须分成三个文件。</p>
+        </section>
+      </div>
+    </article>
+  </main>
+
+  <footer class="page-footer">
+    <p>本页可离线打开。没有插画、没有角色、阅读不依赖脚本，也不请求网络或模型。因 <code>ahafold-output/web-terms/</code> 已有作品，本说明写在 <code>ahafold-output/web-terms-v2/</code>，未覆盖原文件。</p>
+  </footer>
+</body>
+</html>

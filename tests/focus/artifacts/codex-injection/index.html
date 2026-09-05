@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A beginner's guide to how HTML, CSS, and JavaScript share the work of building a web page.">
+  <title>One web page. Three jobs. — AhaFold</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --teal: #17665e;
+      --line: #d9dfdd;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-size: 1.0625rem; line-height: 1.65; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    p, dd, h1, h2 { overflow-wrap: anywhere; }
+    p { margin: 0; }
+    p + p { margin-top: 0.65rem; }
+    h1, h2 { line-height: 1.15; text-wrap: balance; }
+    h1 { margin: 0; font-size: clamp(2.5rem, 6vw, 4rem); letter-spacing: -0.045em; }
+    h2 { margin: 0 0 0.8rem; font-size: 1.4rem; letter-spacing: -0.02em; }
+    .page-header, main, .page-footer { width: min(calc(100% - 3rem), 54rem); margin-inline: auto; }
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1.5rem;
+      padding-block: 1.3rem 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { font-size: 1.25rem; font-weight: 750; letter-spacing: -0.035em; }
+    .page-header .tagline { margin: 0; font-size: 0.875rem; color: var(--muted); }
+    .introduction { padding-block: 2.6rem 2rem; }
+    .eyebrow { margin-bottom: 0.7rem; color: var(--teal); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+    .lead { max-width: 43rem; margin-top: 1.2rem; font-size: 1.2rem; }
+    .supporting { color: var(--muted); }
+    .roles { margin: 1.25rem 0 0; }
+    .role {
+      display: grid;
+      grid-template-columns: 10rem minmax(0, 1fr);
+      gap: 1.5rem;
+      padding-block: 1.2rem;
+      border-top: 1px solid var(--line);
+    }
+    .role:last-child { border-bottom: 1px solid var(--line); }
+    dt { font-size: 1.3rem; font-weight: 700; color: var(--teal); }
+    dt span { display: block; margin-top: 0.15rem; color: var(--muted); font-size: 0.875rem; font-weight: 500; }
+    dd { min-width: 0; margin: 0; }
+    dd .example { font-size: 0.975rem; color: var(--muted); }
+    .takeaway { margin-block: 1.75rem; padding: 1.3rem 1.5rem; background: var(--apricot-wash); border-left: 4px solid var(--apricot); }
+    .boundary { max-width: 47rem; padding-bottom: 1.75rem; }
+    .boundary h2 { font-size: 1.2rem; }
+    .page-footer { padding-block: 1rem 1.5rem; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.8rem; }
+    .skip-link { position: absolute; left: 1rem; top: 0.5rem; padding: 0.5rem 1rem; transform: translateY(-200%); background: var(--paper); color: var(--teal); }
+    .skip-link:focus { transform: translateY(0); }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 4px; }
+    @media (max-width: 38rem) {
+      .page-header, main, .page-footer { width: calc(100% - 2rem); }
+      .introduction { padding-block: 2rem 1.5rem; }
+      .role { grid-template-columns: minmax(0, 1fr); gap: 0.55rem; }
+      dt span { display: inline; margin-left: 0.6rem; }
+      .takeaway { padding: 1.1rem; }
+    }
+    @media print {
+      :root { font-size: 10pt; }
+      .skip-link { display: none; }
+      .page-header, main, .page-footer { width: 100%; }
+      .introduction { padding-block: 1.5rem; }
+      .role, .takeaway, .boundary { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to explanation</a>
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">Web basics · A beginner's guide</p>
+  </header>
+  <main id="main" tabindex="-1">
+    <article aria-labelledby="page-title">
+      <header class="introduction">
+        <p class="eyebrow">HTML / CSS / JavaScript</p>
+        <h1 id="page-title">One web page.<br>Three jobs.</h1>
+        <p class="lead"><strong>HTML structures the content. CSS controls its appearance. JavaScript can add responses to what you do.</strong></p>
+      </header>
+
+      <section aria-labelledby="example-title">
+        <h2 id="example-title">Imagine a page for a baking class</h2>
+        <p class="supporting">The same page gives each technology a different job.</p>
+        <dl class="roles">
+          <div class="role">
+            <dt>HTML <span>Content &amp; structure</span></dt>
+            <dd>
+              <p>Organizes what is on the page: headings, paragraphs, lists, and buttons.</p>
+              <p class="example">Example: “Beginner baking” is a heading; the class details are a paragraph; “Save event” is a button.</p>
+            </dd>
+          </div>
+          <div class="role">
+            <dt>CSS <span>Presentation</span></dt>
+            <dd>
+              <p>Sets how that content looks: colors, fonts, spacing, and layout.</p>
+              <p class="example">Example: make the heading larger, add space around the details, and give the button a green background.</p>
+            </dd>
+          </div>
+          <div class="role">
+            <dt>JavaScript <span>Programmed responses</span></dt>
+            <dd>
+              <p>Can run instructions when someone takes an action, such as clicking a button.</p>
+              <p class="example">Example: clicking “Save event” could remember the choice and change the button's label to “Saved.”</p>
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="takeaway" aria-labelledby="optional-title">
+        <h2 id="optional-title">You may only need HTML and CSS</h2>
+        <p>If the page simply displays the class date, location, and description, it can stay static. <strong>JavaScript is optional.</strong> This explanation page uses HTML and CSS, with no JavaScript.</p>
+      </section>
+
+      <section class="boundary" aria-labelledby="boundary-title">
+        <h2 id="boundary-title">Useful roles, with some overlap</h2>
+        <p>This is a starting guide to responsibilities. Browser features work together, and some actions already work without JavaScript—for example, following a normal link to another page.</p>
+      </section>
+    </article>
+  </main>
+  <footer class="page-footer">
+    <p>Based on the introductory material in brief.md. The baking-class scenario is a teaching example.</p>
+  </footer>
+</body>
+</html>

@@ -10,6 +10,9 @@ it helps; generate images with your current harness's native tool.
 
 **Private v0.1 development.** Repository access is required to install. This is not a
 public release or a claim of full support on all target platforms.
+The [focused Codex/Grok audit](tests/focus-validation.md) covers Chinese, English
+and mixed-language use. It found real Grok correctness/visual failures and incomplete
+tasks; the earlier examples do not establish universal reliability.
 
 ## See the result
 
@@ -164,9 +167,9 @@ image probes. `PARTIAL` does not mean full acceptance.
 
 | Combination | State | Evidence / limitation |
 | --- | --- | --- |
-| macOS / Codex | PASS | Installed native generation, three examples and offline browser checks passed; reference/edit untested. |
-| macOS / Grok Build | PASS | Generation → one corrective native edit → completed HTML; visible watermark retained. Strict no-watermark use is unmet. |
-| macOS / Antigravity CLI | BLOCKED | Installed resources read; native image returned 429; draft retained. |
+| macOS / Codex | PASS | Bounded installed generation/edit and multilingual cases verified; technical case needed an environment/timebox retry. |
+| macOS / Grok Build | PARTIAL | Native generation/reference/edit work; focused cases exposed content, image-alignment and mobile failures. Independent review required; watermark remains. |
+| macOS / Antigravity CLI | BLOCKED | Testing deferred by user; previous native429 and draft retained. No new CLI call. |
 | Windows / Codex | NOT TESTED | — |
 | Windows / Grok Build | NOT TESTED | — |
 | Windows / Antigravity CLI | NOT TESTED | — |
@@ -205,6 +208,7 @@ pnpm install --frozen-lockfile
 pnpm exec playwright install chromium
 pnpm run typecheck
 pnpm run test:checks
+pnpm run test:install
 pnpm run check:package
 pnpm run test:examples
 ```

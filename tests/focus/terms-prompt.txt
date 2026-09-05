@@ -1,0 +1,2 @@
+使用 AhaFold 做一个术语对照 HTML，不要角色、不要图片。面向初学者，采用简体中文正文，保留英文术语。所给资料：HTML provides the page structure. CSS 决定颜色、间距和版式。JavaScript adds optional behavior when the reader interacts with the page.请保存到 ahafold-output/web-terms/index.html。
+本次图片调用预算为 0。仅使用当前宿主；不要联网、使用浏览器、启动其他 CLI 宿主或子代理，不读取凭据或修改全局配置。

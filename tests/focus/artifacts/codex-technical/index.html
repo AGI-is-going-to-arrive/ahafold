@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="从 snippet.ts 看懂 fetch、HTTP status 检查、JSON parsing 与 TypeScript 类型断言的关系，以及 Promise<User> 的保证边界。">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <title>loadUser：JSON 解析成功，不代表它是 User — AhaFold</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --line: #d9dfdd;
+      --soft: #f4f7f6;
+      --teal: #17665e;
+      --teal-wash: #edf5f2;
+      --amber: #795017;
+      --amber-wash: #fff7e5;
+      --rust: #923d2d;
+      --rust-wash: #fcf1ed;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      font-synthesis: none;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 1.5rem; }
+    body { margin: 0; font-size: 1rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: #f4c96b; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    a { color: var(--teal); text-underline-offset: 0.25em; }
+    a:hover { text-decoration-thickness: 2px; }
+    p, li, dd, th, td { overflow-wrap: anywhere; }
+    p { margin: 0 0 1rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { line-height: 1.4; text-wrap: balance; }
+    h1 { margin: 0; font-size: clamp(2.15rem, 4.8vw, 3.5rem); letter-spacing: -0.025em; font-weight: 750; }
+    h2 { margin: 0 0 1rem; font-size: 1.65rem; font-weight: 700; letter-spacing: -0.02em; }
+    h3 { margin: 0 0 0.6rem; font-size: 1.15rem; font-weight: 650; }
+    strong { font-weight: 650; }
+    code, pre { font-family: var(--mono); font-size: 0.91em; }
+    code { overflow-wrap: anywhere; }
+    pre { margin: 0; max-width: 100%; overflow-x: auto; line-height: 1.9; tab-size: 2; }
+    pre code { font-size: inherit; overflow-wrap: normal; }
+    .page-header, main, .page-footer { width: min(calc(100% - 3rem), 66rem); margin-inline: auto; }
+    .page-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1.5rem; padding-block: 1.5rem; border-bottom: 1px solid var(--line); }
+    .wordmark { margin: 0; font-size: 1.35rem; font-weight: 750; letter-spacing: -0.035em; }
+    .page-header nav { display: flex; gap: 1.5rem; font-size: 0.9rem; }
+    .page-header nav a { padding-block: 0.5rem; }
+    .skip-link { position: absolute; top: 0.5rem; left: 1rem; z-index: 2; padding: 0.5rem 1rem; background: var(--paper); transform: translateY(-200%); }
+    .skip-link:focus { transform: translateY(0); }
+    .introduction { padding-block: 3.5rem 2.5rem; }
+    .introduction h1 span { color: var(--teal); }
+    .lead { max-width: 46rem; margin-top: 1.35rem; font-size: 1.15rem; }
+    .section { padding-block: 2.75rem; border-top: 1px solid var(--line); }
+    .section-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 1.5rem; margin-bottom: 1rem; }
+    .section-top h2 { margin: 0; }
+    .supporting { color: var(--muted); font-size: 0.925rem; }
+    .section-top .supporting { margin: 0; }
+    .source { padding-top: 0; border-top: 0; }
+    .source-box { border: 1px solid var(--line); background: var(--soft); }
+    .file-label { margin: 0; padding: 0.55rem 1.25rem; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 0.875rem; }
+    #original-code { padding: 1.25rem; user-select: text; -webkit-user-select: text; }
+    .keyword { color: #7d365a; }
+    .api { color: var(--teal); }
+    .type { color: #714d15; }
+    .source-note { max-width: 52rem; margin-top: 1rem; }
+    .request-path { margin-block: 1.25rem 1.75rem; padding: 1rem 1.25rem; background: var(--soft); }
+    .request-path p + p { margin-top: 0.45rem; }
+    .path-example { display: flex; flex-wrap: wrap; gap: 0.35rem 0.85rem; align-items: baseline; }
+    .flow { margin: 0; padding: 0; list-style: none; }
+    .step { position: relative; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr) minmax(0, 0.65fr); gap: 1.25rem; padding-bottom: 2rem; }
+    .step:last-child { padding-bottom: 0; }
+    .step:not(:last-child)::after { content: ""; position: absolute; left: 1.0625rem; top: 2.4rem; bottom: 0.25rem; border-left: 2px solid var(--line); }
+    .step-number { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; color: var(--teal); border: 1px solid var(--teal); border-radius: 50%; font-family: var(--mono); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+    .step-main { min-width: 0; }
+    .step-main p { margin-bottom: 0.65rem; }
+    .step-main .operation { margin-bottom: 0.7rem; font-size: 0.97rem; }
+    .operation code { background: var(--soft); padding: 0.15rem 0.35rem; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+    .continue { color: var(--teal); font-size: 0.925rem; }
+    .failure { align-self: start; padding: 1rem 1.15rem; background: var(--rust-wash); color: #733d30; font-size: 0.925rem; }
+    .failure h3 { color: var(--rust); font-size: 0.95rem; margin-bottom: 0.4rem; }
+    .failure p + p { margin-top: 0.5rem; }
+    .promise-exit { margin: 1.75rem 0 0 3.5rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+    .type-section { margin-bottom: 2.75rem; padding: 2rem; border: 1px dashed #ad915e; background: var(--amber-wash); }
+    .type-section > p { max-width: 48rem; }
+    .type-compare { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); margin-block: 1.5rem; }
+    .type-view { padding-block: 0.5rem; }
+    .type-view:first-child { padding-right: 2rem; }
+    .type-view + .type-view { border-left: 1px solid #d9c8a9; padding-left: 2rem; }
+    .type-view h3 { color: var(--amber); font-size: 0.95rem; }
+    .value { margin-bottom: 0.7rem; font-family: var(--mono); font-size: clamp(1.05rem, 2.5vw, 1.35rem); line-height: 1.65; }
+    .type-view p:last-child { font-size: 0.95rem; }
+    .type-section .supporting { color: #6b5634; }
+    .table-scroll { max-width: 100%; overflow-x: auto; }
+    pre, .table-scroll { scrollbar-width: thin; scrollbar-color: #849990 var(--soft); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+    caption { text-align: left; color: var(--muted); margin-bottom: 1rem; font-size: 0.925rem; }
+    th, td { text-align: left; vertical-align: top; padding: 1rem 1.1rem 1rem 0; border-bottom: 1px solid var(--line); }
+    thead th { font-weight: 650; border-top: 1px solid var(--line); background: var(--soft); }
+    th:first-child, td:first-child { padding-left: 1rem; }
+    th:last-child, td:last-child { padding-right: 1rem; }
+    tbody th { font-weight: 500; width: 34%; }
+    td:nth-child(2) { width: 23%; }
+    .success-text { color: var(--teal); font-weight: 650; }
+    .error-text { color: var(--rust); font-weight: 650; }
+    .boundaries { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2.5rem; }
+    .boundaries h3 { padding-bottom: 0.7rem; border-bottom: 1px solid var(--line); }
+    .boundaries ul { padding-left: 1.2rem; margin: 0; }
+    .boundaries li + li { margin-top: 0.75rem; }
+    .takeaway { margin-top: 1.75rem; padding: 1.25rem 1.5rem; background: var(--teal-wash); color: #24564e; }
+    .takeaway strong { color: #154f45; }
+    .page-footer { padding-block: 1.5rem 2.5rem; border-top: 1px solid var(--line); }
+    .page-footer p { max-width: 50rem; font-size: 0.875rem; color: var(--muted); }
+    @media (max-width: 44rem) {
+      .page-header, main, .page-footer { width: calc(100% - 2.5rem); }
+      .page-header { padding-block: 1.15rem; }
+      .page-header nav { gap: 1rem; }
+      .introduction { padding-block: 2.5rem 2rem; }
+      .lead { font-size: 1.05rem; }
+      h2 { font-size: 1.4rem; }
+      .section { padding-block: 2rem; }
+      .source { padding-top: 0; }
+      #original-code { padding: 1rem; }
+      .step { grid-template-columns: 2.25rem minmax(0, 1fr); gap: 0.8rem; padding-bottom: 1.75rem; }
+      .failure { grid-column: 2; }
+      .promise-exit { margin-left: 3.05rem; }
+      .type-section { padding: 1.25rem; margin-bottom: 2rem; }
+      .type-compare, .boundaries { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+      .type-view:first-child { padding-right: 0; }
+      .type-view + .type-view { padding-left: 0; padding-top: 1rem; border-left: 0; border-top: 1px solid #d9c8a9; }
+      table { min-width: 38rem; }
+      .takeaway { padding: 1.15rem; }
+    }
+    @media print {
+      :root { font-size: 10pt; }
+      .page-header, main, .page-footer { width: 100%; }
+      .skip-link, .page-header nav { display: none; }
+      .introduction { padding-block: 1.5rem; }
+      .section { padding-block: 1.5rem; }
+      .step, .type-section, tr, .takeaway { break-inside: avoid; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+      pre code { overflow-wrap: anywhere; }
+      .table-scroll { overflow: visible; }
+      table { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <nav aria-label="页内导航">
+      <a href="#flow-title">读请求流程</a>
+      <a href="#limits-title">看保证边界</a>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <article aria-labelledby="page-title">
+      <header class="introduction">
+        <h1 id="page-title">JSON 解析成功，<br><span>不代表它是 <code>User</code>。</span></h1>
+        <p class="lead">这段 <code>loadUser</code> 会发出请求、检查 HTTP status、解析 JSON。末尾的 <code>as User</code> 告诉 TypeScript 如何看待结果，<strong>不会检查服务器返回的字段</strong>。</p>
+      </header>
+
+      <section class="section source" aria-labelledby="source-title">
+        <div class="section-top">
+          <h2 id="source-title">先看这 6 行</h2>
+          <p class="supporting" id="copy-hint">可直接选中代码复制；窄屏可在代码区横向滚动。</p>
+        </div>
+        <div class="source-box">
+          <p class="file-label"><code>snippet.ts</code> · 原代码</p>
+          <pre id="original-code" tabindex="0" role="region" aria-label="snippet.ts 原代码，可选择复制" aria-describedby="copy-hint"><code><span class="keyword">type</span> <span class="type">User</span> = { id: <span class="type">string</span>; name: <span class="type">string</span> };
+<span class="keyword">async function</span> loadUser(id: <span class="type">string</span>): <span class="type">Promise&lt;User&gt;</span> {
+  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="api">fetch</span>(`/api/users/${<span class="api">encodeURIComponent</span>(id)}`);
+  <span class="keyword">if</span> (!response.ok) <span class="keyword">throw new</span> Error(`HTTP ${response.status}`);
+  <span class="keyword">return</span> (<span class="keyword">await</span> response.<span class="api">json</span>()) <span class="keyword">as</span> <span class="type">User</span>;
+}
+</code></pre>
+        </div>
+        <p class="supporting source-note"><code>async</code> 让函数返回一个 <code>Promise</code>。<code>await</code> 暂停当前函数后续步骤，等待结果，不会阻塞整个页面。<code>Promise&lt;User&gt;</code> 描述成功结果的静态类型，并不承诺请求一定成功。</p>
+      </section>
+
+      <section class="section" aria-labelledby="flow-title">
+        <h2 id="flow-title">运行时，按这三步继续</h2>
+        <p>前一步成功，才走下一步。<code>response</code> 是 HTTP 响应对象；真正的数据要等读取响应体后才拿到。</p>
+        <div class="request-path">
+          <p><strong>请求前：拼接 URL。</strong><code>encodeURIComponent(id)</code> 把 <code>id</code> 编码为 URL 中的一个组成部分。</p>
+          <p class="path-example"><span>例如 <code>id = "a/b"</code></span><span aria-hidden="true">→</span><span>请求路径 <code>/api/users/a%2Fb</code></span></p>
+          <p class="supporting">编码让 <code>/</code> 等字符以转义形式进入 URL；它不验证用户是否存在，也不检查访问权限。</p>
+        </div>
+
+        <ol class="flow" aria-label="请求流程，任一步失败都会结束本次调用">
+          <li class="step">
+            <span class="step-number" aria-hidden="true">1</span>
+            <div class="step-main">
+              <h3><code>fetch</code>：取得 <code>Response</code></h3>
+              <p class="operation"><code>const response = await fetch(…)</code></p>
+              <p>未指定 <code>method</code>，默认发出 GET 请求。拿到状态和响应头后，可以得到 <code>Response</code>；此时响应体不一定已读完。</p>
+              <p class="continue">继续条件：<code>fetch</code> 成功返回响应。404、500 也可以进入下一步。</p>
+            </div>
+            <aside class="failure" aria-label="fetch 的失败出口">
+              <h3>失败出口：请求层出错</h3>
+              <p>例如网络故障或浏览器 CORS 拦截，使 <code>fetch</code> 的 Promise 被拒绝；<code>await</code> 抛出错误。</p>
+              <p>此时不会执行 HTTP status 检查。</p>
+            </aside>
+          </li>
+          <li class="step">
+            <span class="step-number" aria-hidden="true">2</span>
+            <div class="step-main">
+              <h3><code>response.ok</code>：检查 HTTP status</h3>
+              <p class="operation"><code>if (!response.ok) throw new Error(…)</code></p>
+              <p><code>ok</code> 在 status 为 <strong>200–299</strong> 时是 <code>true</code>。这行代码检查状态码，尚未解析 JSON。</p>
+              <p class="continue">继续条件：<code>response.ok === true</code>。2xx 只通过这一关，不保证响应体正确。</p>
+            </div>
+            <aside class="failure" aria-label="HTTP status 检查的失败出口">
+              <h3>失败出口：状态不通过</h3>
+              <p><code>ok === false</code> 时主动 <code>throw</code>。例如 404 会产生消息为 <code>HTTP 404</code> 的 <code>Error</code>。</p>
+              <p>不会调用 <code>response.json()</code>，也不会读取错误响应体中的详情。</p>
+            </aside>
+          </li>
+          <li class="step">
+            <span class="step-number" aria-hidden="true">3</span>
+            <div class="step-main">
+              <h3><code>response.json()</code>：读取并解析 JSON</h3>
+              <p class="operation"><code>await response.json()</code></p>
+              <p>异步读取响应体，并把 JSON 解析为 JavaScript 值。合法 JSON 也可以是数组、数字或 <code>null</code>，不一定是用户对象。</p>
+              <p class="continue">继续条件：读取与解析成功。函数随后返回这个值。</p>
+            </div>
+            <aside class="failure" aria-label="JSON parsing 的失败出口">
+              <h3>失败出口：响应体出错</h3>
+              <p>读取失败会报错；内容不是合法 JSON 时，解析通常抛出 <code>SyntaxError</code>。</p>
+              <p>例如 204 虽通过状态检查，但空响应体不能被解析为 JSON。</p>
+            </aside>
+          </li>
+        </ol>
+        <p class="promise-exit"><strong>所有失败都向调用方传递。</strong>函数没有 <code>catch</code>：未处理的错误会让 <code>loadUser</code> 返回的 Promise 进入 <code>rejected</code>（失败）状态。调用方可用 <code>try/catch</code> 包住 <code>await loadUser(id)</code>。</p>
+      </section>
+
+      <section class="type-section" aria-labelledby="assertion-title">
+        <h2 id="assertion-title"><code>as User</code> 没有增加一道验证</h2>
+        <p>它是<strong>编译时的类型断言</strong>：“把这个表达式当作 <code>User</code>。”类型断言在编译后的 JavaScript 中会被移除，不会检查、补齐或转换字段。</p>
+        <div class="type-compare">
+          <div class="type-view">
+            <h3>运行时：实际收到的值</h3>
+            <p class="value"><code>{"id": 42}</code></p>
+            <p>假设 status 为 200，这份 JSON 可以正常解析。<code>id</code> 仍是数字，缺失的 <code>name</code> 读取为 <code>undefined</code>。</p>
+          </div>
+          <div class="type-view">
+            <h3>编译时：TypeScript 眼中的类型</h3>
+            <p class="value"><code>{ id: string;<br>name: string }</code></p>
+            <p>经 <code>as User</code> 后，调用方会获得 <code>User</code> 的类型提示。对这个结果访问 <code>name.toUpperCase()</code> 可通过类型检查，却会在运行时报错。</p>
+          </div>
+        </div>
+        <p class="supporting"><code>type User</code> 与参数上的 <code>id: string</code> 同样属于静态类型信息。它们帮助 TypeScript 检查代码，不会自动验证外部数据。</p>
+      </section>
+
+      <section class="section" aria-labelledby="examples-title">
+        <div class="section-top">
+          <h2 id="examples-title">换一份响应，结果就不同</h2>
+          <p class="supporting" id="table-hint">窄屏可在表格内横向滚动。</p>
+        </div>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="六种请求结果对照" aria-describedby="table-hint">
+          <table>
+            <caption>以下是按代码推演的教学示例，未发送真实请求。成功对应 Promise 的 <code>fulfilled</code> 状态，失败对应 <code>rejected</code> 状态。</caption>
+            <thead>
+              <tr><th scope="col">请求 / 响应</th><th scope="col">停在哪里</th><th scope="col"><code>loadUser</code> 的结果</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">网络故障，未取得响应</th><td>第 1 步 · <code>fetch</code></td><td><span class="error-text">失败</span>，向调用方传递请求错误。</td></tr>
+              <tr><th scope="row">404 + 任意响应体</th><td>第 2 步 · HTTP status</td><td><span class="error-text">失败</span>，抛出 <code>Error("HTTP 404")</code>；不解析响应体。</td></tr>
+              <tr><th scope="row">200 + <code>not JSON</code></th><td>第 3 步 · JSON parsing</td><td><span class="error-text">失败</span>，JSON 语法无效。</td></tr>
+              <tr><th scope="row">204 + 空响应体</th><td>第 3 步 · JSON parsing</td><td><span class="error-text">失败</span>，虽然 <code>ok</code> 为 <code>true</code>，空内容仍无法解析。</td></tr>
+              <tr><th scope="row">200 + <code>{"id":42}</code></th><td>走完，返回值</td><td><span class="success-text">成功返回</span> <code>{ id: 42 }</code>，即使它不符合 <code>User</code>。</td></tr>
+              <tr><th scope="row">200 + <code>{"id":"u1","name":"Lin"}</code></th><td>走完，返回值</td><td><span class="success-text">成功返回</span>该对象；这次数据恰好符合 <code>User</code>，代码没有做字段验证。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="limits-title">
+        <h2 id="limits-title">这段代码的保证，到哪里为止？</h2>
+        <div class="boundaries">
+          <div>
+            <h3>正常返回，可以推断</h3>
+            <ul>
+              <li><code>fetch</code> 返回了响应，且 <code>response.ok</code> 为 <code>true</code>，也就是 status 在 200–299。</li>
+              <li>响应体成功读完并解析成了一个 JavaScript 值；返回的是这个值。</li>
+              <li>TypeScript 调用方把成功结果视为 <code>User</code>，获得相应类型检查与提示。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>仍然不能保证</h3>
+            <ul>
+              <li>值是对象、含有 <code>id</code> 和 <code>name</code>，或这两个字段都是 <code>string</code>。</li>
+              <li>返回的 <code>id</code> 对应请求的用户，或数据内容在业务上正确。</li>
+              <li>请求一定成功或在指定时限内完成。代码没有配置超时、重试，也没有把错误恢复为默认用户。</li>
+            </ul>
+          </div>
+        </div>
+        <p class="takeaway">若需要可信的 <code>User</code>，应在 JSON 解析后、返回前增加<strong>运行时字段校验</strong>：确认值是非空对象，且 <code>id</code>、<code>name</code> 都是字符串；必要时再检查 <code>id</code> 是否匹配请求。<strong>这些是原代码尚未实现的检查。</strong></p>
+      </section>
+    </article>
+  </main>
+
+  <footer class="page-footer">
+    <p>材料：用户提供的 <code>snippet.ts</code>。解释采用标准 Fetch API 语义，并以浏览器环境为例；相对 URL 按页面的基准 URL 解析。示例均为代码推演，未验证实际服务。此 HTML 可离线阅读，源码只展示，不执行。</p>
+  </footer>
+</body>
+</html>

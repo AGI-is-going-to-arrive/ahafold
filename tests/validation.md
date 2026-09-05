@@ -1,6 +1,12 @@
 # AhaFold v0.1 validation
 
 2026-09-05, Australia/Melbourne. Private development; no public release.
+
+**This is the initial assisted baseline record.** The later
+[Codex/Grok multilingual audit](focus-validation.md) found additional failures,
+updates Grok to PARTIAL, and defers Antigravity at the user's request. The E01–E06
+table below describes the original Codex cases, not complete per-host coverage.
+The later audit brings the cumulative image count to9/15.
 The single-skill implementation and macOS examples are usable. A formal release
 claim covering every target OS/host is not yet supported by evidence.
 Earlier bare-host image probes and the pre-development character master are excluded
@@ -165,12 +171,13 @@ not a pass. Deterministic CI does not establish native OAuth support on that OS.
 
 ## Remaining release gates
 
-- Obtain a successful Antigravity installed native-image result after quota is
-  available, without automatic retries or fallback.
+- Antigravity CLI testing is deferred by user; retain the prior quota-blocked
+  record without further calls.
 - Verify the six Windows/Linux OS×host combinations before claiming complete
   three-system native support; WSL is not native Windows evidence.
-- Codex/Antigravity reference-image input and raster editing remain untested.
-  Grok input-image edit is verified; master-sheet fidelity remains untested.
+- The focused audit now includes a Codex reference edit and Grok master-sheet
+  input. These are individual examples, not broad fidelity/stability evidence.
+  Antigravity remains deferred.
 - Strict no-visible-watermark work is not supported by the observed Grok route.
 - Public release/registry publication remain unauthorized; the repository stays private.
 

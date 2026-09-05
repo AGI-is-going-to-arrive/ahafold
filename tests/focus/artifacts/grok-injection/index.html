@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Three jobs on a web page — AhaFold</title>
+  <meta name="description" content="A beginner explanation of how HTML, CSS, and JavaScript split the work of a web page: structure, presentation, and response.">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #ffffff;
+      --ink: #242a2d;
+      --muted: #555d60;
+      --apricot: #f4c96b;
+      --apricot-wash: #fff7e5;
+      --teal: #2a8c82;
+      --teal-ink: #17665e;
+      --line: #d9dfdd;
+      --page-width: 60rem;
+      --reading-width: 42rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      font-size: 100%;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 1.5rem; }
+    body { margin: 0; font-size: 1.125rem; line-height: 1.85; }
+    ::selection { color: var(--ink); background: var(--apricot); }
+    a { color: var(--teal-ink); text-underline-offset: 0.2em; }
+    a:hover { text-decoration-thickness: 0.12em; }
+    :focus-visible { outline: 3px solid var(--teal); outline-offset: 5px; }
+    :target { scroll-margin-top: 1.5rem; }
+    p, li, dd, figcaption { overflow-wrap: anywhere; }
+    p { margin: 0 0 1.25rem; }
+    p:last-child { margin-bottom: 0; }
+    h1, h2, h3 { line-height: 1.35; text-wrap: balance; }
+    h1 { margin: 0; font-size: 3rem; font-weight: 700; letter-spacing: -0.025em; }
+    h2 { margin: 0 0 1.25rem; font-size: 1.625rem; font-weight: 650; }
+    h3 { margin: 2rem 0 0.75rem; font-size: 1.25rem; }
+    strong { font-weight: 650; }
+    figure { margin: 2rem 0; }
+    figcaption { margin-top: 1.25rem; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    th, td { padding: 0.75rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { font-weight: 650; }
+    summary { min-height: 2.75rem; }
+
+    .skip-link {
+      position: absolute;
+      inset: 0.75rem auto auto 1rem;
+      z-index: 1;
+      padding: 0.5rem 1rem;
+      background: var(--paper);
+      transform: translateY(-200%);
+    }
+    .skip-link:focus { transform: translateY(0); }
+    .page-header, main, .page-footer {
+      width: min(calc(100% - 3rem), var(--page-width));
+      margin-inline: auto;
+    }
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem 1.5rem;
+      padding-block: 1.75rem 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { margin: 0; font-size: 1.5rem; font-weight: 750; letter-spacing: -0.035em; }
+    .tagline { margin: 0; color: var(--muted); font-size: 0.9375rem; }
+    .introduction { max-width: var(--reading-width); padding-block: 4.5rem 3.5rem; }
+    .lead { margin-top: 1.75rem; font-size: 1.25rem; line-height: 1.8; }
+    .reading-body { max-width: var(--reading-width); }
+    .reading-body > section { padding-block: 2.5rem; border-top: 1px solid var(--line); }
+    .takeaway {
+      margin: 1.75rem 0 0;
+      padding: 1.5rem 1.75rem;
+      background: var(--apricot-wash);
+      border: 1px solid var(--apricot);
+      border-radius: 12px;
+      font-size: 1.25rem;
+      line-height: 1.7;
+    }
+    .takeaway strong {
+      text-decoration: underline;
+      text-decoration-color: var(--apricot);
+      text-underline-offset: 0.25em;
+    }
+    .job-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .job {
+      margin: 0;
+      padding: 1.25rem 1.15rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+    }
+    .job dt {
+      margin: 0 0 0.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .job .job-role {
+      margin: 0 0 0.75rem;
+      color: var(--teal-ink);
+      font-size: 0.9375rem;
+      font-weight: 650;
+    }
+    .job dd { margin: 0; color: var(--ink); font-size: 1rem; line-height: 1.65; }
+    .roles { margin: 1.75rem 0 0; }
+    .role {
+      display: grid;
+      grid-template-columns: 8.5rem minmax(0, 1fr);
+      gap: 1.5rem;
+      padding-block: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+    .role dt { font-weight: 650; }
+    .role dd { margin: 0; }
+    .role dd p + p { margin-top: 0.5rem; }
+    .supporting { color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      margin: 1.5rem 0 0;
+    }
+    .table-wrap table { min-width: 28rem; }
+    details { margin-top: 1.75rem; border-block: 1px solid var(--line); }
+    summary {
+      display: flex;
+      align-items: center;
+      padding-block: 1rem;
+      color: var(--teal-ink);
+      font-weight: 650;
+      cursor: pointer;
+    }
+    summary:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+    summary::marker { color: var(--teal-ink); }
+    details[open] summary { margin-bottom: 0.25rem; }
+    .detail-content { padding-bottom: 1.5rem; }
+    .page-footer { padding-block: 1.75rem 3rem; border-top: 1px solid var(--line); }
+    .page-footer p { max-width: var(--reading-width); color: var(--muted); font-size: 0.9375rem; }
+
+    @media (max-width: 42rem) {
+      .page-header, main, .page-footer { width: calc(100% - 3rem); }
+      .page-header { padding-top: 1.25rem; }
+      .introduction { padding-block: 3rem 2.5rem; }
+      h1 { font-size: 2rem; letter-spacing: -0.02em; }
+      h2 { font-size: 1.375rem; }
+      .lead { font-size: 1.125rem; }
+      .reading-body > section { padding-block: 2rem; }
+      .takeaway { padding: 1.25rem; font-size: 1.125rem; }
+      .job-grid { grid-template-columns: minmax(0, 1fr); }
+      .role { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
+    }
+
+    @media print {
+      :root { font-size: 11pt; }
+      .skip-link { display: none; }
+      .page-header, main, .page-footer { width: 100%; }
+      .introduction { padding-block: 2rem; }
+      .reading-body > section { break-inside: avoid; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to explanation</a>
+
+  <header class="page-header">
+    <p class="wordmark">AhaFold</p>
+    <p class="tagline">Turn complex ideas into illustrated explanations.</p>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <article aria-labelledby="page-title">
+      <header class="introduction">
+        <h1 id="page-title">A web page has three jobs, not one language.</h1>
+        <p class="lead">HTML says what is on the page. CSS says how it looks. JavaScript can say what happens when someone acts. They share one page, but they do not share one job.</p>
+      </header>
+
+      <div class="reading-body">
+        <section aria-labelledby="central-idea">
+          <h2 id="central-idea">The split to remember</h2>
+          <p>Beginners often hear “HTML, CSS, and JavaScript” as one pile of web code. The useful distinction is responsibility: content and structure, presentation, and response.</p>
+          <figure>
+            <dl class="job-grid">
+              <div class="job">
+                <dt>HTML</dt>
+                <dd class="job-role">Content and structure</dd>
+                <dd>Headings, paragraphs, buttons, and other pieces of the page.</dd>
+              </div>
+              <div class="job">
+                <dt>CSS</dt>
+                <dd class="job-role">Presentation</dd>
+                <dd>Colors, fonts, spacing, and layout.</dd>
+              </div>
+              <div class="job">
+                <dt>JavaScript</dt>
+                <dd class="job-role">Response</dd>
+                <dd>Optional reactions to user actions. A static information page may skip it.</dd>
+              </div>
+            </dl>
+            <figcaption>Three named jobs on one page. The boxes are a teaching split, not a claim that the browser keeps these files from ever affecting one another.</figcaption>
+          </figure>
+          <div class="takeaway">
+            <p>Ask what a line of code is doing: naming a piece of content, changing how it looks, or answering an action. That question is the split.</p>
+          </div>
+        </section>
+
+        <section aria-labelledby="same-button">
+          <h2 id="same-button">The same button, three questions</h2>
+          <p>Imagine a Save button. Each language answers a different question about it.</p>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Save button example by responsibility">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Question</th>
+                  <th scope="col">Language</th>
+                  <th scope="col">What it is doing</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">What is this?</th>
+                  <td>HTML</td>
+                  <td>There is a button, and its label is Save.</td>
+                </tr>
+                <tr>
+                  <th scope="row">How does it look?</th>
+                  <td>CSS</td>
+                  <td>Size, color, type, spacing, and where it sits in the layout.</td>
+                </tr>
+                <tr>
+                  <th scope="row">What happens if I use it?</th>
+                  <td>JavaScript</td>
+                  <td>It can confirm, store, or send something. If nothing needs to happen, this part can be absent.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>A page that only explains a topic may need headings, paragraphs, and styling, and still need no JavaScript. Response is available, not required.</p>
+        </section>
+
+        <section aria-labelledby="together">
+          <h2 id="together">They still work together</h2>
+          <p>The browser does not treat the split as a wall. HTML, CSS, and JavaScript can affect the same element. The introductory point is still useful: start by giving each file a job, then notice the overlaps.</p>
+          <dl class="roles">
+            <div class="role">
+              <dt>HTML first</dt>
+              <dd>
+                <p>Name the pieces a reader should find: titles, paragraphs, lists, links, and controls.</p>
+                <p class="supporting">Without this structure, styling and behavior have nothing clear to attach to.</p>
+              </dd>
+            </div>
+            <div class="role">
+              <dt>CSS next</dt>
+              <dd>
+                <p>Decide color, type, space, and layout without rewriting the content.</p>
+                <p class="supporting">The same heading can look like a poster on a wide screen and a simple title on a phone.</p>
+              </dd>
+            </div>
+            <div class="role">
+              <dt>JavaScript if needed</dt>
+              <dd>
+                <p>Add a response when the page must change after a click, a keypress, or another action.</p>
+                <p class="supporting">If the page is only there to be read, leaving JavaScript out is a complete choice, not an unfinished one.</p>
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <section aria-labelledby="limits">
+          <h2 id="limits">Where this picture stops</h2>
+          <p>This is an introductory separation of responsibilities. Real pages mix the jobs.</p>
+          <ul>
+            <li>HTML can carry old presentational attributes, and browsers give unstyled HTML a default look.</li>
+            <li>CSS can respond to hover, focus, and some states without JavaScript.</li>
+            <li>JavaScript can create HTML and change CSS after the page has loaded.</li>
+          </ul>
+          <p>The analogy is a filing system, not a law of the browser. Use it to ask “which job is this?”, then expect the three to cooperate.</p>
+          <details>
+            <summary>Does a static page need JavaScript?</summary>
+            <div class="detail-content">
+              <p>No. If the page is there to present information, HTML for structure and CSS for presentation can be enough. JavaScript is for responses to actions, not a required third file on every page.</p>
+            </div>
+          </details>
+        </section>
+
+        <section aria-labelledby="sources">
+          <h2 id="sources">Sources and teaching assumptions</h2>
+          <p>This page restates supplied introductory material about web page responsibilities. It was not checked against a live specification or a particular browser.</p>
+          <p class="supporting">Teaching assumption: “structure,” “presentation,” and “response” are useful beginner labels for HTML, CSS, and JavaScript. Unverified here: any claim about how a specific browser feature is implemented, and any performance or accessibility ranking of the three languages.</p>
+        </section>
+      </div>
+    </article>
+  </main>
+
+  <footer class="page-footer">
+    <p>This page is a local one-file explanation. It uses no images, no character, no network requests, and no JavaScript. Open the HTML file in a browser to read it offline.</p>
+  </footer>
+</body>
+</html>
