@@ -406,6 +406,7 @@ interface ReloadContinuation {
 }
 
 const reloadContinuations: ReloadContinuation[] = [];
+const checkedRepairScripts = new Set<string>();
 
 async function checkReloadContinuation(page: Page, target: NavigationTarget, javaScriptEnabled: boolean): Promise<void> {
   // A reload may restore scrolling before focus. Test the reader's actual next
@@ -489,12 +490,15 @@ async function checkReloadRepairGuards(context: BrowserContext, url: string): Pr
         original.call(this, options);
       };
     });
+    await page.goto(url, { waitUntil: 'load' });
+    const target = (await navigationTargets(page)).at(-1);
+    assert.ok(target);
     const scenarios = ['forward-tab', 'pointer', 'wheel', 'other-key', 'shift-tab', 'changed-hash',
       'existing-focus', 'offscreen', 'occluded', 'untrusted-tab'] as const;
     for (const scenario of scenarios) {
       await page.goto('about:blank');
-      await page.goto(`${url}#sources`, { waitUntil: 'load' });
-      await assertFragmentTarget(page, { index: 0, href: '#sources', id: 'sources' });
+      await page.goto(`${url}#${encodeURIComponent(target.id)}`, { waitUntil: 'load' });
+      await assertFragmentTarget(page, target);
       assert.deepEqual(await page.evaluate(() => (window as unknown as { focusCalls: string[] }).focusCalls), [],
         'Initial fragment entry uses native focus, never script autofocus');
       await page.reload({ waitUntil: 'load' });
@@ -508,7 +512,7 @@ async function checkReloadRepairGuards(context: BrowserContext, url: string): Pr
         document.body.removeAttribute('tabindex');
         (window as unknown as { focusCalls: string[] }).focusCalls = [];
       });
-      if (scenario === 'pointer') await page.locator('#sources').click();
+      if (scenario === 'pointer') await page.locator(`[id=${JSON.stringify(target.id)}]`).click();
       if (scenario === 'wheel') await page.mouse.wheel(0, 1);
       if (scenario === 'other-key') await page.keyboard.press('ArrowRight');
       if (scenario === 'shift-tab') await page.keyboard.press('Shift+Tab');
@@ -522,10 +526,10 @@ async function checkReloadRepairGuards(context: BrowserContext, url: string): Pr
       });
       if (scenario === 'untrusted-tab') await page.evaluate(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true })));
       await page.keyboard.press('Tab');
-      const repaired = await page.evaluate(() => (window as unknown as { focusCalls: string[] }).focusCalls.includes('sources'));
+      const repaired: boolean = await page.evaluate((id: string) => (window as unknown as { focusCalls: string[] }).focusCalls.includes(id), target.id);
       assert.equal(repaired, scenario === 'forward-tab', `${scenario}: only an untouched reader's normal first Tab repairs focus`);
       if (scenario === 'forward-tab') {
-        assert.notEqual(await page.locator(':focus').getAttribute('id'), 'sources', 'The same Tab must advance beyond the heading');
+        assert.notEqual(await page.locator(':focus').getAttribute('id'), target.id, 'The same Tab must advance beyond the heading');
         await page.evaluate(() => { (window as unknown as { focusCalls: string[] }).focusCalls = []; });
         await page.keyboard.press('Tab');
         assert.deepEqual(await page.evaluate(() => (window as unknown as { focusCalls: string[] }).focusCalls), [], 'Repair runs only once');
@@ -904,8 +908,13 @@ try {
         await checkKeyboard(page);
         const tocLinks = await checkNavigation(page, url);
         if (viewport.width === 390 && await page.locator('script[data-reader-fragment-focus]').count()) {
-          await checkReloadRepairGuards(context, url);
-          console.log(`PASS ${candidate.name}: 10 reload-repair guard scenarios, no load autofocus, one-shot continuation`);
+          const repairScript = await page.locator('script[data-reader-fragment-focus]').textContent();
+          assert.ok(repairScript);
+          if (!checkedRepairScripts.has(repairScript)) {
+            await checkReloadRepairGuards(context, url);
+            checkedRepairScripts.add(repairScript);
+            console.log(`PASS ${candidate.name}: 10 reload-repair guard scenarios, no load autofocus, one-shot continuation`);
+          }
         }
         const scrollRegions = await checkScrollRegions(page);
         const minimumSvgFontPx = await checkSvgFonts(page);

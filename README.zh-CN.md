@@ -384,3 +384,9 @@ pnpm run test:longform
 原创技能、模板、脚本及项目持有权利的资产采用 [MIT](LICENSE)。[NOTICE.md](NOTICE.md)说明参考项目、AI 生成图片来源与权利边界；保留原始图片和供应商标记。
 
 欢迎带输入与预期输出的场景、清楚的语言改进、带日期的兼容性记录。请勿提交私人材料、token 或原始会话日志。
+
+## 致谢
+
+- [Ian Xiaohei Illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations)：感谢其让插图承担关键认知动作的创作思路。
+- [visual-explainer](https://github.com/nicobailon/visual-explainer)：感谢其用可读 HTML 呈现可视化解释的方法。
+- [Linux DO 社区](https://linux.do/)：感谢社区的交流与分享。

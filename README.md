@@ -392,3 +392,9 @@ These are maintainer checks, not steps for using the skill. Real-host acceptance
 Original skill, templates, scripts, and project-held asset rights use [MIT](LICENSE). [NOTICE.md](NOTICE.md) records inspiration, AI-image provenance, and rights limits. Preserve original images and provider markings.
 
 Contribute scenarios with inputs and expected outputs, clearer wording, and dated compatibility records. Do not submit private material, tokens, or raw session logs.
+
+## Acknowledgments
+
+- [Ian Xiaohei Illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations), for the approach of making an illustration express a meaningful conceptual action.
+- [visual-explainer](https://github.com/nicobailon/visual-explainer), for the approach of presenting visual explanations as readable HTML.
+- [Linux DO](https://linux.do/), with thanks to the community for its discussions and sharing.

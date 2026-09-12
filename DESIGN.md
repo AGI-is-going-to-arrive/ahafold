@@ -23,7 +23,7 @@ links become an ordinary contents block. Native fragment links use focusable
 destinations and scroll margins. Passive reading never takes focus or forces
 scrolling. Core reading and explicit navigation work without JavaScript.
 
-After a fragment reload, the current template and illustrated library can repair
+After a fragment reload, the current template and published long guides can repair
 Chromium's lost sequential starting point on an untouched reader's first normal
 Tab, only when BODY is focused and the destination is visible and unobscured.
 The same Tab then advances natively; prior input or another focus choice cancels

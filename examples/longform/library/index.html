@@ -524,5 +524,38 @@
     </article>
   </main>
   <footer class="page-footer"><div class="footer-inner"><p>拾光工具图书馆 · 虚构教学案例<br>文字、流程与表格均可选择、搜索和离线阅读；打印时保留完整规则与金额对照。</p><a class="return-link" href="#contents">返回本页目录</a></div></footer>
+  <!-- Keep native navigation. Only an untouched reader's first Tab after a
+       fragment reload may repair a lost sequential focus position; never focus on load. -->
+  <script data-reader-fragment-focus>
+    (() => {
+      const initialHash = location.hash;
+      if (!initialHash || performance.getEntriesByType('navigation')[0]?.type !== 'reload') return;
+      let id;
+      try { id = decodeURIComponent(initialHash.slice(1)); } catch { return; }
+      const controller = new AbortController();
+      const abandon = () => controller.abort();
+      for (const type of ['pointerdown', 'wheel', 'touchstart']) {
+        document.addEventListener(type, abandon, { capture: true, once: true, passive: true, signal: controller.signal });
+      }
+      document.addEventListener('focusin', (event) => {
+        // Native fragment restoration may briefly focus the heading before BODY.
+        // Yield to any other focused control or destination.
+        if (event.target !== document.body && event.target !== document.getElementById(id)) abandon();
+      }, { capture: true, signal: controller.signal });
+      document.addEventListener('keydown', (event) => {
+        abandon();
+        if (!event.isTrusted || event.key !== 'Tab' || event.shiftKey || event.ctrlKey || event.altKey || event.metaKey || event.repeat || event.isComposing) return;
+        if (location.hash !== initialHash || document.activeElement !== document.body || !document.hasFocus()) return;
+        const target = document.getElementById(id);
+        if (!(target instanceof HTMLElement) || !target.matches('h1[tabindex="-1"],h2[tabindex="-1"],h3[tabindex="-1"],h4[tabindex="-1"]') || !document.querySelector('main')?.contains(target)) return;
+        const bounds = target.getBoundingClientRect();
+        if (typeof target.checkVisibility !== 'function' || !target.checkVisibility() || bounds.width <= 0 || bounds.height <= 0 || bounds.left < 0 || bounds.right > innerWidth || bounds.top < 0 || bounds.bottom > innerHeight) return;
+        const top = document.elementFromPoint(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
+        if (!top || !target.contains(top)) return;
+        target.focus({ preventScroll: true });
+        // Let this same Tab continue natively from the chapter; do not preventDefault().
+      }, { capture: true, once: true, signal: controller.signal });
+    })();
+  </script>
 </body>
 </html>

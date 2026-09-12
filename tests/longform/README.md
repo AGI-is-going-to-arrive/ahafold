@@ -74,16 +74,20 @@ heading with `BODY` focused after reload. Reload focus and the next Tab are now
 checked separately from an explicit link activation: native reload does not
 promise page-load autofocus, and the page must not steal focus from a reader.
 
-The current template and maintainer-integrated illustrated library repair a lost
+The current template and all seven published long-form examples repair a lost
 starting point only on the untouched reader's first ordinary Tab after reload.
 They do not focus or scroll on load. Pointer, wheel, touch, another key, a changed
 hash, another focused control, an offscreen or covered heading, and modified Tab
 all prevent the repair. The same Tab continues natively beyond the heading.
-The six historical default/reviewed pages remain byte-identical.
+The six default/reviewed examples receive only the same appended repair script;
+their original HTML, prose, existing scripts and embedded images remain unchanged.
+The historical raw outputs under `tests/longform/artifacts/` remain byte-identical.
+The Windows job for `20ef253` exposed the same real first-Tab failure in the retry
+example, so the repair covers every published long-form page.
 
 Every fixture still has strict TOC activation, fresh deep-link focus, hash,
 viewport, occlusion and JavaScript-enabled post-reload keyboard continuation
-checks. Ten separate fault-injection cases exercise the repair's guards; they do
+checks. Ten separate fault-injection cases exercise each distinct repair script's guards; they do
 not move focus on behalf of the ordinary navigation checks.
 
 With JavaScript disabled, only the observed native `BODY` → first page control
