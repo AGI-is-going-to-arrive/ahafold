@@ -2,289 +2,387 @@
 
 **Turn complex ideas into illustrated explanations.**
 
-[简体中文](README.zh-CN.md)
+[简体中文](README.zh-CN.md) · [Live introduction](https://agi-is-going-to-arrive.github.io/ahafold/?lang=en) · [Page source](index.html) · [See real examples](#see-what-you-get)
 
-A lightweight, single agent skill that plans original illustrations and accurate
-HTML together, from one concept to a long document. **Fold**, a curious paper-page
-character, demonstrates the relevant action. Use the current harness's native
-image tool for the planned scenes; explicit no-image requests, text-only edits and
-precision-only material remain supported. Add interaction when it helps.
+Turn a concept, article, or set of instructions into **an illustrated explanation you can read in a browser**. Tell your existing AI tool what you want to understand. AhaFold helps organize the words, pictures, and small interactions that make the answer easier to follow.
 
-**Private v0.1 development.** Repository access is required to install. This is not a
-public release or a claim of full support on all target platforms.
-The [focused Codex/Grok audit](tests/focus-validation.md) covers Chinese, English
-and mixed-language use. It found real Grok correctness/visual failures and incomplete
-tasks; the earlier examples do not establish universal reliability.
+> **v0.1 preview.** The repository is currently private; installation requires access. Codex has historical successful cases, Grok Build is partially verified, and Antigravity CLI has not completed acceptance. Current revisions are not verified across all three hosts.
 
-## See the result
+<a id="see-the-result"></a>
 
-[![AhaFold illustrated long Chinese tool-library guide](examples/longform/library/illustrated-preview.png)](examples/longform/library/illustrated.html)
+## See what you get
 
-| Explanation | Scope | Complete HTML | Input and provenance |
-| --- | --- | --- | --- |
-| Borrowing from a tool library | Chinese · 11 sections · 2 original Fold scenes | [Read](examples/longform/library/illustrated.html) | [Notes](examples/longform/library/README.md) |
-| Did my seats get booked? | English · 11 sections | [Read](examples/longform/retries/index.html) | [Notes](examples/longform/retries/README.md) |
-| TypeScript → JSON boundaries | Chinese + English terms/code · 10 sections | [Read](examples/longform/type-boundaries/index.html) | [Notes](examples/longform/type-boundaries/README.md) |
-| Sunk cost · 沉没成本 | Compact | [Read](examples/sunk-cost/index.html) | [Notes](examples/sunk-cost/README.md) |
-| Recognition versus recall | Compact | [Read](examples/recognition-recall/index.html) | [Notes](examples/recognition-recall/README.md) |
-| Compounding · 复利 | Compact | [Read](examples/compounding/index.html) | [Notes](examples/compounding/README.md) |
+[![Fold puts down a heavy bag representing past costs and faces two future paths](examples/sunk-cost/preview.png)](examples/sunk-cost/index.html)
 
-The illustrated library guide combines two real current-Codex native images with
-the existing long explanation: one scene anchors receipt versus reservation,
-another explains recorded return versus inspection. It is a maintainer-integrated
-example, not a new fresh installed-host run. The three original no-image Codex
-outputs and separately reviewed Grok variants remain in the [long-guide notes](examples/longform/README.md).
-Previews show only the opening; the second illustration is inside the return chapter.
+**“I bought the movie ticket. Do I still have to go?”**
 
-The [Chinese recognition/recall edition](examples/recognition-recall/index.zh-CN.html)
-demonstrates a language revision that preserves the original image.
+AhaFold illustrates sunk cost with Fold putting down a heavy bag, then explains why irrecoverable past spending differs from future costs and benefits. The picture gives you a starting point; the conditions and exceptions stay in the explanation.
 
-Download or clone the repository, then open an example's `index.html` in your browser;
-GitHub's file view displays source. Pages keep their CSS and any small script inline. Illustrated pages embed their
-images and retain the originals in the adjacent `assets/` folder.
-Readers need no AI account, Node.js, server, or extra model calls.
+| What to explore | Actual output | What it demonstrates |
+| --- | --- | --- |
+| One concept | [Sunk cost](examples/sunk-cost/index.html) | An illustration, everyday examples, and analogy limits |
+| Two similar ideas | [Recognition versus recall](examples/recognition-recall/index.html) · [Chinese edition](examples/recognition-recall/index.zh-CN.html) | A comparison; translated prose preserves the image |
+| Changing numbers | [Compounding and time](examples/compounding/index.html) | Adjust conditions and inspect hypothetical results |
+| A long set of rules | [Tool-library borrowing guide](examples/longform/library/illustrated.html) | Eleven sections, contents navigation, two real native illustrations |
+| A technical process | [Booking retries](examples/longform/retries/index.html) | An English guide, timing, and failure conditions |
+| Boundaries in code | [TypeScript → JSON](examples/longform/type-boundaries/index.html) | Chinese explanations, English terminology, original code |
 
-## What you can make
+Download or clone the repository and open these HTML files in a browser; GitHub's file view shows source. The [introduction](index.html) is bilingual; see the Pages setup below. Illustrations are existing real artifacts, not newly generated for this update. The long illustrated library guide was integrated by a maintainer, not produced in a fresh installed-host acceptance run of the revised skill. Each example's README records sources and edits.
 
-- An intuitive explanation of an unfamiliar concept.
-- A comparison that separates two easily confused ideas.
-- A short explanation with a useful step-through or a simple interactive example.
-- A long guide with an overview, linked chapters, local diagrams, worked examples,
-  and the conditions and exceptions that qualify its conclusions.
+## Start with three steps
 
-Simple requests use the [compact starting point](skills/ahafold/assets/explainer.html).
-Substantial material or an explicit long-guide request uses the
-[long-form guidance](skills/ahafold/references/longform.md) and
-[original multi-section template](skills/ahafold/assets/longform.html). The skill
-chooses the representations for the material within the same local-HTML workflow.
-Image count follows the generated explanatory prose. Start from roughly one image
-per1000 Chinese/CJK characters or600 English words (combine both for mixed prose),
-then adjust for independent mechanisms, difficult passages and existing visual
-coverage. Recount after the full draft or a substantial rewrite. Code, tables,
-appendices, captions and image data do not inflate the count; there is no universal
-image cap. Explicit user counts, edit scope and authorized budgets take precedence.
+### 1. Install in your project
 
-Images carry the character, situation, action, and a few useful short labels. Long
-prose, code, formulas, and complex charts stay in editable HTML/SVG. Explicit
-no-image and precision-only requests remain supported; Fold and interaction are
-used when they help. You can also request an illustration only.
+You need Node.js **22.20.0+** and a normally signed-in Codex, Grok Build, or Antigravity CLI. Illustrations also require that tool's native image capability and available quota. No additional image API key is needed.
 
-The author uses their selected harness account and available quota. Generation sends
-the supplied material to that provider. AhaFold includes no database, indexer,
-standalone service, unified model SDK, or repository-analysis product line.
-
-## Requirements
-
-- Codex, Grok Build, or **Antigravity CLI (`agy`)** with its normal account login.
-- Access to that host's native image tool and available quota when an image is needed.
-- Node.js **22.20.0 or later** for the pinned `skills@1.5.23` installer.
-- Access to this private GitHub repository through authenticated Git. No token belongs
-  in an installation command, generated HTML, or an issue.
-- A browser to read the output. AhaFold's native workflow needs no extra image API key.
-
-## Install in your project
-
-First check for an existing `ahafold` folder in **both** `.agents/skills/` and
-`.grok/skills/`. If one exists, stop and review/back up its changes before installing;
-the upstream installer can overwrite an existing installation.
-
-Run from the project where you want to use AhaFold:
+Already installed? Check `.agents/skills/ahafold/` and `.grok/skills/ahafold/` and preserve local changes first: the installer can overwrite a skill with the same name.
 
 ```sh
 npx skills@1.5.23 add AGI-is-going-to-arrive/ahafold --skill ahafold --copy
 ```
 
-Choose the target in the installer:
+Choose your current tool in the installer:
 
-| Harness | Installer agent ID | Project skill path | Invocation |
+| Tool | Installer ID | Project installation path | Invocation |
 | --- | --- | --- | --- |
-| Codex | `codex` | `.agents/skills/ahafold/` | `$ahafold`; `/skills` |
-| Grok Build | `grok` | `.grok/skills/ahafold/` | `/ahafold`; `/skills` |
-| Antigravity CLI | `antigravity-cli` | `.agents/skills/ahafold/` | `/ahafold`; `/skills` |
+| Codex | `codex` | `.agents/skills/ahafold/` | `$ahafold`; inspect with `/skills` |
+| Grok Build | `grok` | `.grok/skills/ahafold/` | `/ahafold`; inspect with `/skills` |
+| Antigravity CLI (`agy`) | `antigravity-cli` | `.agents/skills/ahafold/` | `/ahafold`; inspect with `/skills` |
 
-Use **`antigravity-cli`**, not the separate `antigravity` IDE target. `grok-build`
-is not an installer ID. To select one host directly:
+Choose `antigravity-cli`, not the older IDE's `antigravity`; `grok-build` is not an installer ID. `--copy` uses file copies to avoid Windows symlink privileges. Start a new session after installation and check `/skills` for AhaFold.
+
+<a id="use-it"></a>
+
+### 2. Ask in ordinary language
+
+```text
+Use AhaFold to explain sunk cost to a beginner. Write one illustrated page in English.
+```
+
+You can also write `$ahafold` in Codex or `/ahafold` in the other two tools. If you are unsure what to ask, supply three things:
+
+> **Who it is for + what to explain + the output language.**
+
+For example: “Explain delegation versus dumping responsibility to a first-time manager, in English.” Illustrated HTML is the default. Add an image-only request, no-image preference, or call limit when you need one. No special prompt syntax to learn.
+
+### 3. Open the page
+
+The default output is `ahafold-output/<topic-slug>/index.html`, with original images in the adjacent `assets/` directory. Open it in a browser. Readers of a self-contained HTML file need no AI account, Node.js, or server. Reading and ordinary interactions make no model calls. Keep the originals for later edits and provenance checks.
+
+## Twenty situations: copy a prompt and try it
+
+These are **suggested uses, not twenty completed acceptance tests**. Supply the referenced file or material along with the request. Examples do not imply automatic access to unauthorized websites, cloud drives, or private files.
+
+### Learning and everyday questions
+
+<details>
+<summary>Understand a concept — An everyday scene + the conditions that matter</summary>
+
+```text
+Use AhaFold to explain sunk cost to a beginner through a movie ticket they no longer want to use. Write an illustrated page in English and distinguish money that can still be recovered.
+```
+
+</details>
+
+<details>
+<summary>Tell two ideas apart — Side-by-side comparison + one example each</summary>
+
+```text
+Use AhaFold to explain recognition versus recall to a student. Compare multiple-choice and fill-in-the-blank questions in an illustrated English page.
+```
+
+</details>
+
+<details>
+<summary>Explain science to a child — A journey + where the analogy breaks</summary>
+
+```text
+Use AhaFold to explain the water cycle to a ten-year-old in English. Illustrate the journey of water and explain why a cloud is not a bag of water.
+```
+
+</details>
+
+<details>
+<summary>See how numbers change — An adjustable example + explicit assumptions</summary>
+
+```text
+Use AhaFold to explain time and compounding in English. Assume a principal of 100, a fixed annual rate of 5%, and annual compounding. Add a years control; state that taxes and fees are excluded and returns are hypothetical.
+```
+
+</details>
+
+<details>
+<summary>Understand a long article — An overview, then linked sections</summary>
+
+```text
+Use AhaFold to explain my supplied article.md to someone without background knowledge. Write in English: answer first, then illustrated sections. Preserve important conditions, exceptions, and numbers.
+```
+
+</details>
+
+### Teams and work
+
+<details>
+<summary>Teach a new teammate a process — Steps + owners + completion conditions</summary>
+
+```text
+Use AhaFold to turn my supplied onboarding process into an illustrated English guide. Show who acts, what they do, what counts as done, and whom to contact when blocked.
+```
+
+</details>
+
+<details>
+<summary>Clarify a confusing rule — Distinct states + common misreadings</summary>
+
+```text
+Use AhaFold to explain these borrowing rules to a first-time tool-library visitor in English. Separate submitting a request, confirming a reservation, and collecting an item. Preserve return and cancellation conditions.
+```
+
+</details>
+
+<details>
+<summary>Compare two options — Shared assumptions; missing data stays visible</summary>
+
+```text
+Use AhaFold to compare my supplied options A and B in English. Use the same budget and headcount, explain when each fits, and mark missing data.
+```
+
+</details>
+
+<details>
+<summary>Show what changed — One example traced before and after</summary>
+
+```text
+Use AhaFold to compare my supplied old and new processes in English. Trace the same concrete example through both and mark changes, unchanged behavior, and new constraints.
+```
+
+</details>
+
+<details>
+<summary>Explain meeting decisions — Decisions / open questions / next steps</summary>
+
+```text
+Use AhaFold to explain these meeting notes in English. Separate decisions, open questions, and next steps. Do not turn discussed ideas into commitments.
+```
+
+</details>
+
+### Writing and communication
+
+<details>
+<summary>Illustrate an article — Images and captions only</summary>
+
+```text
+Use AhaFold to make three Fold illustrations for my supplied article. Deliver only the images and captions, each explaining a different key idea. Do not rewrite the article.
+```
+
+</details>
+
+<details>
+<summary>Plan pictures first — An illustration plan; no image calls</summary>
+
+```text
+Use AhaFold to plan illustrations for this article without generating images yet. Explain where each belongs, what it teaches, and what Fold is doing.
+```
+
+</details>
+
+<details>
+<summary>Explain technology to family — A familiar situation + limits</summary>
+
+```text
+Use AhaFold to explain cloud backup versus file sync to a nontechnical family member in English. Use an accidentally deleted photo and show what each can and cannot guarantee.
+```
+
+</details>
+
+### Technology and code
+
+<details>
+<summary>Explain an API to a teammate — A request path + important states</summary>
+
+```text
+Use AhaFold to explain an order request to a product teammate from this API description. Write in English; distinguish received, processing, and completed. Do not assume a timeout means failure.
+```
+
+</details>
+
+<details>
+<summary>Explain retry failures — A timeline + a concrete failure case</summary>
+
+```text
+Use AhaFold to explain from my supplied material why retrying a booking may duplicate an order. Write in English, show request and response timing, and preserve the conditions for idempotency keys.
+```
+
+</details>
+
+<details>
+<summary>Understand types and runtime — Explanation beside code + boundaries</summary>
+
+```text
+Use AhaFold to explain this TypeScript code that receives JSON. Write in English, preserve the original code, and distinguish compile-time checking, runtime validation, and type assertions.
+```
+
+</details>
+
+### Revisions and control
+
+<details>
+<summary>Make it simpler — A focused rewrite; no new images</summary>
+
+```text
+Use AhaFold to rewrite the second paragraph of this page for a beginner in English. Keep its important conditions, the other content, and every existing image unchanged.
+```
+
+</details>
+
+<details>
+<summary>Translate text, keep the image — A new prose language; unchanged image bytes</summary>
+
+```text
+Use AhaFold to translate this HTML text into English and keep the original image. Explain its Chinese labels in an English caption without claiming the image text was edited.
+```
+
+</details>
+
+<details>
+<summary>Use precise diagrams only — A comparison with selectable text</summary>
+
+```text
+Use AhaFold to turn this glossary into an English HTML comparison. No character or raster images. Keep accurate definitions and one short example each.
+```
+
+</details>
+
+<details>
+<summary>Set an image budget — A call limit + honest incomplete status</summary>
+
+```text
+Use AhaFold to illustrate this material in English. Make at most two native image calls, including retries. If the budget runs out, deliver a readable draft and identify missing illustrations.
+```
+
+</details>
+
+
+## Meet Fold
+
+**Fold / 小折** is an apricot paper-page character with a teal folded corner. Fold performs an action that explains a relationship: putting down a bag, handing in a request, or following a path. Precise diagrams need no character when one would add nothing.
+
+AhaFold draws on [Ian Xiaohei Illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations) for illustrations that enact a conceptual step, and [visual-explainer](https://github.com/nicobailon/visual-explainer) for readable HTML delivery. It implements its own lightweight workflow with an independent character and original templates. Neither reference project needs to be installed first.
+
+Images establish a scene and intuition; HTML/SVG carries selectable text, exact values, code, and changing state. Long guides start with an answer and overview, then expand into linked sections. Illustration coverage follows the prose and subject. Interaction is optional when a direct explanation is enough.
+
+## Where it fits
+
+Use it for learning concepts, illustrating articles, onboarding, explaining rules, comparing options, and explaining technical material you supply. You can request illustrations only, a plan only, or an image-free page.
+
+It does not provide editable PPTX, complete vector illustration sources, automated repository audits, or automatic publishing. Generated facts, image labels, and analogies still require review. An output looking clearer does not establish that people learn faster from it.
+
+Generation sends prompts and reference material to **your current tool's cloud service**, using that account and its quota. Cost may be unknown; a subscription does not imply unlimited generation. Missing images, 429 responses, authentication failures, or uncertain outcomes stop that image route. A readable draft can still be delivered with limitations stated. There is no silent provider switch, automatic API fallback, or removal of provider watermarks.
+
+## What is implemented and verified
+
+This is **historical installation-to-output coverage**, not renewed certification of every current revision. Native host probes, browser checks, and human comprehension are separate kinds of evidence.
+
+| Combination | State | Scope and limits |
+| --- | --- | --- |
+| macOS / Codex | PASS | Bounded historical installed generation, editing, and multilingual cases passed; the revised illustrated workflow needs fresh acceptance. |
+| macOS / Grok Build | PARTIAL | Native generation/reference/editing work; content, image alignment, and mobile reading failures remain in the evidence. |
+| macOS / Antigravity CLI | BLOCKED | Historical429; later testing deferred. Complete workflow unverified. |
+| Windows / Codex | NOT TESTED | No native Windows installation-to-output evidence. |
+| Windows / Grok Build | NOT TESTED | Same limitation. |
+| Windows / Antigravity CLI | NOT TESTED | Same limitation. |
+| Linux / Codex | NOT TESTED | No Linux installation-to-output evidence. |
+| Linux / Grok Build | NOT TESTED | Same limitation. |
+| Linux / Antigravity CLI | NOT TESTED | Same limitation. |
+
+Priorities: **repeat real-host acceptance against the current skill; fix or clearly bound long-guide reload focus; verify each fact and image relationship; observe first-time readers completing comprehension tasks.** Keep one skill without adding a service or extra configuration for distribution.
+
+<details>
+<summary>Test records and remaining evidence gaps</summary>
+
+Rechecked the current local worktree on 2026-09-12: type, package, installer, compact-page, and long-guide browser checks passed. Long-guide checks separately reported two native reload-focus limitations with JavaScript disabled; those behaviors did not pass. This pass made no new host image calls and did not recertify Windows/Linux.
+
+- [Installation and native acceptance](tests/validation.md): versions, call counts, and scope.
+- [Focused Codex / Grok evaluation](tests/focus-validation.md): Chinese, English, mixed-language tasks, and actual failures.
+- [Long-guide evaluation](tests/longform/results.md): six no-image sessions; all60 required facts were consistent across the three Codex outputs, versus56 of60 for Grok. This does not establish illustrated long-form authoring.
+- [Illustrated-guide checks](tests/longform/illustrated-results.md): a maintainer-integrated two-image example and historical reload-focus issues. Files have since changed; old results do not automatically describe the current version.
+- [Long-guide behavior checks](tests/longform/README.md) and [acceptance cases](tests/cases.md): deterministic checks cannot prove another OS's OAuth image generation or lower human learning costs.
+
+Earlier Windows long-form CI failed; strict illustrated-page checks also recorded a macOS reload-focus failure. Check actual results for the current commit before release rather than carrying forward an older green status. Without a human comparison study, do not claim better outcomes than the reference projects.
+
+</details>
+
+<details>
+<summary>Illustration counts and host differences</summary>
+
+A short explanation may need one picture. Longer explanations start from roughly one per1000 Chinese/CJK characters or600 English words of generated prose, then adjust for distinct mechanisms, difficulty, and existing coverage. Combine both for mixed-language prose and recount after the full draft. Code, tables, appendices, captions, and image data do not inflate the count. Explicit counts and authorized budgets take precedence; there is no universal cap.
+
+Codex's preferred image target is `gpt-image-2.5`: plan integrated headings,
+annotations and conceptual charts when useful. Grok Build and Antigravity CLI
+default to simpler native scenes with no text or a few short labels, plus precise
+HTML/SVG. These are authoring strategies, not a measured quality ranking.
+Long prose, executable code, authoritative formulas/data and changing charts stay
+editable. Important image text also remains selectable in the page. Explicit
+no-image and precision-only requests remain supported; Fold and interaction are
+used when they help. You can also request an illustration only.
+
+The target does not force a native backend. As checked on 2026-09-12, official
+[image prompting guidance](https://developers.openai.com/api/docs/guides/image-prompting)
+documents 2.5 API variants, while [Codex image generation](https://developers.openai.com/codex/image-generation)
+still names `gpt-image-2`. AhaFold selects a requested model only when the live native
+schema supports it, and reports an undisclosed backend honestly. Subscription login
+alone does not verify a specific model or quota; no API key or reasoning-model
+configuration change is needed for the native workflow.
+
+</details>
+
+## Installation, updates, and distribution
+
+**npx installation is already available; a separate npm package is unnecessary.** `npx` runs the pinned `skills` installer, which retrieves `skills/ahafold/` from GitHub. The repository is currently private, so only authorized users can install. The same command becomes suitable for the general public after a deliberate public-repository release.
+
+To choose one tool directly, for example Codex:
 
 ```sh
 npx skills@1.5.23 add AGI-is-going-to-arrive/ahafold --skill ahafold --agent codex --copy
 ```
 
-Replace `codex` with `grok` or `antigravity-cli` as needed. `--copy` avoids Windows
-symlink privileges. Installation is project-scoped. Start a new host session and
-check `/skills`; the compatibility table separates documented syntax from observed
-product acceptance.
+Replace `codex` with `grok` or `antigravity-cli`. The **installer version** is pinned; the skill follows the repository's default branch, so this does not freeze the AhaFold version. A stable release also needs a tag and acceptance of that version.
 
-For a local clone, run the same `add` command with a quoted path to the clone instead
-of `AGI-is-going-to-arrive/ahafold`. On Windows, use your actual Windows path. If you
-prefer manual installation, copy **the entire `skills/ahafold/` folder**, including
-`references/`, `assets/`, and `LICENSE`, to the appropriate project path above. Do not
-copy only `SKILL.md`. No `pnpm install` is needed by skill users. Global installation
-is not part of the verified v0.1 instructions.
+For a local clone, replace the repository name with its quoted directory. You can also copy **the entire `skills/ahafold/` folder**, including `references/`, `assets/`, and `LICENSE`, to the appropriate project path. Skill users do not need `pnpm install`. These instructions are project-scoped; global installation is outside the verified scope.
 
-## Use it
-
-In Codex, mention `$ahafold`. In Grok Build and Antigravity CLI, use `/ahafold` or ask
-naturally. Invocation depends on the host; there is no universal slash command.
-
-```text
-Use AhaFold to explain sunk cost to a general reader.
-Make one illustrated HTML page and explain where the analogy stops working.
-```
-
-```text
-Use AhaFold to explain the difference between recognition and recall.
-Use short labels in the illustration, and add interaction only if it helps.
-```
-
-```text
-Use AhaFold to turn material.md into a complete long guide for a general reader.
-Write in English. Keep important conditions, exceptions, numbers, and original code.
-Scale the number and placement of Fold illustrations to the generated body length
-and conceptual density, then review the plan after the full draft.
-```
-
-State the output language explicitly. For a Chinese or mixed-language long guide:
-
-```text
-使用 AhaFold 把 material.md 做成完整长篇图解，面向普通读者。
-用简体中文写作，保留重要条件、例外和数值。先共同规划正文与小折配图，
-配图数量随生成正文的长度、独立机制和阅读节奏动态调整，完整初稿后重新核算。
-```
-
-```text
-使用 AhaFold 把 material.md 做成长篇图解。
-解释用简体中文，保留 English 术语与原代码，讲清关键边界。
-配图数量随实际解释正文的长短调整；精确执行路径、代码与数值留在 HTML/SVG，
-代码块和表格长度不用于凑配图数量。
-```
-
-To skip images:
-
-```text
-Use AhaFold to make an HTML terminology comparison. No character or images.
-```
-
-## Edit an explanation
-
-```text
-Use AhaFold to rewrite the second paragraph for beginners.
-Keep the existing illustration and the rest of the page unchanged.
-```
-
-```text
-Translate the HTML text into Simplified Chinese. Keep the original image.
-Explain any English labels from the image in the Chinese caption.
-```
-
-Editing words inside a raster image may require a new native edit or generation.
-Changing HTML prose or language preserves unaffected images; their hashes should
-stay unchanged. AhaFold does not promise a general dependency-tracking editor.
-
-## Output and lifecycle
-
-Default: `ahafold-output/<topic-slug>/index.html`, with original images in `assets/`.
-Your requested path takes precedence. Existing output is versioned unless you
-explicitly request replacement. Share the self-contained HTML; keep original files
-for provenance and later edits. References need internet when opened, but reading
-and ordinary interaction make no network or model requests.
-
-Before updating, review local skill changes. Update only this package using the
-same pinned installation command after preserving any changes you want to keep.
-To remove this package from the current project after reviewing its content:
+Preserve local edits before updating with the same command. After inspecting the directories, remove only this skill from the current project with:
 
 ```sh
 npx skills@1.5.23 remove ahafold -y
 ```
 
-This targets only the named skill across project agent locations. Codex and
-Antigravity CLI share the `.agents` copy; removal affects both. Other skills and
-`ahafold-output/` work remain intact. Selecting only three `--agent` targets can
-leave the shared copy for other detected agents, so verify the actual folders. Tested installer lifecycle details are in
-[the validation report](tests/validation.md).
+Codex and Antigravity CLI share the `.agents` copy; removal affects both. Other skills and `ahafold-output/` remain intact. The installer may leave a shared copy for other detected hosts, so inspect the actual directories. Never put credentials in commands or issue reports.
 
-## Compatibility and limits
+<details>
+<summary>Maintainers: introduction page and checks</summary>
 
-Targets: native Windows, macOS, and Linux, across the three hosts. WSL is a separate
-Linux environment, not proof of native Windows support. States below describe
-**installed AhaFold → native image → saved HTML → offline reading**, not bare-host
-image probes. `PARTIAL` does not mean full acceptance.
+The root [index.html](index.html) is a standalone bilingual introduction that opens locally. It reuses existing native illustrations and supports language switching, scenario filters, and prompt copying. Ordinary browsing makes no model calls.
 
-| Combination | State | Evidence / limitation |
-| --- | --- | --- |
-| macOS / Codex | PASS | Bounded installed generation/edit and multilingual cases verified; technical case needed an environment/timebox retry. |
-| macOS / Grok Build | PARTIAL | Native generation/reference/edit work; focused cases exposed content, image-alignment and mobile failures. Independent review required; watermark remains. |
-| macOS / Antigravity CLI | BLOCKED | Testing deferred by user; previous native429 and draft retained. No new CLI call. |
-| Windows / Codex | NOT TESTED | — |
-| Windows / Grok Build | NOT TESTED | — |
-| Windows / Antigravity CLI | NOT TESTED | — |
-| Linux / Codex | NOT TESTED | — |
-| Linux / Grok Build | NOT TESTED | — |
-| Linux / Antigravity CLI | NOT TESTED | — |
-
-Dated versions, deterministic CI, image call counts, and remaining release gates
-are recorded in [tests/validation.md](tests/validation.md). Deterministic CI cannot
-prove OAuth image generation on a different operating system.
-
-The separate [long-form evaluation](tests/longform/results.md), dated 2026-09-05,
-used six fresh installed Codex/Grok sessions with no images; all six completed.
-Independent review found all 60 required facts consistent in the three raw Codex
-outputs. Grok mentioned all 60, but only 56 were consistent: three contradictory
-passages affected four checks. One Grok run produced Chinese from English material
-and an English prompt that had no explicit “Write in English” clause. Reviewed
-examples retain their correction records; the raw results and earlier failures
-remain part of the evidence. Browser results and outstanding checks are in that report.
-The Windows long-form CI gate remains **FAIL**: native heading focus can be lost
-after reload, including after a verified fresh deep link with JavaScript disabled.
-macOS/Linux checks passed. This development iteration has not cleared every release gate.
-
-Those six no-image cases do not establish the illustrated long-form path. The
-[new library picture record](examples/longform/library/illustration-provenance.json)
-adds2 current-Codex native calls (cumulative11/15), with actual pixel/caption checks
-and a maintainer-integrated long guide. Grok/Antigravity illustrated long-form
-authoring and a fresh installed-host run of this corrected workflow remain unverified.
-The [illustrated-page checks](tests/longform/illustrated-results.md) passed their
-separate image/reading scope, but the strict page run also hit reload-focus failure
-on macOS. Earlier CI passes do not establish full acceptance of this new edition.
-
-Short labels, Fold identity, reference-image input, and image editing are separate
-checks. A logged-in account does not guarantee quota. Cost is unknown and usage is
-not unlimited. Inspect every image: a strict no-visible-watermark task may not be
-satisfied by a particular provider. Keep supplier markings and original bytes;
-“no visible watermark observed” does not mean an image has no provenance marks.
-
-Missing native tools, 429/auth failures, and uncertain outcomes stop that image
-route. A readable draft may still be delivered with its limitation stated. No
-silent retries, credential extraction, endpoint switching, or API fallback.
-Claude Code, OpenCode, DeepSeek, and other-harness fallback remain future plans.
-AhaFold does not publish pages automatically.
-
-## Contributing and license
-
-Original skill, templates, scripts, and project-held asset rights: [MIT](LICENSE).
-See [NOTICE.md](NOTICE.md) for AI-generated Fold provenance, image-rights limits,
-and inspiration from [Ian Xiaohei Illustrations](https://github.com/helloianneo/ian-xiaohei-illustrations)
-and [visual-explainer](https://github.com/nicobailon/visual-explainer).
-
-The original long-form template draws methodological inspiration from the local
-visual-explainer snapshot `7163c3e`: representation choice, overview/detail structure,
-contents navigation, and claim review. See the [source comparison](tests/longform/README.md).
-No upstream implementation was copied. This comparison does not establish equal or
-better generated-output quality in a matched test.
-
-Contribute reproducible examples, language improvements, and dated compatibility
-results without tokens, private material, or raw session logs. Maintainer checks:
+The [Pages workflow](.github/workflows/pages.yml) publishes only the introduction, curated examples, and license notices when manually dispatched. It does not upload `tests/`, `output/`, or the whole repository. GitHub Pages must be available and configured to use GitHub Actions. A workflow file is not proof of a live deployment; repository visibility and npm publication remain separate decisions.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm exec playwright install chromium
 pnpm run typecheck
+pnpm run check:package
 pnpm run test:checks
 pnpm run test:install
-pnpm run check:package
 pnpm run test:examples
 pnpm run test:longform
 ```
 
-These development dependencies are outside the installable skill. See
-[behavior cases](tests/cases.md) for E01–E06 and the native acceptance checklist.
-Keep the repository private; public publication requires a separate decision.
+These are maintainer checks, not steps for using the skill. Real-host acceptance is separate.
+
+</details>
+
+## License and contributions
+
+Original skill, templates, scripts, and project-held asset rights use [MIT](LICENSE). [NOTICE.md](NOTICE.md) records inspiration, AI-image provenance, and rights limits. Preserve original images and provider markings.
+
+Contribute scenarios with inputs and expected outputs, clearer wording, and dated compatibility records. Do not submit private material, tokens, or raw session logs.

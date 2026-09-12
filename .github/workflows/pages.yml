@@ -1,0 +1,57 @@
+name: Publish introduction to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare the public site
+        shell: bash
+        run: |
+          mkdir -p _site/examples/longform
+          cp index.html LICENSE NOTICE.md _site/
+          mkdir -p _site/skills/ahafold/assets/fold
+          cp skills/ahafold/assets/fold/reference-sheet.png _site/skills/ahafold/assets/fold/
+          for topic in sunk-cost recognition-recall compounding; do
+            mkdir -p "_site/examples/$topic"
+            cp "examples/$topic/"*.html "_site/examples/$topic/"
+            cp -R "examples/$topic/assets" "_site/examples/$topic/assets"
+          done
+          for topic in library retries type-boundaries; do
+            mkdir -p "_site/examples/longform/$topic"
+            cp "examples/longform/$topic/index.html" "_site/examples/longform/$topic/"
+          done
+          cp examples/longform/library/illustrated.html _site/examples/longform/library/
+          test -s _site/index.html
+          test -s _site/examples/longform/library/illustrated.html
+          test ! -e _site/tests
+          test ! -e _site/output
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
