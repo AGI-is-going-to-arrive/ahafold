@@ -6,7 +6,7 @@
 
 把一个概念、一篇文章或一份说明，变成**有插图、讲人话、浏览器里就能读的解释页**。你在现有 AI 工具里说清想理解什么，AhaFold 帮你组织文字、配图和必要的小交互。
 
-> **v0.1 预览版。** 仓库目前私有，安装需要访问权限。Codex 有历史成功案例；Grok Build 部分通过；Antigravity CLI 尚未完成验收。当前修订不等于三个宿主都已验证。
+> **v0.1 公开预览版。** 可以直接从公开的 GitHub 仓库安装。Codex 有历史成功案例；Grok Build 部分通过；Antigravity CLI 尚未完成验收。当前修订不等于三个宿主都已验证。
 
 ## 先看看它做出来什么
 
@@ -299,7 +299,7 @@ AhaFold 借鉴 [Ian Xiaohei Illustrations](https://github.com/helloianneo/ian-xi
 <details>
 <summary>查看测试记录与尚未证明的部分</summary>
 
-2026-09-12 对当前工作区重新运行：类型检查、包检查、安装器、短篇与长篇浏览器检查通过。长篇检查另报告2处禁用 JavaScript 时的原生刷新焦点限制，这些行为未算通过。本轮没有新增宿主生图调用，也未重新认证 Windows/Linux。
+2026-09-12 在隔离检出中验证续读修复：类型检查、包检查、安装器、短篇与长篇浏览器检查通过。无 JavaScript 的原生刷新限制仍单独记录，不计作导航通过。本轮没有新增宿主生图调用；浏览器 CI 不等于重新认证 Windows/Linux 的原生生图支持。
 
 - [安装与原生验收](tests/validation.md)：版本、调用次数、测试范围。
 - [Codex / Grok 专项评估](tests/focus-validation.md)：中文、英文、混排与实际失败。
@@ -307,7 +307,7 @@ AhaFold 借鉴 [Ian Xiaohei Illustrations](https://github.com/helloianneo/ian-xi
 - [长文图文检查](tests/longform/illustrated-results.md)：两张图的维护者整合样例及历史刷新焦点问题。后续已改动文件，旧结果不自动适用于当前版本。
 - [长文行为检查](tests/longform/README.md)与[验收案例](tests/cases.md)：确定性测试不证明其他操作系统的 OAuth 生图，也不证明真人理解成本下降。
 
-旧 Windows 长文 CI 曾失败，后续图文页的严格检查也记录过 macOS 刷新焦点失败。发布前必须检查当前提交的实际结果，不沿用旧绿色状态。无真人对照实验时，不宣称相较两个参考项目效果更好。
+旧 Windows／Ubuntu 长文 CI 曾在刷新焦点检查失败。[续读修复与更新后的验收边界](tests/longform/README.md#reload-repair-and-acceptance-boundary-2026-09-12)区分了严格验证的 JavaScript 续读和单独记录的无 JavaScript 浏览器限制，历史失败结果保持不变。请检查当前提交的实际结果，不沿用旧绿色状态。无真人对照实验时，不宣称相较两个参考项目效果更好。
 
 </details>
 
@@ -331,7 +331,7 @@ Grok Build 与 Antigravity CLI 默认使用简单原生场景、无字或少量�
 
 ## 安装、更新与分发
 
-**已经可以通过 npx 安装，不必另外发布 npm 包。** `npx` 运行固定版本的 `skills` 安装器，它从 GitHub 获取 `skills/ahafold/`。当前仓库私有，所以只有获授权用户能安装；公开仓库后，同一条命令才适合直接面向公众。
+**已经可以通过 npx 安装，不必另外发布 npm 包。** `npx` 运行固定版本的 `skills` 安装器，它从 GitHub 获取 `skills/ahafold/`。仓库已经公开，克隆和安装 skill 无需登录 GitHub。
 
 只选一个工具时，例如 Codex：
 
@@ -339,7 +339,13 @@ Grok Build 与 Antigravity CLI 默认使用简单原生场景、无字或少量�
 npx skills@1.5.23 add AGI-is-going-to-arrive/ahafold --skill ahafold --agent codex --copy
 ```
 
-将 `codex` 换为 `grok` 或 `antigravity-cli` 即可。这里固定的是**安装器版本**，skill 内容跟随仓库默认分支，并未冻结 AhaFold 版本；稳定发布还需要标签与对对应版本的验收。
+将 `codex` 换为 `grok` 或 `antigravity-cli` 即可。这里固定的是**安装器版本**，skill 内容跟随仓库默认分支，并未冻结 AhaFold 版本；如果也要固定 skill 内容，可使用预览标签：
+
+```sh
+npx skills@1.5.23 add https://github.com/AGI-is-going-to-arrive/ahafold/tree/v0.1.0-preview.1 --skill ahafold --copy
+```
+
+预览版仍保留上面的宿主支持限制。该安装器不把 `owner/repo@tag` 当作版本标签语法，请使用 `/tree/<tag>` URL。
 
 本地克隆安装时，把仓库名换为带引号的克隆目录。也可手动复制**整个 `skills/ahafold/`** 到对应目录，包括 `references/`、`assets/` 和 `LICENSE`。技能用户无需 `pnpm install`。这些说明按项目安装，全局安装尚未纳入已验证范围。
 
@@ -356,7 +362,7 @@ Codex 与 Antigravity CLI 共用 `.agents` 副本，移除会同时影响两者�
 
 根目录 [index.html](index.html) 是独立的双语介绍页，可本地打开。它复用已有原生图片，支持语言切换、场景筛选和提示词复制，普通浏览不调用模型。
 
-[Pages 工作流](.github/workflows/pages.yml)仅在手动触发时发布介绍页、公开示例与许可说明；不上传 `tests/`、`output/` 或整个仓库。需要 GitHub Pages 可用并将来源设为 GitHub Actions。工作流存在不代表网站已经上线；仓库公开与 npm 发布都需要单独决定。
+[Pages 工作流](.github/workflows/pages.yml)仅在手动触发时发布介绍页、公开示例与许可说明；不上传 `tests/`、`output/` 或整个仓库。需要 GitHub Pages 可用并将来源设为 GitHub Actions。请核对实际部署结果。公开预览版通过 GitHub 分发，没有单独发布 AhaFold npm 包。
 
 ```sh
 pnpm install --frozen-lockfile

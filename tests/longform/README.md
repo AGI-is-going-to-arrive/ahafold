@@ -51,7 +51,7 @@ It is not evidence that a host generated a fresh image or completed a user's gui
 `pnpm run test:longform --template-only` checks that template. The full command
 requires eight pages: the template, three original long guides, their three reviewed
 Grok variants and the illustrated library; missing examples fail. The suite checks 320/390/768/1440px,
-contents focus, fresh deep-link focus followed by reload, keyboard scroll/disclosures,
+contents focus, fresh deep-link focus, reload visibility and keyboard continuation, keyboard scroll/disclosures,
 screen-size SVG text, offline resources, axe, no-JS reading, A4 print and actual
 200% Chromium page zoom. Zoom uses a temporary isolated test extension, never a
 personal browser profile or a product dependency.
@@ -63,9 +63,38 @@ metrics; it does not test fresh cross-document entry or reload at 200%. Earlier
 Windows focus failures on the interactive-history reload path remain documented
 in the [navigation evidence](windows-navigation.json).
 
-The latest executable-code run also failed Windows reload focus after a verified
-fresh deep link with JavaScript disabled. The assertion is retained, and the
-Windows release gate remains **FAIL**; see the [final result](results.md).
+The earlier executable-code run failed Windows reload focus after a verified
+fresh deep link with JavaScript disabled; that historical **FAIL** remains in the
+[original result](results.md).
+
+### Reload repair and acceptance boundary (2026-09-12)
+
+The Ubuntu and Windows jobs for `ffb200a` also reproduced a visible `#sources`
+heading with `BODY` focused after reload. Reload focus and the next Tab are now
+checked separately from an explicit link activation: native reload does not
+promise page-load autofocus, and the page must not steal focus from a reader.
+
+The current template and maintainer-integrated illustrated library repair a lost
+starting point only on the untouched reader's first ordinary Tab after reload.
+They do not focus or scroll on load. Pointer, wheel, touch, another key, a changed
+hash, another focused control, an offscreen or covered heading, and modified Tab
+all prevent the repair. The same Tab continues natively beyond the heading.
+The six historical default/reviewed pages remain byte-identical.
+
+Every fixture still has strict TOC activation, fresh deep-link focus, hash,
+viewport, occlusion and JavaScript-enabled post-reload keyboard continuation
+checks. Ten separate fault-injection cases exercise the repair's guards; they do
+not move focus on behalf of the ordinary navigation checks.
+
+With JavaScript disabled, only the observed native `BODY` → first page control
+reload failure is classified as a browser limitation. It is recorded with file,
+width, focus before/after and `continued: false` in `output/longform-checks/results.json`,
+printed as `LIMITATION`, and excluded from navigation PASS claims. Other
+unexpected destinations, missing headings, wrong fragments, occlusion, broken
+links or JavaScript-enabled failures still fail CI. Core no-JS reading and
+explicit navigation remain strict. This is a revised supported contract, not a
+claim that the browser's no-JS reload behavior was fixed. Use the visible page
+contents to resume the desired section if that native limitation occurs.
 
 Money checks compare displayed precision exactly with a full-precision oracle;
 the earlier tolerance that could hide one-cent errors is removed. Geometry uses

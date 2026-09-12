@@ -6,7 +6,7 @@
 
 Turn a concept, article, or set of instructions into **an illustrated explanation you can read in a browser**. Tell your existing AI tool what you want to understand. AhaFold helps organize the words, pictures, and small interactions that make the answer easier to follow.
 
-> **v0.1 preview.** The repository is currently private; installation requires access. Codex has historical successful cases, Grok Build is partially verified, and Antigravity CLI has not completed acceptance. Current revisions are not verified across all three hosts.
+> **v0.1 public preview.** Install directly from this public GitHub repository. Codex has historical successful cases, Grok Build is partially verified, and Antigravity CLI has not completed acceptance. Current revisions are not verified across all three hosts.
 
 <a id="see-the-result"></a>
 
@@ -301,7 +301,7 @@ Priorities: **repeat real-host acceptance against the current skill; fix or clea
 <details>
 <summary>Test records and remaining evidence gaps</summary>
 
-Rechecked the current local worktree on 2026-09-12: type, package, installer, compact-page, and long-guide browser checks passed. Long-guide checks separately reported two native reload-focus limitations with JavaScript disabled; those behaviors did not pass. This pass made no new host image calls and did not recertify Windows/Linux.
+The reload repair was checked in an isolated checkout on 2026-09-12: type, package, installer, compact-page, and long-guide browser checks passed. Native no-JavaScript reload limitations remain separately recorded and are not counted as passed navigation. This pass made no new host image calls; browser CI does not recertify native-image support on Windows/Linux.
 
 - [Installation and native acceptance](tests/validation.md): versions, call counts, and scope.
 - [Focused Codex / Grok evaluation](tests/focus-validation.md): Chinese, English, mixed-language tasks, and actual failures.
@@ -309,7 +309,7 @@ Rechecked the current local worktree on 2026-09-12: type, package, installer, co
 - [Illustrated-guide checks](tests/longform/illustrated-results.md): a maintainer-integrated two-image example and historical reload-focus issues. Files have since changed; old results do not automatically describe the current version.
 - [Long-guide behavior checks](tests/longform/README.md) and [acceptance cases](tests/cases.md): deterministic checks cannot prove another OS's OAuth image generation or lower human learning costs.
 
-Earlier Windows long-form CI failed; strict illustrated-page checks also recorded a macOS reload-focus failure. Check actual results for the current commit before release rather than carrying forward an older green status. Without a human comparison study, do not claim better outcomes than the reference projects.
+Earlier Windows/Ubuntu long-form CI failed on reload focus. The [reload repair and revised acceptance boundary](tests/longform/README.md#reload-repair-and-acceptance-boundary-2026-09-12) distinguish strict JavaScript-enabled keyboard continuation from a separately reported no-JavaScript browser limitation. Historical failed results remain unchanged. Check actual results for the current commit rather than carrying forward an older green status. Without a human comparison study, do not claim better outcomes than the reference projects.
 
 </details>
 
@@ -339,7 +339,7 @@ configuration change is needed for the native workflow.
 
 ## Installation, updates, and distribution
 
-**npx installation is already available; a separate npm package is unnecessary.** `npx` runs the pinned `skills` installer, which retrieves `skills/ahafold/` from GitHub. The repository is currently private, so only authorized users can install. The same command becomes suitable for the general public after a deliberate public-repository release.
+**npx installation is already available; a separate npm package is unnecessary.** `npx` runs the pinned `skills` installer, which retrieves `skills/ahafold/` from GitHub. The repository is public; cloning or installing the skill requires no GitHub login.
 
 To choose one tool directly, for example Codex:
 
@@ -347,7 +347,13 @@ To choose one tool directly, for example Codex:
 npx skills@1.5.23 add AGI-is-going-to-arrive/ahafold --skill ahafold --agent codex --copy
 ```
 
-Replace `codex` with `grok` or `antigravity-cli`. The **installer version** is pinned; the skill follows the repository's default branch, so this does not freeze the AhaFold version. A stable release also needs a tag and acceptance of that version.
+Replace `codex` with `grok` or `antigravity-cli`. The **installer version** is pinned; the skill follows the repository's default branch, so this does not freeze the AhaFold version. To freeze the skill as well, use the preview tag:
+
+```sh
+npx skills@1.5.23 add https://github.com/AGI-is-going-to-arrive/ahafold/tree/v0.1.0-preview.1 --skill ahafold --copy
+```
+
+The preview retains the host-support limits above. `owner/repo@tag` is not tag syntax in this installer; use the `/tree/<tag>` URL.
 
 For a local clone, replace the repository name with its quoted directory. You can also copy **the entire `skills/ahafold/` folder**, including `references/`, `assets/`, and `LICENSE`, to the appropriate project path. Skill users do not need `pnpm install`. These instructions are project-scoped; global installation is outside the verified scope.
 
@@ -364,7 +370,7 @@ Codex and Antigravity CLI share the `.agents` copy; removal affects both. Other 
 
 The root [index.html](index.html) is a standalone bilingual introduction that opens locally. It reuses existing native illustrations and supports language switching, scenario filters, and prompt copying. Ordinary browsing makes no model calls.
 
-The [Pages workflow](.github/workflows/pages.yml) publishes only the introduction, curated examples, and license notices when manually dispatched. It does not upload `tests/`, `output/`, or the whole repository. GitHub Pages must be available and configured to use GitHub Actions. A workflow file is not proof of a live deployment; repository visibility and npm publication remain separate decisions.
+The [Pages workflow](.github/workflows/pages.yml) publishes only the introduction, curated examples, and license notices when manually dispatched. It does not upload `tests/`, `output/`, or the whole repository. GitHub Pages must be available and configured to use GitHub Actions. Verify the actual deployment result. The public preview is distributed from GitHub; no separate AhaFold npm package is published.
 
 ```sh
 pnpm install --frozen-lockfile

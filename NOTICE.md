@@ -57,5 +57,7 @@ Official route documentation, checked 2026-09-05:
 [Grok skills](https://docs.x.ai/build/features/skills-plugins-marketplaces),
 [Antigravity CLI skills](https://www.antigravity.google/docs/cli/plugins/).
 
-This repository is private development work. No public release, registry upload,
-or change to repository visibility is part of v0.1 development synchronization.
+The v0.1 public preview is distributed from this GitHub repository through the
+`skills` installer. There is no separate AhaFold npm package. Public availability
+does not certify untested hosts or remove the provider and AI-output limitations
+described above. Historical test results retain their original scope.

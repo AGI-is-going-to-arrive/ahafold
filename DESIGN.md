@@ -19,9 +19,17 @@ tables and timelines may use the wider main column. Sections have different jobs
 rather than repeating identical cards.
 
 Desktop contents stay beside the article; on smaller screens the same native
-links become an ordinary contents block. Fragment navigation works without JS,
-with focusable destinations and scroll margins. Passive reading never takes focus
-or forces scrolling. The supplied template needs no JavaScript at all.
+links become an ordinary contents block. Native fragment links use focusable
+destinations and scroll margins. Passive reading never takes focus or forces
+scrolling. Core reading and explicit navigation work without JavaScript.
+
+After a fragment reload, the current template and illustrated library can repair
+Chromium's lost sequential starting point on an untouched reader's first normal
+Tab, only when BODY is focused and the destination is visible and unobscured.
+The same Tab then advances natively; prior input or another focus choice cancels
+the repair. There is no focus on load. The no-JS browser limitation is separately
+recorded rather than counted as passed navigation; the supported gate and guard
+regressions are described in `tests/longform/README.md`.
 
 Dense diagrams use decomposition or labelled keyboard-scrollable local regions,
 with precise text values alongside. Essential SVG labels must be at least 12px

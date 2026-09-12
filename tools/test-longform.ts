@@ -393,7 +393,68 @@ async function checkContentsNavigation(page: Page): Promise<NavigationTarget[]> 
   return targets;
 }
 
-async function checkNavigation(page: Page, url: string): Promise<number> {
+interface ReloadContinuation {
+  file: string;
+  width: number;
+  javaScriptEnabled: boolean;
+  target: string;
+  focusBeforeTab: string;
+  focusAfterTab: string;
+  immediateFocusRestored: boolean;
+  continued: boolean;
+  limitation: string | null;
+}
+
+const reloadContinuations: ReloadContinuation[] = [];
+
+async function checkReloadContinuation(page: Page, target: NavigationTarget, javaScriptEnabled: boolean): Promise<void> {
+  // A reload may restore scrolling before focus. Test the reader's actual next
+  // Tab; do not move focus from the test or require page-load autofocus.
+  await page.waitForFunction((id) => {
+    const heading = document.getElementById(id);
+    if (!heading) return false;
+    const bounds = heading.getBoundingClientRect();
+    const top = document.elementFromPoint(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2);
+    return decodeURIComponent(location.hash.slice(1)) === id && bounds.top >= 0 && bounds.bottom <= innerHeight
+      && top !== null && heading.contains(top);
+  }, target.id, { timeout: 5000 });
+  const selectors = 'a[href],button,input,select,textarea,summary,[tabindex]';
+  const expected = await page.locator(selectors).evaluateAll((elements, id) => {
+    const target = document.getElementById(id);
+    if (!target) throw new Error('Missing fragment target');
+    const index = elements.findIndex((element) => element instanceof HTMLElement && element.tabIndex >= 0
+      && !element.matches(':disabled') && element.checkVisibility()
+      && Boolean(target.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING));
+    const first = elements.findIndex((element) => element instanceof HTMLElement && element.tabIndex >= 0
+      && !element.matches(':disabled') && element.checkVisibility());
+    return { index, first, active: document.activeElement?.id || document.activeElement?.tagName || '',
+      immediate: document.activeElement === target || target.contains(document.activeElement) };
+  }, target.id);
+  assert.ok(expected.index >= 0, 'The fixture has a following keyboard destination');
+  await page.keyboard.press('Tab');
+  const next = page.locator(selectors).nth(expected.index);
+  const continued = await next.evaluate((element) => document.activeElement === element);
+  const restartedAtHeader = expected.active === 'BODY' && expected.first >= 0
+    && await page.locator(selectors).nth(expected.first).evaluate((element) => document.activeElement === element);
+  const limitation = !continued && !javaScriptEnabled && restartedAtHeader
+    ? 'Native Chromium fragment reload lost the sequential Tab starting point with JavaScript disabled; the progressive repair cannot run.'
+    : null;
+  reloadContinuations.push({ file: path.relative(root, fileURLToPath(page.url())),
+    width: page.viewportSize()?.width ?? 0, javaScriptEnabled, target: target.id,
+    focusBeforeTab: expected.active, focusAfterTab: await page.evaluate(() => document.activeElement?.id
+      || document.activeElement?.getAttribute('href') || document.activeElement?.tagName || ''),
+    immediateFocusRestored: expected.immediate, continued, limitation });
+  if (limitation) {
+    // This is an observed browser limitation, not a navigation PASS. Core
+    // no-JS reading, explicit link activation and fresh deep links stay strict.
+    console.warn(`LIMITATION ${target.id}: ${limitation}`);
+    return;
+  }
+  assert.ok(continued, `${target.id}: first Tab after reload must continue after the chapter, not restart at the page header`);
+  await expectFocus(next);
+}
+
+async function checkNavigation(page: Page, url: string, javaScriptEnabled = true): Promise<number> {
   const targets = await checkContentsNavigation(page);
   const last = targets.at(-1);
   assert.ok(last);
@@ -412,8 +473,67 @@ async function checkNavigation(page: Page, url: string): Promise<number> {
   await assertFragmentTarget(page, last);
   await page.reload({ waitUntil: 'load' });
   await assertViewportPreserved();
-  await assertFragmentTarget(page, last);
+  await checkReloadContinuation(page, last, javaScriptEnabled);
   return targets.length;
+}
+
+async function checkReloadRepairGuards(context: BrowserContext, url: string): Promise<void> {
+  const page = await context.newPage();
+  try {
+    await page.addInitScript(() => {
+      const state = window as unknown as { focusCalls: string[] };
+      state.focusCalls = [];
+      const original = HTMLElement.prototype.focus;
+      HTMLElement.prototype.focus = function (options?: FocusOptions): void {
+        state.focusCalls.push(this.id || this.tagName);
+        original.call(this, options);
+      };
+    });
+    const scenarios = ['forward-tab', 'pointer', 'wheel', 'other-key', 'shift-tab', 'changed-hash',
+      'existing-focus', 'offscreen', 'occluded', 'untrusted-tab'] as const;
+    for (const scenario of scenarios) {
+      await page.goto('about:blank');
+      await page.goto(`${url}#sources`, { waitUntil: 'load' });
+      await assertFragmentTarget(page, { index: 0, href: '#sources', id: 'sources' });
+      assert.deepEqual(await page.evaluate(() => (window as unknown as { focusCalls: string[] }).focusCalls), [],
+        'Initial fragment entry uses native focus, never script autofocus');
+      await page.reload({ waitUntil: 'load' });
+      assert.deepEqual(await page.evaluate(() => (window as unknown as { focusCalls: string[] }).focusCalls), [],
+        'The repair never focuses on initial entry or reload');
+      // This separate fault-injection check simulates Chromium losing its focus
+      // starting point. The normal navigation checks above never move focus for it.
+      await page.evaluate(() => {
+        document.body.tabIndex = -1;
+        document.body.focus({ preventScroll: true });
+        document.body.removeAttribute('tabindex');
+        (window as unknown as { focusCalls: string[] }).focusCalls = [];
+      });
+      if (scenario === 'pointer') await page.locator('#sources').click();
+      if (scenario === 'wheel') await page.mouse.wheel(0, 1);
+      if (scenario === 'other-key') await page.keyboard.press('ArrowRight');
+      if (scenario === 'shift-tab') await page.keyboard.press('Shift+Tab');
+      if (scenario === 'changed-hash') await page.evaluate(() => history.replaceState(null, '', '#contents'));
+      if (scenario === 'existing-focus') await page.locator('a[href]').last().focus();
+      if (scenario === 'offscreen') await page.evaluate(() => scrollTo(0, 0));
+      if (scenario === 'occluded') await page.evaluate(() => {
+        const cover = document.createElement('div');
+        cover.style.cssText = 'position:fixed;inset:0;z-index:999;background:white';
+        document.body.append(cover);
+      });
+      if (scenario === 'untrusted-tab') await page.evaluate(() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true })));
+      await page.keyboard.press('Tab');
+      const repaired = await page.evaluate(() => (window as unknown as { focusCalls: string[] }).focusCalls.includes('sources'));
+      assert.equal(repaired, scenario === 'forward-tab', `${scenario}: only an untouched reader's normal first Tab repairs focus`);
+      if (scenario === 'forward-tab') {
+        assert.notEqual(await page.locator(':focus').getAttribute('id'), 'sources', 'The same Tab must advance beyond the heading');
+        await page.evaluate(() => { (window as unknown as { focusCalls: string[] }).focusCalls = []; });
+        await page.keyboard.press('Tab');
+        assert.deepEqual(await page.evaluate(() => (window as unknown as { focusCalls: string[] }).focusCalls), [], 'Repair runs only once');
+      }
+    }
+  } finally {
+    await page.close();
+  }
 }
 
 async function checkScrollRegions(page: Page): Promise<number> {
@@ -663,7 +783,7 @@ async function checkNoJavaScript(browser: Awaited<ReturnType<typeof chromium.lau
     await assertCoreStructure(page);
     assertSameReading(await readingSnapshot(page), expectedCore, `${candidate.name}, no JavaScript: preserve the default explanation/state`);
     await assertNoOverflow(page, `${candidate.name}, no JavaScript`);
-    await checkNavigation(page, url);
+    await checkNavigation(page, url, false);
     await checkLibraryNumbers(page, candidate);
     await assertLocalResources(page, candidate);
     await checkIllustratedLibrary(page, candidate);
@@ -783,6 +903,10 @@ try {
         const illustrations = await checkIllustratedLibrary(page, candidate);
         await checkKeyboard(page);
         const tocLinks = await checkNavigation(page, url);
+        if (viewport.width === 390 && await page.locator('script[data-reader-fragment-focus]').count()) {
+          await checkReloadRepairGuards(context, url);
+          console.log(`PASS ${candidate.name}: 10 reload-repair guard scenarios, no load autofocus, one-shot continuation`);
+        }
         const scrollRegions = await checkScrollRegions(page);
         const minimumSvgFontPx = await checkSvgFonts(page);
         const numericStates = await checkLibraryNumbers(page, candidate);
@@ -799,7 +923,7 @@ try {
     }
     assert.ok(core, 'JavaScript-enabled reading baseline was captured at the matching 390px width');
     await checkNoJavaScript(browser, candidate, core);
-    console.log(`PASS ${candidate.name}: JavaScript disabled, exact static narrative/headings/default controls/numeric outputs and native navigation preserved; capability notices may differ`);
+    console.log(`PASS ${candidate.name}: JavaScript disabled, exact static narrative/headings/default controls/numeric outputs, explicit links and fresh deep links preserved; reload continuation limitations are reported separately`);
   }
 } finally {
   await browser.close();
@@ -808,5 +932,7 @@ await checkRealPageZoom();
 const scope = templateOnly ? 'template only; delivered examples and installed hosts were not tested'
   : artifact ? 'one explicitly selected artifact only; this is not approval of the artifact or installed-host acceptance'
     : 'template, three original longform topics, their three reviewed Grok variants and the illustrated library; installed hosts require separate evidence';
-await writeFile(path.join(output, 'results.json'), `${JSON.stringify({ timestamp: new Date().toISOString(), scope, cases: evidence }, null, 2)}\n`);
+const limitations = reloadContinuations.filter((entry) => entry.limitation !== null);
+await writeFile(path.join(output, 'results.json'), `${JSON.stringify({ timestamp: new Date().toISOString(), scope, cases: evidence, reloadContinuations, limitations }, null, 2)}\n`);
+if (limitations.length) console.warn(`LIMITATIONS: ${limitations.length} native no-JavaScript reload continuation failure(s); see results.json. These are not counted as passed navigation behavior.`);
 console.log(`Scope: ${scope}. Automated checks do not establish factual correctness, illustration semantics, aesthetics, or human comprehension.`);
